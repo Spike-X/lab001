@@ -1,0 +1,230 @@
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
+ 
+/**
+ * RestTemplate配置类
+ */
+@Configuration
+public class RestTemplateConfig {
+    
+    
+    //最好是用不注释的方法，在注入的同时设置连接时间，这种注释的也可以，但是没有设置超时时间
+    /*@Bean
+    public RestTemplate restTemplate(RestTemplateBuilder builder){
+        return builder.build();
+    }*/
+ 
+    @Bean
+    public RestTemplate restTemplate(ClientHttpRequestFactory factory){
+        return new RestTemplate(factory);
+    }
+ 
+    @Bean
+    public ClientHttpRequestFactory simpleClientHttpRequestFactory(){
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setReadTimeout(5000);//单位为ms
+        factory.setConnectTimeout(5000);//单位为ms
+        return factory;
+    }
+}
+
+----------------------------------
+//get json数据
+JSONObject json = restTemplate.getForEntity(url, JSONObject.class).getBody();
+
+
+// 1-getForObject()
+User user1 = this.restTemplate.getForObject(uri, User.class);
+
+// 2-getForEntity()
+ResponseEntity<User> responseEntity1 = this.restTemplate.getForEntity(uri, User.class);
+HttpStatus statusCode = responseEntity1.getStatusCode();
+HttpHeaders header = responseEntity1.getHeaders();
+User user2 = responseEntity1.getBody();
+  
+// 3-exchange()
+RequestEntity requestEntity = RequestEntity.get(new URI(uri)).build();
+ResponseEntity<User> responseEntity2 = this.restTemplate.exchange(requestEntity, User.class);
+User user3 = responseEntity2.getBody();
+
+-----------------------------------
+// 1-postForObject()
+User user1 = this.restTemplate.postForObject(uri, user, User.class);
+
+// 2-postForEntity()
+ResponseEntity<User> responseEntity1 = this.restTemplate.postForEntity(uri, user, User.class);
+
+//post json数据
+JSONObject postData = new JSONObject();
+postData.put("data", "request for post");
+JSONObject json = restTemplate.postForEntity(url, postData, JSONObject.class).getBody();
+
+
+
+// 3-exchange()
+RequestEntity<User> requestEntity = RequestEntity.post(new URI(uri)).body(user);
+ResponseEntity<User> responseEntity2 = this.restTemplate.exchange(requestEntity, User.class);
+
+------------------------------------
+/** HttpEntity 方式 **/
+//post json string data
+//return string
+HttpHeaders headers = new HttpHeaders();
+MediaType type = MediaType.parseMediaType("application/json; charset=UTF-8");
+headers.setContentType(type);
+headers.add("Accept", MediaType.APPLICATION_JSON.toString());
+
+
+JSONObject jsonObj = JSONObject.parseObject(params);
+HttpEntity<String> formEntity = new HttpEntity<String>(jsonObj.toString(), headers);
+String result = restTemplate.postForObject(url, formEntity, String.class);
+
+
+
+
+
+/** RequestEntity 方式 **/
+// 1-Content-Type
+RequestEntity<User> requestEntity = RequestEntity
+        .post(new URI(uri))
+        .contentType(MediaType.APPLICATION_JSON)
+        .body(user);
+
+// 2-Accept
+RequestEntity<User> requestEntity = RequestEntity
+        .post(new URI(uri))
+        .accept(MediaType.APPLICATION_JSON)
+        .body(user);
+
+// 3-Other
+RequestEntity<User> requestEntity = RequestEntity
+        .post(new URI(uri))
+        .header("Authorization", "Basic " + base64Credentials)
+        .body(user);
+
+-----------------------------------
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.web.client.RestTemplate;
+/**
+ * Spring RestTemplate工具类
+ */
+public class RestTemplateUtils {
+
+    private static class SingletonRestTemplate {
+        /**
+         * 单例对象实例
+         */
+        static final RestTemplate INSTANCE = new RestTemplate();
+    }
+
+    private RestTemplateUtils() {
+
+    }
+    
+    /**
+     * 单例实例
+     */
+    public static RestTemplate getInstance() {
+        return SingletonRestTemplate.INSTANCE;
+    }
+
+    /**
+     * 
+     * 发送post请求
+     * 
+     * @param url 请求URL地址
+     * @param data  json数据
+     * @param token RSA加密token
+     */
+    public static String post(String url, String data, String token)
+            throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        /*headers.add(HttpHeadersImpl.ACCEPT, "application/json");
+        headers.add(HttpHeadersImpl.ACCEPT_ENCODING, "gzip");
+        headers.add(HttpHeadersImpl.CONTENT_ENCODING, "UTF-8");
+        headers.add(HttpHeadersImpl.CONTENT_TYPE,
+                "application/json; charset=UTF-8");
+        headers.add(HttpHeadersImpl.COOKIE, token);
+        headers.add("Token", token);*/
+        headers.add("Accept", "application/json");
+        headers.add("Accpet-Encoding", "gzip");
+        headers.add("Content-Encoding", "UTF-8");
+        headers.add("Content-Type", "application/json; charset=UTF-8");
+        headers.add("Token", token);
+
+        HttpEntity<String> formEntity = new HttpEntity<String>(data, headers);
+        return RestTemplateUtils.getInstance().postForObject(url, formEntity, String.class);
+    }
+    
+    /**
+     * 
+     * 发送post请求
+     * 
+     * @param url 请求URL地址
+     * @param data json数据
+     * @param token RSA加密token【
+     * @param CustomCode 自定义
+     */
+    public static String post(String url, String data, String token,String platformCode,String tenantCode)
+            throws Exception {
+        HttpHeaders headers = new HttpHeaders();
+        /*headers.add(HttpHeadersImpl.ACCEPT, "application/json");
+        headers.add(HttpHeadersImpl.ACCEPT_ENCODING, "gzip");
+        headers.add(HttpHeadersImpl.CONTENT_ENCODING, "UTF-8");
+        headers.add(HttpHeadersImpl.CONTENT_TYPE,
+                "application/json; charset=UTF-8");
+        headers.add(HttpHeadersImpl.COOKIE, token);
+        headers.add("Token", token);*/
+
+        headers.add("Accept", "application/json");
+        headers.add("Accpet-Encoding", "gzip");
+        headers.add("Content-Encoding", "UTF-8");
+        headers.add("Content-Type", "application/json; charset=UTF-8");
+        headers.add("Token", token);
+        headers.add("CustomCode", CustomCode);
+
+        HttpEntity<String> formEntity = new HttpEntity<String>(data, headers);
+        return RestTemplateUtils.getInstance().postForObject(url, formEntity, String.class);
+    }
+    
+    /**
+     * get根据url获取对象
+     */
+    public String get(String url) {
+        return RestTemplateUtils.getInstance().getForObject(url, String.class,new Object[]{});
+    }
+
+    /**
+     * getById根据ID获取对象
+     */
+    public String getById(String url, String id) {
+        return RestTemplateUtils.getInstance().getForObject(url, String.class, id);
+    }
+
+    /**
+     * post提交对象
+     */
+    public String post(String url, String data) {
+        return RestTemplateUtils.getInstance().postForObject(url, null,
+                String.class, data);
+    }
+
+    /**
+     * put修改对象
+     */
+    public void put(String url, String data) {
+        RestTemplateUtils.getInstance().put(url, null, data);
+    }
+
+    /**
+     * delete根据ID删除对象
+     */
+    public void delete(String url, String id) {
+        RestTemplateUtils.getInstance().delete(url, id);
+    }
+
+}
