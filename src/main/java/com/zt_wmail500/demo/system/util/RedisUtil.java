@@ -1,11 +1,11 @@
 package com.zt_wmail500.demo.system.util;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.connection.RedisConnection;
 import org.springframework.data.redis.core.BoundListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
+import javax.annotation.Resource;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -17,11 +17,12 @@ import java.util.concurrent.TimeUnit;
  * @author: tao.zhang
  * @create: 2020-08-04 15:43
  **/
+@Component
 public class RedisUtil {
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
+    @Resource
+    private final RedisTemplate<String, Object> redisTemplate;
 
-    public RedisUtil(RedisTemplate<String, Object> redisTemplate) {
+    private RedisUtil(RedisTemplate<String, Object> redisTemplate) {
         this.redisTemplate = redisTemplate;
     }
 
@@ -640,21 +641,6 @@ public class RedisUtil {
 
     //=========BoundListOperations 用法 End============
 
-    /***
-     * 清空当前数据库
-     * @return
-     */
-    public boolean flushdb() {
-        try {
-            RedisConnection connection = redisTemplate.getConnectionFactory().getConnection();
-            connection.flushDb();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
 }
 
 /**
@@ -665,7 +651,7 @@ abstract class Status {
     /**
      * 过期时间相关枚举
      */
-    public static enum ExpireEnum {
+    public enum ExpireEnum {
         //未读消息的有效期为30天
         UNREAD_MSG(30L, TimeUnit.DAYS);
 

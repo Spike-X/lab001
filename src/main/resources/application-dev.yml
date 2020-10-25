@@ -3,11 +3,29 @@ server:
 
 spring:
   redis:
-    host: 192.168.213.128
+    host: 192.168.31.164
     port: 6379
+    password: spike-x
+    database: 0
+    ## 连接超时时间（毫秒）
+    timeout: 1200
+    jedis:
+      pool:
+        ## 连接池最大连接数（使用负值表示没有限制）
+        #spring.redis.pool.max-active=8
+        max-active: 8
+        ## 连接池最大阻塞等待时间（使用负值表示没有限制）
+        #spring.redis.pool.max-wait=-1
+        max-wait: -1
+        ## 连接池中的最大空闲连接
+        #spring.redis.pool.max-idle=8
+        max-idle: 8
+        ## 连接池中的最小空闲连接
+        #spring.redis.pool.min-idle=0
+        min-idle: 0
   datasource:
     druid:
-      url: jdbc:mysql://192.168.213.128:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
       username: root
       password: root
       driver-class-name: com.mysql.cj.jdbc.Driver
