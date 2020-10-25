@@ -1,7 +1,7 @@
 package com.zt_wmail500.demo.system.util;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 import org.springframework.http.HttpStatus;
 
 /**
@@ -10,8 +10,8 @@ import org.springframework.http.HttpStatus;
  * @author: tao.zhang
  * @create: 2020-09-05 19:13
  **/
-@ToString
 @Getter
+@AllArgsConstructor
 public enum ResultStatus {
 
     SUCCESS(HttpStatus.OK, 200, "OK"),
@@ -25,10 +25,4 @@ public enum ResultStatus {
     private Integer code;
     /** 业务异常信息描述 */
     private String message;
-
-    ResultStatus(HttpStatus httpStatus, Integer code, String message) {
-        this.httpStatus = httpStatus;
-        this.code = code;
-        this.message = message;
-    }
 }
