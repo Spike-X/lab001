@@ -1,6 +1,5 @@
 package com.zt_wmail500.demo.business.controller;
 
-import com.zt_wmail500.demo.system.conf.ResponseResultBody;
 import com.zt_wmail500.demo.system.util.Result;
 import com.zt_wmail500.demo.system.util.ResultStatus;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,7 +20,6 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/hello")
-@ResponseResultBody
 public class JsonResultController {
     private static final HashMap<String, Object> INFO;
 
@@ -57,9 +55,4 @@ public class JsonResultController {
         Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
         return Result.success(map);
     }
-
-//    @GetMapping("helloMyError")
-//    public HashMap<String, Object> helloMyError() throws Exception {
-//        throw new ResultException();
-//    }
 }
