@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.axis.client.Call;
 import org.apache.axis.encoding.XMLType;
 import org.springframework.stereotype.Service;
+
 import javax.xml.namespace.QName;
 import javax.xml.rpc.ParameterMode;
 import java.util.HashMap;
@@ -55,15 +56,16 @@ public class WeatherServiceImpl implements WeatherService {
             // 返回结果
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(call.invoke(paramValues));
-            log.info("返回结果：{}",json);
+            log.info("返回结果：{}", json);
 
             // 解析json串
-            List<String> nodeList = objectMapper.readValue(json,new TypeReference<List<String>>(){});
+            List<String> nodeList = objectMapper.readValue(json, new TypeReference<List<String>>() {
+            });
             Map<String, Object> map = new HashMap<>();
-            map.put("city",nodeList.get(0));
-            map.put("today",nodeList.get(7));
-            map.put("tomorrow",nodeList.get(12));
-            log.info("map:{}",map);
+            map.put("city", nodeList.get(0));
+            map.put("today", nodeList.get(7));
+            map.put("tomorrow", nodeList.get(12));
+            log.info("map:{}", map);
         } catch (Exception e) {
             e.printStackTrace();
         }

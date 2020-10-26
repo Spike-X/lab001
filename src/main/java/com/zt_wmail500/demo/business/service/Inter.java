@@ -8,11 +8,11 @@ package com.zt_wmail500.demo.business.service;
  **/
 public interface Inter {
 
-    void show();
-
     static void say() {
 
     }
+
+    void show();
 
     default void print() {
 

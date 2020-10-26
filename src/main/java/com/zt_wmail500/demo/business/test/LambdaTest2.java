@@ -26,7 +26,7 @@ public class LambdaTest2 {
         lambda3.method();
 
         //4.如果方法体只有一条语句，并且是 return 语句，则可以省略方法体大括号
-        LambdaInterface.ReturnOneParam lambda4 = a -> a+3;
+        LambdaInterface.ReturnOneParam lambda4 = a -> a + 3;
         System.out.println(lambda4.method(5));
 
         LambdaInterface.ReturnMultiParam lambda5 = Integer::sum;

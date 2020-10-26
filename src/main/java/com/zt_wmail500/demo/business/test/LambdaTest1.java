@@ -24,7 +24,7 @@ public class LambdaTest1 {
 
         //多个参数无返回
         LambdaInterface.NoReturnMultiParam noReturnMultiParam = (int a, int b) -> {
-            System.out.println("NoReturnMultiParam param:" + "{" + a +"," + + b +"}");
+            System.out.println("NoReturnMultiParam param:" + "{" + a + "," + +b + "}");
         };
         noReturnMultiParam.method(6, 8);
 
@@ -46,7 +46,7 @@ public class LambdaTest1 {
 
         //多个参数有返回值
         LambdaInterface.ReturnMultiParam returnMultiParam = (int a, int b) -> {
-            System.out.println("ReturnMultiParam param:" + "{" + a + "," + b +"}");
+            System.out.println("ReturnMultiParam param:" + "{" + a + "," + b + "}");
             return 1;
         };
         int res3 = returnMultiParam.method(6, 8);

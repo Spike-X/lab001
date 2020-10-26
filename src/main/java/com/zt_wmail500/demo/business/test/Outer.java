@@ -10,23 +10,6 @@ import com.zt_wmail500.demo.business.service.Inter;
  **/
 public class Outer {
 
-    public void method(){
-        // lambda
-        Inter inter1 = () -> System.out.println("lambda匿名内部类");
-        inter1.show();
-
-        // 普通匿名内部类
-        Inter inter2 = new Inter() {
-            public void show() {
-                System.out.println("普通匿名内部类");
-            }
-            public void print() {
-                System.out.println("aaa");
-            }
-        };
-        inter2.print();
-    }
-
     public static void main(String[] args) {
         LambdaInterface.ReturnOneParam lambda1 = a -> doubleNum(a);
         System.out.println(lambda1.method(1));
@@ -48,6 +31,24 @@ public class Outer {
      */
     public static int doubleNum(int a) {
         return a * 2;
+    }
+
+    public void method() {
+        // lambda
+        Inter inter1 = () -> System.out.println("lambda匿名内部类");
+        inter1.show();
+
+        // 普通匿名内部类
+        Inter inter2 = new Inter() {
+            public void show() {
+                System.out.println("普通匿名内部类");
+            }
+
+            public void print() {
+                System.out.println("aaa");
+            }
+        };
+        inter2.print();
     }
 
     public int addTwo(int a) {
