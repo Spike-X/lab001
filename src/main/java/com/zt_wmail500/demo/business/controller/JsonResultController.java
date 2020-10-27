@@ -1,5 +1,10 @@
 package com.zt_wmail500.demo.business.controller;
 
+import com.zt_wmail500.demo.system.conf.APIException;
+import com.zt_wmail500.demo.system.conf.ResultCode;
+import com.zt_wmail500.demo.system.conf.ResultInfo;
+import com.zt_wmail500.demo.system.conf.ResultInfoBuilder;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +23,7 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/hello")
+@Slf4j
 public class JsonResultController {
     private static final HashMap<String, Object> INFO;
 
@@ -31,26 +37,32 @@ public class JsonResultController {
     private RedisTemplate<String, Object> redisTemplate;
 
     @GetMapping("/map")
-    public Map<String, Object> hello() {
+    public Map<String, Object> map() {
         return INFO;
     }
 
+    @GetMapping("/test")
+    public ResultInfo<?> test() {
+        INFO.put("id", "100001");
+        return ResultInfoBuilder.success();
+    }
+
     @GetMapping("/result")
-    public Result<Map<String, Object>> helloResult() {
-        return Result.failure(ResultStatus.BAD_REQUEST);
+    public ResultInfo<?> Result() {
+        log.info(">>>>>>>>>>>>>>>>>>>>");
+        return ResultInfoBuilder.success(ResultCode.LOGIN_NO);
+    }
+
+    @GetMapping("/redis")
+    public ResultInfo<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
+        INFO.put("id", parentId);
+        redisTemplate.opsForHash().putAll("test:map:2", INFO);
+        Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
+        return ResultInfoBuilder.success(ResultCode.SUCCESS, map);
     }
 
     @GetMapping("helloError")
-    public HashMap<String, Object> helloError() throws Exception {
-        throw new Exception("helloError");
-    }
-
-    @GetMapping("/parentId")
-    public Result<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
-        INFO.put("id", parentId);
-
-        redisTemplate.opsForHash().putAll("test:map:2", INFO);
-        Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
-        return Result.success(map);
+    public HashMap<String, Object> helloError() {
+        throw new APIException("helloError");
     }
 }

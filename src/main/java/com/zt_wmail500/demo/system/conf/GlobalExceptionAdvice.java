@@ -16,7 +16,7 @@ public class GlobalExceptionAdvice {
 
     @ExceptionHandler(APIException.class)
     public ResultInfo<String> APIExceptionHandler(APIException e) {
-        return new ResultInfo<>(ResultCode.FAILED, e.getMsg());
+        return new ResultInfo<>(ResultCode.FAILED, e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
