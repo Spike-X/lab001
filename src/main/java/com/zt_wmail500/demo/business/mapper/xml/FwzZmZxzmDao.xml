@@ -16,7 +16,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-    id, `name`, rxsj, xb, xh, sfzh, yx, zy, xz, xy, xxmc
+        id, `name`, rxsj, xb, xh, sfzh, yx, zy, xz, xy, xxmc
     </sql>
 
     <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">

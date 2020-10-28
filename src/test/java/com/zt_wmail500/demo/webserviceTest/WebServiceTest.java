@@ -4,6 +4,7 @@ import com.zt_wmail500.demo.business.service.WeatherService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+
 import javax.annotation.Resource;
 
 /**
@@ -20,7 +21,7 @@ public class WebServiceTest {
     private WeatherService weatherService;
 
     @Test
-    public void weatherTest(){
+    public void weatherTest() {
         this.weatherService.getWeather();
     }
 

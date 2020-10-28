@@ -28,7 +28,7 @@ public class FwzZmZxzm implements Serializable {
      * 姓名
      */
     @NotBlank
-    @Size(min=2, max=30,message = "请检查名字的长度是否有问题")
+    @Size(min = 2, max = 30, message = "请检查名字的长度是否有问题")
     private String name;
     /**
      * 入校时间

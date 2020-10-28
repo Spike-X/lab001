@@ -18,7 +18,7 @@ public class guavaTest {
 
     @Test
     public void joinerListTest() {
-        List<String> lists = Lists.newArrayList("a","b","g","8","9");
+        List<String> lists = Lists.newArrayList("a", "b", "g", "8", "9");
         String result = Joiner.on(",").join(lists);
         System.out.println(result);
     }

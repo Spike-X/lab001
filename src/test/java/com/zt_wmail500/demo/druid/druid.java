@@ -21,7 +21,7 @@ public class druid {
     private DataSource dataSource;
 
     @Test
-    public void testConnection() throws Exception{
+    public void testConnection() throws Exception {
         System.out.println(dataSource.getClass());
         Connection connection = this.dataSource.getConnection();
         System.out.println(connection);
