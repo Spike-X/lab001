@@ -124,7 +124,6 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
 
-        <!--数据库驱动-->
         <dependency>
             <groupId>com.oracle.database.jdbc</groupId>
             <artifactId>ojdbc8</artifactId>
