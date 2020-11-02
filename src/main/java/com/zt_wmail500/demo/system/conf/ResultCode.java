@@ -26,17 +26,15 @@ package com.zt_wmail500.demo.system.conf;
  **/
 public enum ResultCode implements IReturnCode{
 
-    SUCCESS(1000, "操作成功"),
-    FAILED(1001, "响应失败"),
-    VALIDATE_FAILED(1002, "参数校验失败"),
-    FAIL(400, "Failure!"),
-    NO_PERMISSION(403, "Need Authorities!"),//没有权限
-    LOGIN_NO(402, "Need Login!"),//未登录
-    LOGIN_FAIL(401, "Login Failure!"),//登录失败
-    LOGIN_SUCCESS(200, "Login Success!"),//登录成功
-    LOGOUT_SUCCESS(200, "Logout Success!"),//退出登录
-    SESSION_EXPIRES(101, "Session Expires!"),//会话到期
-    ERROR(5000, "未知错误"),
+    SUCCESS(200, "请求成功"),
+    BAD_REQUEST(400, "请求错误，请修正请求"),
+    UNAUTHORIZED(401, "用户未登录"),
+    FORBIDDEN(403, "未授权的请求"),
+    NOT_FOUND(404, "请求资源未找到"),
+    INTERNAL_SERVER_ERROR(500, "服务器内部错误"),
+
+    FAILURE(1001, "请求失败"),
+    VALIDATE_FAILURE(1002, "参数校验失败"),
     ;
 
     private final int code;

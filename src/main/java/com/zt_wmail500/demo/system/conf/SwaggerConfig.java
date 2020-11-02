@@ -44,8 +44,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfig {
 
-    @Bean(value = "defaultApi2")
-    public Docket defaultApi2() {
+    @Bean(value = "defaultApi")
+    public Docket defaultApi() {
         return new Docket(DocumentationType.SWAGGER_2)
                 .apiInfo(apiInfo())
                 //分组名称
@@ -57,11 +57,32 @@ public class SwaggerConfig {
                 .build();
     }
 
+    @Bean(value = "groupRestApi")
+    public Docket groupRestApi() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .apiInfo(groupApiInfo())
+                .groupName("分组接口")
+                .select()
+                .apis(RequestHandlerSelectors.basePackage("com.swagger.bootstrap.ui.demo.group"))
+                .paths(PathSelectors.any())
+                .build();
+    }
+
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
                 .title("swagger-bootstrap-ui RESTful APIs")
                 .description("spike-demo-project")
                 .termsOfServiceUrl("https://spike-x.com/springboot-demo/")
+                .contact(new Contact("spike-x", "", "zt_wmail500@163.com"))
+                .version("1.0")
+                .build();
+    }
+
+    private ApiInfo groupApiInfo() {
+        return new ApiInfoBuilder()
+                .title("swagger-bootstrap-ui很棒~~~！！！")
+                .description("<div style='font-size:14px;color:red;'>swagger-bootstrap-ui-demo RESTful APIs</div>")
+                .termsOfServiceUrl("http://www.group.com/")
                 .contact(new Contact("spike-x", "", "zt_wmail500@163.com"))
                 .version("1.0")
                 .build();

@@ -60,7 +60,7 @@ public class JsonResultController {
     @GetMapping("/result")
     public CommonResult<?> Result() {
         log.info(">>>>>>>>>>>>>>>>>>>>");
-        return CommonResult.success(ResultCode.LOGIN_NO.getMessage());
+        return CommonResult.success(ResultCode.UNAUTHORIZED.getMessage());
     }
 
     @GetMapping("/redis")
@@ -78,7 +78,7 @@ public class JsonResultController {
 
     @GetMapping("/apiError")
     public HashMap<String, Object> apiError() {
-        throw new APIException(ResultCode.NO_PERMISSION);
+        throw new APIException(ResultCode.NOT_FOUND);
     }
 
     @Autowired

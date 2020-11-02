@@ -18,13 +18,18 @@
 
 package com.zt_wmail500.demo.system.conf;
 
+import java.io.Serializable;
+
 /**
  * @program: demo
  * @description: 统一返回对象实体
  * @author: tao.zhang
  * @create: 2020-10-26 21:42
  **/
-public class CommonResult<T> {
+public class CommonResult<T> implements Serializable {
+
+    private static final long serialVersionUID = 1L;
+
     /**
      * 状态码
      */
@@ -59,11 +64,11 @@ public class CommonResult<T> {
     }
 
     public static <T> CommonResult<T> failed() {
-        return failed(ResultCode.FAILED, null);
+        return failed(ResultCode.FAILURE, null);
     }
 
     public static <T> CommonResult<T> failed(String message) {
-        return new CommonResult<>(ResultCode.FAILED.getCode(), message, null);
+        return new CommonResult<>(ResultCode.FAILURE.getCode(), message, null);
     }
 
     public static <T> CommonResult<T> failed(IReturnCode returnCode) {

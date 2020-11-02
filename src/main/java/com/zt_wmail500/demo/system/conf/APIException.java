@@ -38,6 +38,14 @@ public class APIException extends RuntimeException {
         super(message);
     }
 
+    public APIException(Throwable cause) {
+        super(cause);
+    }
+
+    public APIException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
     public IReturnCode getReturnCode() {
         return returnCode;
     }
