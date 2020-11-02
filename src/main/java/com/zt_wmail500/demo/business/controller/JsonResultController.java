@@ -1,17 +1,21 @@
 package com.zt_wmail500.demo.business.controller;
 
+import com.zt_wmail500.demo.business.pojo.User;
+import com.zt_wmail500.demo.business.service.UserService;
 import com.zt_wmail500.demo.system.conf.APIException;
+import com.zt_wmail500.demo.system.conf.CommonResult;
 import com.zt_wmail500.demo.system.conf.ResultCode;
-import com.zt_wmail500.demo.system.conf.ResultInfo;
-import com.zt_wmail500.demo.system.conf.ResultInfoBuilder;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.validator.constraints.Length;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -23,7 +27,9 @@ import java.util.Map;
  **/
 @RestController
 @RequestMapping("/hello")
+@Api(tags = "统一返回格式测试")
 @Slf4j
+@Validated
 public class JsonResultController {
     private static final HashMap<String, Object> INFO;
 
@@ -37,32 +43,52 @@ public class JsonResultController {
     private RedisTemplate<String, Object> redisTemplate;
 
     @GetMapping("/map")
-    public Map<String, Object> map() {
-        return INFO;
+    @ApiOperation(value = "map测试",notes = "RequestBody接收Map参数")
+    public CommonResult<Map<String, Object>> map(@RequestParam @Length(min = 3, max = 20) String key, @RequestParam @Length(min = 3, max = 20) String value) {
+        INFO.put(key,value);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), INFO);
     }
 
     @GetMapping("/test")
-    public ResultInfo<?> test() {
+    public CommonResult<?> test(@RequestParam @Length(min = 3, max = 20) String key) {
+        log.info(key);
         INFO.put("id", "100001");
-        return ResultInfoBuilder.success();
+        return CommonResult.success();
     }
 
+    @ApiOperation("result测试")
     @GetMapping("/result")
-    public ResultInfo<?> Result() {
+    public CommonResult<?> Result() {
         log.info(">>>>>>>>>>>>>>>>>>>>");
-        return ResultInfoBuilder.success(ResultCode.LOGIN_NO);
+        return CommonResult.success(ResultCode.LOGIN_NO.getMessage());
     }
 
     @GetMapping("/redis")
-    public ResultInfo<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
+    public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
         INFO.put("id", parentId);
         redisTemplate.opsForHash().putAll("test:map:2", INFO);
         Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
-        return ResultInfoBuilder.success(ResultCode.SUCCESS, map);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), map);
     }
 
-    @GetMapping("helloError")
+    @GetMapping("/helloError")
     public HashMap<String, Object> helloError() {
         throw new APIException("helloError");
+    }
+
+    @GetMapping("/apiError")
+    public HashMap<String, Object> apiError() {
+        throw new APIException(ResultCode.NO_PERMISSION);
+    }
+
+    @Autowired
+    private UserService userService;
+
+    @ApiOperation("添加用户")
+    @PostMapping("/addUser")
+    public CommonResult<String> addUser(@RequestBody @Valid User user) {
+        log.info("1111111111");
+        String s = userService.addUser(user);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), s);
     }
 }

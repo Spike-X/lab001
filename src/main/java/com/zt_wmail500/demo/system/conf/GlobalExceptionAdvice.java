@@ -18,10 +18,17 @@
 
 package com.zt_wmail500.demo.system.conf;
 
-import org.springframework.validation.ObjectError;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.ConstraintViolationException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @program: demo
@@ -33,13 +40,35 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler(APIException.class)
-    public ResultInfo<String> APIExceptionHandler(APIException e) {
-        return new ResultInfo<>(ResultCode.FAILED, e.getMessage());
+    public CommonResult<String> APIExceptionHandler(APIException e) {
+        if (e.getReturnCode() != null) {
+            return CommonResult.failed(e.getReturnCode());
+        }
+        return CommonResult.failed(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResultInfo<String> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
-        ObjectError objectError = e.getBindingResult().getAllErrors().get(0);
-        return new ResultInfo<>(ResultCode.VALIDATE_FAILED, objectError.getDefaultMessage());
+    public CommonResult<?> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+        BindingResult bindingResult = e.getBindingResult();
+        String message = null;
+        if (bindingResult.hasErrors()) {
+            FieldError fieldError = bindingResult.getFieldError();
+            if (fieldError != null) {
+                message = fieldError.getField()+fieldError.getDefaultMessage();
+            }
+        }
+        return CommonResult.failed(message);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public CommonResult<?> ConstraintViolationExceptionHandler(ConstraintViolationException e) {
+        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+        String message;
+        List<String> list = new ArrayList<>();
+        violations.forEach(x -> list.add(x.getInvalidValue() + " 请求参数错误," + x.getMessage()));
+        message = String.join(",", list);
+//        message = violations.stream().map(ConstraintViolation::getMessage)
+//                .collect(Collectors.joining(","));
+        return CommonResult.failed(message);
     }
 }

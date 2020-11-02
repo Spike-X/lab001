@@ -1,12 +1,12 @@
 /*
  * Copyright (c) 2020, Tao Zhang (zt_wmail500@163.com).
- * <p>
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * <p>
- * http://www.apache.org/licenses/LICENSE-2.0
- * <p>
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,29 +16,13 @@
 
 package com.zt_wmail500.demo.system.conf;
 
-import lombok.Getter;
-
 /**
- * @program: demo
- * @description: 自定义异常
- * @author: tao.zhang
- * @create: 2020-10-26 21:32
+ * @description: s
+ * @author: spikeX
+ * @create: 2020-11-01
  **/
-@Getter
-public class APIException extends RuntimeException {
+public interface IReturnCode {
+    int getCode();
 
-    private IReturnCode returnCode;
-
-    public APIException(IReturnCode iReturnCode) {
-        super(iReturnCode.getMessage());
-        this.returnCode = iReturnCode;
-    }
-
-    public APIException(String message) {
-        super(message);
-    }
-
-    public IReturnCode getReturnCode() {
-        return returnCode;
-    }
+    String getMessage();
 }

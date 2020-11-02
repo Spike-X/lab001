@@ -28,33 +28,6 @@ spring:
       url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
       username: root
       password: root
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      # 初始化时建立物理连接的个数
-      initial-size: 5
-      # 最小与最大连接池
-      min-idle: 5
-      max-active: 20
-      # 获取连接超时时间
-      max-wait: 60000
-      # 是否缓存 preparedStatement,mysql下建议关闭
-      pool-prepared-statements: false
-      max-pool-prepared-statement-per-connection-size: 20
-      # 检测连接是否有效
-      #validation-query: SELECT 1 FROM DUAL
-      validation-query: SELECT 1
-      test-while-idle: true
-      test-on-borrow: false
-      test-on-return: false
-      # 配置检测间隔时间，检测需要关闭的空闲连接，单位毫秒
-      time-between-eviction-runs-millis: 60000
-      # 配置连接在池中最小生存时间，单位毫秒
-      min-evictable-idle-time-millis: 300000
-      # 配置监控统计拦截的 filters，去掉后监控界面sql无法统计，'wall'用于防火墙
-      filters: stat,wall,slf4j
-      # 通过 connectProperties 属性来打开 mergeSql 功能；慢 SQL记录
-      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
-      # 合并多个 DruidDataSource 的监控数据
-      use-global-data-source-stat: true
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
@@ -83,3 +56,4 @@ mybatis-plus:
 
 logging:
   config: classpath:log4j2-${spring.profiles.active}.xml
+

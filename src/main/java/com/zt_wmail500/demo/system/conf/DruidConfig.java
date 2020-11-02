@@ -21,12 +21,14 @@ package com.zt_wmail500.demo.system.conf;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
+import javax.annotation.Resource;
 import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.Map;
@@ -38,29 +40,35 @@ import java.util.Map;
  * @create: 2020-07-26 21:35
  **/
 @Configuration
+@EnableConfigurationProperties(DruidProperties.class)
 public class DruidConfig {
 
-    @ConfigurationProperties(prefix = "spring.datasource.druid")
+    @Resource
+    private DruidProperties properties;
+
     @Bean
+    @Primary // 在同样的DataSource中，首先使用被标注的DataSource
     public DataSource druid() {
-        return new DruidDataSource();
+        DruidDataSource dataSource = new DruidDataSource();
+        properties.injectConfig(dataSource);
+        return dataSource;
     }
 
-    // 后台servlet
     @Bean
     public ServletRegistrationBean<StatViewServlet> statViewServlet() {
         ServletRegistrationBean<StatViewServlet> bean = new ServletRegistrationBean<>(new StatViewServlet(), "/druid/*");
         Map<String, String> initParams = new HashMap<>();
+        // 控制台管理用户 http://localhost:8080/druid/login.html
         initParams.put("loginUsername", "admin");
         initParams.put("loginPassword", "123456");
         initParams.put("allow", "127.0.0.1");
-//        initParams.put("deny", "192.168.14.17");
+        // IP黑名单(共同存在时，deny优先于allow)
+        initParams.put("deny", "");
         initParams.put("resetEnable", "false");
         bean.setInitParameters(initParams);
         return bean;
     }
 
-    // 监控filter
     @Bean
     public FilterRegistrationBean<WebStatFilter> webStatFilter() {
         FilterRegistrationBean<WebStatFilter> bean = new FilterRegistrationBean<>();
@@ -72,5 +80,4 @@ public class DruidConfig {
 //        bean.setUrlPatterns(Arrays.asList("/*"));
         return bean;
     }
-
 }

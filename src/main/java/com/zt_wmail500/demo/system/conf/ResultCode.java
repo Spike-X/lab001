@@ -24,7 +24,7 @@ package com.zt_wmail500.demo.system.conf;
  * @author: tao.zhang
  * @create: 2020-10-26 21:58
  **/
-public enum ResultCode {
+public enum ResultCode implements IReturnCode{
 
     SUCCESS(1000, "操作成功"),
     FAILED(1001, "响应失败"),
