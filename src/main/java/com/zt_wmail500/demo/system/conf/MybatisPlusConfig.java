@@ -18,16 +18,9 @@
 
 package com.zt_wmail500.demo.system.conf;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.core.MybatisConfiguration;
-import com.baomidou.mybatisplus.core.config.GlobalConfig;
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
-import javax.sql.DataSource;
 
 /**
  * @program: demo
@@ -37,7 +30,6 @@ import javax.sql.DataSource;
  **/
 @Configuration
 public class MybatisPlusConfig {
-
     /**
      * mybatis-plus分页插件
      */
@@ -45,35 +37,5 @@ public class MybatisPlusConfig {
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
     }
-
-    /**
-     * 设置属性
-     */
-    @Bean
-    public SqlSessionFactory sqlSessionFactory(DataSource dataSource) throws Exception {
-        MybatisSqlSessionFactoryBean sqlSessionFactory = new MybatisSqlSessionFactoryBean();
-        sqlSessionFactory.setDataSource(dataSource);
-        MybatisConfiguration configuration = new MybatisConfiguration();
-        configuration.setMapUnderscoreToCamelCase(true); //驼峰标识
-        configuration.setCallSettersOnNulls( true );
-//        configuration.setLogImpl(new StdOutImpl());
-        configuration.setCacheEnabled(false);
-        sqlSessionFactory.setConfiguration(configuration);
-        sqlSessionFactory.setGlobalConfig(globalConfiguration());
-        return sqlSessionFactory.getObject();
-    }
-
-    /**
-     * 设置策略
-     */
-    @Bean
-    public GlobalConfig globalConfiguration() {
-        GlobalConfig conf = new GlobalConfig();
-        GlobalConfig.DbConfig dbconf = new GlobalConfig.DbConfig();
-        dbconf.setIdType(IdType.AUTO);
-        dbconf.setLogicDeleteValue("1");
-        dbconf.setLogicNotDeleteValue("0");
-        conf.setDbConfig(dbconf);
-        return conf;
-    }
+    
 }
