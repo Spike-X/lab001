@@ -1,0 +1,47 @@
+server:
+  port: 8081
+
+spring:
+  redis:
+    host: 192.168.31.164
+    port: 6379
+    password: spike-x
+    database: 0
+    ## 连接超时时间（毫秒）
+    timeout: 1200
+    jedis:
+      pool:
+        ## 连接池最大连接数（使用负值表示没有限制）
+        max-active: 8
+        ## 连接池最大阻塞等待时间（使用负值表示没有限制）
+        max-wait: -1
+        ## 连接池中的最大空闲连接
+        max-idle: 8
+        ## 连接池中的最小空闲连接
+        min-idle: 0
+  datasource:
+    druid:
+      url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
+      username: root
+      password: root
+#  jackson:
+#    date-format: yyyy-MM-dd HH:mm:ss
+#    time-zone: GMT+8
+#    serialization:
+#      write-dates-as-timestamps: false
+
+mybatis-plus:
+  # xml文件扫描，多个目录用逗号或者分号分隔(告诉 Mapper 所对应的 XML 文件位置)
+  mapper-locations: classpath:/com/zt_wmail500/demo/business/mapper/xml/*.xml
+  #实体类扫描，多个目录用逗号或者分号分隔
+  type-aliases-package: com.zt_wmail500.demo.business.pojo
+  configuration:
+    # 打印执行sql，在开发或测试环境用
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      #主键类型 AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID"
+      id-type: auto
+
+logging:
+  config: classpath:log4j2-${spring.profiles.active}.xml
