@@ -16,15 +16,12 @@
 
 package com.zt_wmail500.demo.system.conf;
 
-import lombok.Getter;
-
 /**
  * @program: demo
  * @description: 自定义异常
  * @author: tao.zhang
  * @create: 2020-10-26 21:32
  **/
-@Getter
 public class APIException extends RuntimeException {
 
     private IReturnCode returnCode;
