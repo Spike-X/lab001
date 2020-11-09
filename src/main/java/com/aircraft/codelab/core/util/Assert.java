@@ -31,6 +31,9 @@ import java.util.Map;
  * @create: 2020-11-08
  **/
 public class Assert {
+    private Assert() {
+    }
+
     public static void isTrue(boolean expression, String message, Object... params) {
         if (!expression) {
             throw new APIException(String.format(message, params));
