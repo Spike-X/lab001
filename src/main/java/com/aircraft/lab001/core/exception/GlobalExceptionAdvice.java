@@ -38,7 +38,7 @@ import java.util.Set;
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler(ApiException.class)
-    public CommonResult<String> APIExceptionHandler(ApiException e) {
+    public CommonResult<String> apiExceptionHandler(ApiException e) {
         if (e.getReturnCode() != null) {
             return CommonResult.failed(e.getReturnCode());
         }
@@ -46,7 +46,7 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public CommonResult<?> MethodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public CommonResult<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
         if (bindingResult.hasErrors()) {
@@ -59,7 +59,7 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public CommonResult<?> ConstraintViolationExceptionHandler(ConstraintViolationException e) {
+    public CommonResult<?> constraintViolationExceptionHandler(ConstraintViolationException e) {
         Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
         String message;
         List<String> list = new ArrayList<>();
