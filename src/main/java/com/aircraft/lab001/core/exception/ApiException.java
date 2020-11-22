@@ -23,23 +23,23 @@ import com.aircraft.lab001.core.service.IReturnCode;
  * @author: spikeX
  * @create: 2020-11-03
  **/
-public class APIException extends RuntimeException {
+public class ApiException extends RuntimeException {
     private IReturnCode returnCode;
 
-    public APIException(IReturnCode iReturnCode) {
+    public ApiException(IReturnCode iReturnCode) {
         super(iReturnCode.getMessage());
         this.returnCode = iReturnCode;
     }
 
-    public APIException(String message) {
+    public ApiException(String message) {
         super(message);
     }
 
-    public APIException(Throwable cause) {
+    public ApiException(Throwable cause) {
         super(cause);
     }
 
-    public APIException(String message, Throwable cause) {
+    public ApiException(String message, Throwable cause) {
         super(message, cause);
     }
 
