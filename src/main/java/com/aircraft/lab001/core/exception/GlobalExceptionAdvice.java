@@ -37,8 +37,8 @@ import java.util.Set;
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
 
-    @ExceptionHandler(APIException.class)
-    public CommonResult<String> APIExceptionHandler(APIException e) {
+    @ExceptionHandler(ApiException.class)
+    public CommonResult<String> APIExceptionHandler(ApiException e) {
         if (e.getReturnCode() != null) {
             return CommonResult.failed(e.getReturnCode());
         }

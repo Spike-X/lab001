@@ -16,7 +16,7 @@
 
 package com.aircraft.lab001.core.util;
 
-import com.aircraft.lab001.core.exception.APIException;
+import com.aircraft.lab001.core.exception.ApiException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -36,7 +36,7 @@ public class Assert {
 
     public static void isTrue(boolean expression, String message, Object... params) {
         if (!expression) {
-            throw new APIException(String.format(message, params));
+            throw new ApiException(String.format(message, params));
         }
     }
 
