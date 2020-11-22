@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.core.service;
+package com.aircraft.lab001.core.service;
 
 /**
  * @description: 响应码接口

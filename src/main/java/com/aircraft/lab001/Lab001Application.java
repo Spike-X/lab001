@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab;
+package com.aircraft.lab001;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class CodelabApplication {
+public class Lab001Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(CodelabApplication.class, args);
+        SpringApplication.run(Lab001Application.class, args);
     }
 
 }

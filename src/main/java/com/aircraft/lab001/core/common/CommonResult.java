@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.core.common;
+package com.aircraft.lab001.core.common;
 
-import com.aircraft.codelab.core.enums.ResultCode;
-import com.aircraft.codelab.core.service.IReturnCode;
+import com.aircraft.lab001.core.enums.ResultCode;
+import com.aircraft.lab001.core.service.IReturnCode;
 
 import java.io.Serializable;
 

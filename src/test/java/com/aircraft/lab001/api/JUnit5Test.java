@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.api;
+package com.aircraft.lab001.api;
 
 import org.junit.jupiter.api.*;
 

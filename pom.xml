@@ -8,11 +8,25 @@
         <version>2.3.2.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
+
     <groupId>com.aircraft</groupId>
-    <artifactId>codelab</artifactId>
+    <artifactId>lab001</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>codelab</name>
+    <name>lab001</name>
     <description>Demo project for Spring Boot</description>
+
+    <developers>
+        <developer>
+            <name>spike</name>
+            <id>tao.zhang</id>
+            <email>zt_wmail500@163.com</email>
+            <organization>Aircraft Technologies Co., Ltd</organization>
+            <roles>
+                <role>creator</role>
+                <role>maintainer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <springboot.version>2.3.2.RELEASE</springboot.version>
@@ -25,6 +39,9 @@
         <knife4j.version>2.0.3</knife4j.version>
         <validator.version>6.1.5.Final</validator.version>
         <jedis.version>3.3.0</jedis.version>
+        <commons-lang3.version>3.11</commons-lang3.version>
+        <commons-collections4.version>4.4</commons-collections4.version>
+        <commons-io.version>2.8.0</commons-io.version>
         <guava.version>30.0-jre</guava.version>
     </properties>
 
@@ -43,6 +60,11 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.lmax</groupId>
+            <artifactId>disruptor</artifactId>
+            <version>3.4.2</version>
         </dependency>
         <!--log4j2日志-->
 
@@ -140,13 +162,19 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.11</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.4</version>
+            <version>${commons-collections4.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons-io.version}</version>
         </dependency>
 
         <dependency>

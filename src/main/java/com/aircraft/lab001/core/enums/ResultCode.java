@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.core.enums;
+package com.aircraft.lab001.core.enums;
 
-import com.aircraft.codelab.core.service.IReturnCode;
+import com.aircraft.lab001.core.service.IReturnCode;
 
 /**
  * @description: 统一响应码枚举

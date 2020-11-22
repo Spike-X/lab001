@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.core.util;
+package com.aircraft.lab001.core.util;
 
-import com.aircraft.codelab.core.exception.APIException;
+import com.aircraft.lab001.core.exception.APIException;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;

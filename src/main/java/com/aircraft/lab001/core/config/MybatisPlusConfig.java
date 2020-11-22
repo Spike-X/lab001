@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.core.config;
+package com.aircraft.lab001.core.config;
 
 import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * @description: MybatisPlus配置类
  * @author: spikeX
  * @create: 2020-11-03
  **/
+@EnableTransactionManagement
 @Configuration
 public class MybatisPlusConfig {
     /**
@@ -33,22 +35,5 @@ public class MybatisPlusConfig {
     @Bean
     public PaginationInterceptor paginationInterceptor() {
         return new PaginationInterceptor();
-    }
-    
-    @Bean
-    public FilterRegistrationBean<CorsFilter> corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-
-        CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true);
-        config.addAllowedOrigin("*");
-        config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
-
-        source.registerCorsConfiguration("/**", config);
-
-        FilterRegistrationBean<CorsFilter> registrationBean = new FilterRegistrationBean<>(new CorsFilter(source));
-        registrationBean.setOrder(0);
-        return registrationBean;
     }
 }

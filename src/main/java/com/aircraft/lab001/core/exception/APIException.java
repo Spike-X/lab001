@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.core.exception;
+package com.aircraft.lab001.core.exception;
 
-import com.aircraft.codelab.core.service.IReturnCode;
+import com.aircraft.lab001.core.service.IReturnCode;
 
 /**
  * @description: 自定义异常
