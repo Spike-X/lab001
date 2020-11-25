@@ -17,6 +17,7 @@
 package com.aircraft.lab001.core.util;
 
 import com.aircraft.lab001.core.exception.ApiException;
+import com.google.common.base.Strings;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.commons.lang3.ArrayUtils;
@@ -30,13 +31,13 @@ import java.util.Map;
  * @author: spikeX
  * @create: 2020-11-08
  **/
-public class Assert {
+public final class Assert {
     private Assert() {
     }
 
     public static void isTrue(boolean expression, String message, Object... params) {
         if (!expression) {
-            throw new ApiException(String.format(message, params));
+            throw new ApiException(Strings.lenientFormat(message,params));
         }
     }
 

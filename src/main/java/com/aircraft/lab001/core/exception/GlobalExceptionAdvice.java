@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -59,7 +60,7 @@ public class GlobalExceptionAdvice {
     public CommonResult<String> handleException(ConstraintViolationException e) {
         String message;
         message = e.getConstraintViolations().stream()
-                .map(x -> String.format("%s value '%s' %s", x.getPropertyPath(), x.getInvalidValue(), x.getMessage()))
+                .map(x -> String.format(Locale.ROOT,"%s value '%s' %s", x.getPropertyPath(), x.getInvalidValue(), x.getMessage()))
                 .collect(Collectors.joining(","));
         return CommonResult.failed(message);
     }
