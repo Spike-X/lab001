@@ -23,11 +23,9 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.Locale;
+import java.util.stream.Collectors;
 
 /**
  * @description: 统一异常捕获
@@ -38,7 +36,7 @@ import java.util.Set;
 public class GlobalExceptionAdvice {
 
     @ExceptionHandler(ApiException.class)
-    public CommonResult<String> apiExceptionHandler(ApiException e) {
+    public CommonResult<String> handleException(ApiException e) {
         if (e.getReturnCode() != null) {
             return CommonResult.failed(e.getReturnCode());
         }
@@ -46,7 +44,7 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public CommonResult<?> methodArgumentNotValidExceptionHandler(MethodArgumentNotValidException e) {
+    public CommonResult<String> handleException(MethodArgumentNotValidException e) {
         BindingResult bindingResult = e.getBindingResult();
         String message = null;
         if (bindingResult.hasErrors()) {
@@ -59,14 +57,11 @@ public class GlobalExceptionAdvice {
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public CommonResult<?> constraintViolationExceptionHandler(ConstraintViolationException e) {
-        Set<ConstraintViolation<?>> violations = e.getConstraintViolations();
+    public CommonResult<String> handleException(ConstraintViolationException e) {
         String message;
-        List<String> list = new ArrayList<>();
-        violations.forEach(x -> list.add(x.getInvalidValue() + " 请求参数错误," + x.getMessage()));
-        message = String.join(",", list);
-//        message = violations.stream().map(ConstraintViolation::getMessage)
-//                .collect(Collectors.joining(","));
+        message = e.getConstraintViolations().stream()
+                .map(x -> String.format(Locale.ROOT,"%s value '%s' %s", x.getPropertyPath(), x.getInvalidValue(), x.getMessage()))
+                .collect(Collectors.joining(","));
         return CommonResult.failed(message);
     }
 }

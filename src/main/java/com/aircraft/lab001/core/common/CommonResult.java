@@ -52,7 +52,7 @@ public class CommonResult<T> implements Serializable {
     }
 
     public static <T> CommonResult<T> success() {
-        return success(ResultCode.SUCCESS.getMessage());
+        return success(ResultCode.SUCCESS.getMessage(),null);
     }
 
     public static <T> CommonResult<T> success(String message) {
@@ -64,7 +64,7 @@ public class CommonResult<T> implements Serializable {
     }
 
     public static <T> CommonResult<T> failed() {
-        return failed(ResultCode.FAILURE, null);
+        return failed(ResultCode.FAILURE.getMessage());
     }
 
     public static <T> CommonResult<T> failed(String message) {
