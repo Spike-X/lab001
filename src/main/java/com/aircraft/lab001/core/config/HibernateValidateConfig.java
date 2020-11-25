@@ -26,10 +26,12 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 /**
- * @description: 校验配置
- * @author: spikeX
- * @create: 2020-11-03
- **/
+ * 2020-11-03
+ * 校验配置
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @Configuration
 public class HibernateValidateConfig {
     @Bean

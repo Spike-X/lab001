@@ -17,10 +17,12 @@
 package com.aircraft.lab001.core.service;
 
 /**
- * @description: 响应码接口
- * @author: spikeX
- * @create: 2020-11-01
- **/
+ * 2020-11-01
+ * 响应码接口
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 public interface IReturnCode {
     int getCode();
 

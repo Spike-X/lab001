@@ -19,10 +19,12 @@ package com.aircraft.lab001.core.exception;
 import com.aircraft.lab001.core.service.IReturnCode;
 
 /**
- * @description: 自定义异常
- * @author: spikeX
- * @create: 2020-11-03
- **/
+ * 2020-11-03
+ * 自定义异常
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 public class ApiException extends RuntimeException {
     private IReturnCode returnCode;
 

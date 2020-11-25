@@ -32,10 +32,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @description: Druid配置类
- * @author: spikeX
- * @create: 2020-11-01
- **/
+ * 2020-11-01
+ * Druid配置类
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @Configuration
 @EnableConfigurationProperties(DruidProperties.class)
 public class DruidConfig {

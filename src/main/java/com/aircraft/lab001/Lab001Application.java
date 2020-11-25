@@ -19,6 +19,13 @@ package com.aircraft.lab001;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+/**
+ * 2020-10-31
+ * 启动类
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @SpringBootApplication
 public class Lab001Application {
 
