@@ -22,10 +22,12 @@ import com.aircraft.lab001.core.service.IReturnCode;
 import java.io.Serializable;
 
 /**
- * @description: 统一返回消息实体
- * @author: spikeX
- * @create: 2020-11-01
- **/
+ * 2020-11-01
+ * 统一返回消息实体
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 public class CommonResult<T> implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -52,7 +54,7 @@ public class CommonResult<T> implements Serializable {
     }
 
     public static <T> CommonResult<T> success() {
-        return success(ResultCode.SUCCESS.getMessage(),null);
+        return success(ResultCode.SUCCESS.getMessage(), null);
     }
 
     public static <T> CommonResult<T> success(String message) {

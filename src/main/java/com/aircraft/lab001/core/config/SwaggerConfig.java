@@ -31,10 +31,12 @@ import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
- * @description: Knife4j配置类
- * @author: spikeX
- * @create: 2020-11-03
- **/
+ * 2020-11-03
+ * Knife4j配置类
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @Configuration
 @EnableSwagger2
 @EnableKnife4j

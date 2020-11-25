@@ -27,17 +27,19 @@ import java.util.Collection;
 import java.util.Map;
 
 /**
- * @description: 自定义断言类
- * @author: spikeX
- * @create: 2020-11-08
- **/
+ * 2020-11-08
+ * 自定义断言类
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 public final class Assert {
     private Assert() {
     }
 
     public static void isTrue(boolean expression, String message, Object... params) {
         if (!expression) {
-            throw new ApiException(Strings.lenientFormat(message,params));
+            throw new ApiException(Strings.lenientFormat(message, params));
         }
     }
 

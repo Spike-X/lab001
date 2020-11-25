@@ -28,10 +28,12 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
- * @description: 统一异常捕获
- * @author: spikeX
- * @create: 2020-11-03
- **/
+ * 2020-11-03
+ * 统一异常捕获
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
 
@@ -60,7 +62,7 @@ public class GlobalExceptionAdvice {
     public CommonResult<String> handleException(ConstraintViolationException e) {
         String message;
         message = e.getConstraintViolations().stream()
-                .map(x -> String.format(Locale.ROOT,"%s value '%s' %s", x.getPropertyPath(), x.getInvalidValue(), x.getMessage()))
+                .map(x -> String.format(Locale.ROOT, "%s value '%s' %s", x.getPropertyPath(), x.getInvalidValue(), x.getMessage()))
                 .collect(Collectors.joining(","));
         return CommonResult.failed(message);
     }

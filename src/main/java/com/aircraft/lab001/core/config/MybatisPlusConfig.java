@@ -22,10 +22,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * @description: MybatisPlus配置类
- * @author: spikeX
- * @create: 2020-11-03
- **/
+ * 2020-11-03
+ * MybatisPlus配置类
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @EnableTransactionManagement
 @Configuration
 public class MybatisPlusConfig {

@@ -22,10 +22,12 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import java.sql.SQLException;
 
 /**
- * @description: Druid属性配置类
- * @author: spikeX
- * @create: 2020-11-01
- **/
+ * 2020-11-01
+ * Druid属性配置类
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @ConfigurationProperties(prefix = "spring.datasource.druid")
 public class DruidProperties {
 

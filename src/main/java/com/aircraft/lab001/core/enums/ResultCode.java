@@ -19,10 +19,12 @@ package com.aircraft.lab001.core.enums;
 import com.aircraft.lab001.core.service.IReturnCode;
 
 /**
- * @description: 统一响应码枚举
- * @author: spikeX
- * @create: 2020-11-01
- **/
+ * 2020-11-01
+ * 统一响应码枚举
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 public enum ResultCode implements IReturnCode {
 
     SUCCESS(200, "请求成功"),
