@@ -24,11 +24,42 @@ spring:
       url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
       username: root
       password: root
+
 #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 #    time-zone: GMT+8
 #    serialization:
 #      write-dates-as-timestamps: false
+
+  kafka:
+    bootstrap-servers:
+    template:
+      default-topic:
+    producer:
+      #重试次数，0为不启用重试机制
+      retries: 0
+      #控制批处理大小，单位为字节
+      batch-size: 16384
+      #生产者可以使用的总内存字节来缓冲等待发送到服务器的记录
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        #批量发送，延迟为1毫秒，启用该功能能有效减少生产者发送消息次数，从而提高并发量
+        "[linger.ms]": "1"
+    consumer:
+      group-id:
+      #是否自动提交offset偏移量(默认true)
+      enable-auto-commit: false
+      #自动提交的频率(ms)
+      auto-commit-interval: 100
+      #offset偏移量规则设置
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.IntegerSerializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        #Session超时设置
+        session.timeout.ms: 15000
 
 mybatis-plus:
   mapper-locations:
