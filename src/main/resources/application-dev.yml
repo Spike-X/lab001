@@ -35,7 +35,11 @@ spring:
     bootstrap-servers:
     template:
       default-topic:
+    listener:
+      ack-mode: manual_immediate
     producer:
+      #把消息发送到kafka leader分区，并且写入磁盘就认为发送成功
+      acks: 1
       #重试次数，0为不启用重试机制
       retries: 0
       #控制批处理大小，单位为字节
@@ -53,9 +57,9 @@ spring:
       enable-auto-commit: false
       #自动提交的频率(ms)
       auto-commit-interval: 100
-      #offset偏移量规则设置
+      #offset偏移量规则设置:当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
       auto-offset-reset: earliest
-      key-deserializer: org.apache.kafka.common.serialization.IntegerSerializer
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
         #Session超时设置

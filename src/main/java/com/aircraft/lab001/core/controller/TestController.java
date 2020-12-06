@@ -54,7 +54,7 @@ public class TestController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @ApiOperation(value = "map测试", notes = "RequestBody接收Map参数")
+    @ApiOperation(value = "map测试", notes = "redis测试")
     @GetMapping("/redis")
     public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
         INFO.put("id", parentId);
