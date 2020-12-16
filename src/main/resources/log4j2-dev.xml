@@ -32,11 +32,12 @@
         <AsyncLogger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncLogger name="com.aircraft.lab001" level="debug">
+        <AsyncLogger name="com.aircraft.lab001" level="debug" additivity="false">
+            <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncRoot level="info">
+        <Root level="info">
             <appender-ref ref="Console"/>
-        </AsyncRoot>
+        </Root>
     </loggers>
 
 </configuration>

@@ -57,6 +57,7 @@ public class TestController {
     @ApiOperation(value = "map测试", notes = "redis测试")
     @GetMapping("/redis")
     public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
+        log.debug("redis test");
         INFO.put("id", parentId);
         redisTemplate.opsForHash().putAll("test:map:2", INFO);
         Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
