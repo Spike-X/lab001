@@ -24,11 +24,45 @@ spring:
       url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
       username: root
       password: root
+
 #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 #    time-zone: GMT+8
 #    serialization:
 #      write-dates-as-timestamps: false
+
+  kafka:
+    bootstrap-servers:
+    template:
+      default-topic:
+    listener:
+      ack-mode: manual_immediate
+      concurrency: 3
+    producer:
+      #把消息发送到kafka leader分区，并且写入磁盘就认为发送成功
+      acks: 1
+      #重试次数，0为不启用重试机制
+      retries: 0
+      #控制批处理大小，单位为字节
+      batch-size: 16384
+      #生产者可以使用的总内存字节来缓冲等待发送到服务器的记录
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      properties:
+        #批量发送，延迟为5毫秒，启用该功能能有效减少生产者发送消息次数，从而提高并发量
+        "[linger.ms]": "5"
+    consumer:
+      group-id:
+      #是否自动提交offset偏移量(默认true)
+      enable-auto-commit: false
+      #offset偏移量规则设置:当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      properties:
+        #Session超时设置
+        session.timeout.ms: 15000
 
 mybatis-plus:
   mapper-locations:

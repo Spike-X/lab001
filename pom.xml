@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.3.2.RELEASE</version>
+        <version>2.2.9.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -29,20 +29,21 @@
     </developers>
 
     <properties>
-        <springboot.version>2.3.2.RELEASE</springboot.version>
         <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <lombok.version>1.18.12</lombok.version>
         <mysql-connector.version>8.0.20</mysql-connector.version>
         <ojdbc8.version>12.2.0.1</ojdbc8.version>
         <druid.version>1.1.22</druid.version>
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <knife4j.version>2.0.3</knife4j.version>
-        <validator.version>6.1.5.Final</validator.version>
         <jedis.version>3.3.0</jedis.version>
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
         <commons-io.version>2.8.0</commons-io.version>
         <guava.version>30.0-jre</guava.version>
+        <hutool-all.version>5.5.2</hutool-all.version>
+        <spring-kafka.version>2.4.7.RELEASE</spring-kafka.version>
     </properties>
 
     <dependencies>
@@ -133,7 +134,6 @@
             <version>${mybatis-plus.version}</version>
         </dependency>
 
-        <!-- https://mvnrepository.com/artifact/com.github.xiaoymin/knife4j-spring-boot-starter -->
         <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
@@ -144,12 +144,6 @@
                     <groupId>com.google.guava</groupId>
                 </exclusion>
             </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${validator.version}</version>
         </dependency>
 
         <dependency>
@@ -183,6 +177,17 @@
             <version>${guava.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+            <version>${hutool-all.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+            <version>${spring-kafka.version}</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -202,7 +207,16 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>${springboot.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
             </plugin>
             <!--打包时跳过测试-->
             <plugin>
@@ -212,6 +226,25 @@
                 <configuration>
                     <skipTests>true</skipTests>
                 </configuration>
+            </plugin>
+            <!--配置生成Javadoc包 -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <charset>${project.build.sourceEncoding}</charset>
+                    <docencoding>${project.build.sourceEncoding}</docencoding>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>attach-javadocs</id>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
