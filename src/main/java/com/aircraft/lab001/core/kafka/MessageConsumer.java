@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
  * @author tao.zhang
  * @since 1.0
  */
-@Component
+//@Component
 @Slf4j
 public class MessageConsumer {
 

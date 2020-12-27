@@ -21,11 +21,12 @@ spring:
         min-idle: 0
   datasource:
     druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
       url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
       username: root
       password: root
 
-#  jackson:
+  #  jackson:
 #    date-format: yyyy-MM-dd HH:mm:ss
 #    time-zone: GMT+8
 #    serialization:

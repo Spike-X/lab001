@@ -41,6 +41,7 @@
         <druid.version>1.1.22</druid.version>
         <mybatis-plus.version>3.3.1</mybatis-plus.version>
         <knife4j.version>2.0.3</knife4j.version>
+        <validator.version>6.1.5.Final</validator.version>
         <jedis.version>3.3.0</jedis.version>
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
@@ -73,10 +74,21 @@
         </dependency>
         <!--log4j2日志-->
 
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--        </dependency>-->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${validator.version}</version>
         </dependency>
 
         <!--junit5-->
@@ -187,11 +199,11 @@
             <version>${hutool-all.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>${spring-kafka.version}</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.kafka</groupId>-->
+<!--            <artifactId>spring-kafka</artifactId>-->
+<!--            <version>${spring-kafka.version}</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
