@@ -14,20 +14,23 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.kafka;
+package com.aircraft.codelab;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
- * 2020-12-06
- * KafkaProducer
+ * 2020-10-31
+ * 启动类
  *
  * @author tao.zhang
  * @since 1.0
  */
-//@Component
-@Slf4j
-public class MessageProducer {
+@SpringBootApplication
+public class Lab001Application {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Lab001Application.class, args);
+    }
 
 }

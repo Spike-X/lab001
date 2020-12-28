@@ -14,38 +14,28 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.exception;
+package com.aircraft.codelab.core.config;
 
-import com.aircraft.lab001.core.service.IReturnCode;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  * 2020-11-03
- * 自定义异常
+ * MybatisPlus配置类
  *
  * @author tao.zhang
  * @since 1.0
  */
-public class ApiException extends RuntimeException {
-    private IReturnCode returnCode;
-
-    public ApiException(IReturnCode iReturnCode) {
-        super(iReturnCode.getMessage());
-        this.returnCode = iReturnCode;
-    }
-
-    public ApiException(String message) {
-        super(message);
-    }
-
-    public ApiException(Throwable cause) {
-        super(cause);
-    }
-
-    public ApiException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    public IReturnCode getReturnCode() {
-        return returnCode;
+@EnableTransactionManagement
+@Configuration
+public class MybatisPlusConfig {
+    /**
+     * mybatis-plus分页插件
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
     }
 }

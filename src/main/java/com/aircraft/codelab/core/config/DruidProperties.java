@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.config;
+package com.aircraft.codelab.core.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;

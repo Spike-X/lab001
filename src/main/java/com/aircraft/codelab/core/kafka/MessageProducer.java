@@ -14,20 +14,19 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.kafka;
+package com.aircraft.codelab.core.kafka;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
 
 /**
  * 2020-12-06
- * KafkaConsumer
+ * KafkaProducer
  *
  * @author tao.zhang
  * @since 1.0
  */
 //@Component
 @Slf4j
-public class MessageConsumer {
+public class MessageProducer {
 
 }

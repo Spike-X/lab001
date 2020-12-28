@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.service;
+package com.aircraft.codelab.core.kafka;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
- * 2020-11-01
- * 响应码接口
+ * 2020-12-06
+ * KafkaConsumer
  *
  * @author tao.zhang
  * @since 1.0
  */
-public interface IReturnCode {
-    int getCode();
+//@Component
+@Slf4j
+public class MessageConsumer {
 
-    String getMessage();
 }

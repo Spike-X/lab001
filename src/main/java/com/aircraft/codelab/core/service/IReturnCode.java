@@ -14,28 +14,17 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.config;
-
-import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
+package com.aircraft.codelab.core.service;
 
 /**
- * 2020-11-03
- * MybatisPlus配置类
+ * 2020-11-01
+ * 响应码接口
  *
  * @author tao.zhang
  * @since 1.0
  */
-@EnableTransactionManagement
-@Configuration
-public class MybatisPlusConfig {
-    /**
-     * mybatis-plus分页插件
-     */
-    @Bean
-    public PaginationInterceptor paginationInterceptor() {
-        return new PaginationInterceptor();
-    }
+public interface IReturnCode {
+    int getCode();
+
+    String getMessage();
 }

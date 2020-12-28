@@ -14,15 +14,17 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.api;
+package com.aircraft.codelab.api;
 
 import org.junit.jupiter.api.*;
 
 /**
- * @description: JUnit5测试
- * @author: spikeX
- * @create: 2020-10-28
- **/
+ * 2020-10-31
+ * JUnit5测试
+ *
+ * @author tao.zhang
+ * @since 1.0
+ */
 @DisplayName("我的第一个测试用例")
 public class JUnit5Test {
     @BeforeAll

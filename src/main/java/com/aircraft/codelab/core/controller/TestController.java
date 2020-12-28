@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.controller;
+package com.aircraft.codelab.core.controller;
 
-import com.aircraft.lab001.core.common.CommonResult;
-import com.aircraft.lab001.core.enums.ResultCode;
+import com.aircraft.codelab.core.common.CommonResult;
+import com.aircraft.codelab.core.enums.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
