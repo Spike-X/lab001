@@ -25,8 +25,36 @@ import lombok.extern.slf4j.Slf4j;
  * @author tao.zhang
  * @since 1.0
  */
-//@Component
+@Component
 @Slf4j
 public class MessageConsumer {
+@KafkaListener(topicPartitions ={@TopicPartition(topic = "${spring.kafka.template.default-topic}", partitions = { "0","1","2"})},containerFactory = "containerFactory")
+    public void receiveMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment ack) {
+        try {
+            records.forEach(record -> {
+                Optional<?> kafkaMessage = Optional.ofNullable(record.value());
+                if (kafkaMessage.isPresent()) {
+                    log.info("key:{},value:{},partition:{},offset:{}", record.key(), record.value(), record.partition(), record.offset());
+                }
+            });
+        } catch (Exception e) {
+            log.error("Kafka监听异常" + e.getMessage(), e);
+        } finally {
+            ack.acknowledge();
+        }
+    }
 
+    @KafkaListener(topics = {"${spring.kafka.template.default-topic}"})
+    public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
+        try {
+            Optional<?> kafkaMessage = Optional.ofNullable(record.value());
+            if (kafkaMessage.isPresent()) {
+                log.info("key:{},value:{},partition:{},offset:{}", record.key(), record.value(), record.partition(), record.offset());
+            }
+        } catch (Exception e) {
+            log.error("Kafka监听异常" + e.getMessage(), e);
+        } finally {
+            ack.acknowledge();
+        }
+    }
 }
