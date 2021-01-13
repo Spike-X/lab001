@@ -9,7 +9,7 @@ spring:
     database: 0
     ## 连接超时时间（毫秒）
     timeout: 1200
-    jedis:
+    lettuce:
       pool:
         ## 连接池最大连接数（使用负值表示没有限制）
         max-active: 8
@@ -19,6 +19,7 @@ spring:
         max-idle: 8
         ## 连接池中的最小空闲连接
         min-idle: 0
+        time-between-eviction-runs: 1
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
@@ -33,14 +34,12 @@ spring:
 #      write-dates-as-timestamps: false
 
   kafka:
-    bootstrap-servers:
+    bootstrap-servers: 10.41.96.99:9092,10.41.98.95:9092,10.41.97.129:9092
     template:
-      default-topic:
+      default-topic: T_PCB_PARSE_PROD
     listener:
-      ack-mode: manual_immediate
-      concurrency: 3
+      ack-mode: manual
     producer:
-      #把消息发送到kafka leader分区，并且写入磁盘就认为发送成功
       acks: 1
       #重试次数，0为不启用重试机制
       retries: 0
@@ -51,19 +50,33 @@ spring:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.apache.kafka.common.serialization.StringSerializer
       properties:
-        #批量发送，延迟为5毫秒，启用该功能能有效减少生产者发送消息次数，从而提高并发量
-        "[linger.ms]": "5"
+        #批量发送，延迟为1毫秒，启用该功能能有效减少生产者发送消息次数，从而提高并发量
+        linger:
+          ms: 5
+        security.protocol: SASL_PLAINTEXT
+        sasl:
+          mechanism: PLAIN
+          jaas:
+            config: org.apache.kafka.common.security.plain.PlainLoginModule required username="com.huawei.pcb_tools" password="R*nZZuhAOZior5kEFpz5Jr53Uxav1Jcv!P$XxF7~+h)GRn[h+BW1584607039062";
     consumer:
-      group-id:
+      group-id: com_huawei_pcb_tools-T_PCB_PARSE_PROD-parser_group
       #是否自动提交offset偏移量(默认true)
       enable-auto-commit: false
-      #offset偏移量规则设置:当各分区下有已提交的offset时，从提交的offset开始消费；无提交的offset时，从头开始消费
+      #offset偏移量规则设置
       auto-offset-reset: earliest
+      #一次调用poll()操作时返回的最大记录数，默认值为500
+      max-poll-records: 5
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       properties:
-        #Session超时设置
-        session.timeout.ms: 15000
+        partition:
+          assignment:
+#            strategy: org.apache.kafka.clients.consumer.RoundRobinAssignor
+        security.protocol: SASL_PLAINTEXT
+        sasl:
+          mechanism: PLAIN
+          jaas:
+            config: org.apache.kafka.common.security.plain.PlainLoginModule required username="com.huawei.pcb_tools" password="R*nZZuhAOZior5kEFpz5Jr53Uxav1Jcv!P$XxF7~+h)GRn[h+BW1584607039062";
 
 mybatis-plus:
   mapper-locations:
