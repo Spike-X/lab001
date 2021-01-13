@@ -64,11 +64,12 @@ public class MessageProducer {
         });
 
         future.addCallback(result -> {
-                    assert result != null;
-                    int partition = result.getRecordMetadata().partition();
-                    long offset = result.getRecordMetadata().offset();
-                    log.info("send success: key={},value={},partition={},offset={}", key, message, partition, offset);
-                },
-                ex -> log.error("send message={} failure: detail message={}", message, ex.getMessage()));
+            Optional<SendResult<String, String>> sendResult = Optional.ofNullable(result);
+            if (sendResult.isPresent()) {
+                int partition = result.getRecordMetadata().partition();
+                long offset = result.getRecordMetadata().offset();
+                log.info("send success: key={},value={},partition={},offset={}", key, message, partition, offset);
+            }
+        }, ex -> log.error("send message={} failure: detail message={}", message, ex.getMessage()));
     }
 }
