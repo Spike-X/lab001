@@ -16,7 +16,18 @@
 
 package com.aircraft.codelab.core.kafka;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.kafka.clients.producer.ProducerRecord;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Component;
+import org.springframework.util.concurrent.ListenableFuture;
+
+import javax.annotation.Resource;
+import java.util.Optional;
 
 /**
  * 2020-12-06
@@ -25,10 +36,10 @@ import lombok.extern.slf4j.Slf4j;
  * @author tao.zhang
  * @since 1.0
  */
-@Component
+//@Component
 @Slf4j
 public class MessageProducer {
-@Value("${spring.kafka.template.default-topic}")
+    @Value("${spring.kafka.template.default-topic}")
     private String topicName;
 
     @Resource
@@ -49,20 +60,6 @@ public class MessageProducer {
         // 默认异步发送消息
         ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(record);
         // 消息回调
-        future.addCallback(new ListenableFutureCallback<SendResult<String, String>>() {
-            @Override
-            public void onSuccess(SendResult<String, String> result) {
-                int partition = result.getRecordMetadata().partition();
-                long offset = result.getRecordMetadata().offset();
-                log.info("send success: key={},value={},partition={},offset={}", key, message, partition, offset);
-            }
-
-            @Override
-            public void onFailure(@NonNull Throwable ex) {
-                log.error("send message={} failure: detail message={}", message, ex.getMessage());
-            }
-        });
-
         future.addCallback(result -> {
             Optional<SendResult<String, String>> sendResult = Optional.ofNullable(result);
             if (sendResult.isPresent()) {
