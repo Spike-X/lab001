@@ -87,7 +87,7 @@
         <AsyncLogger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncLogger name="com.aircraft.lab001" level="info" additivity="false">
+        <AsyncLogger name="com.aircraft.codelab" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </AsyncLogger>
         <Root level="info">

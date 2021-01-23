@@ -14,20 +14,28 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.kafka;
+package com.aircraft.codelab.core.config;
 
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Component;
+import com.baomidou.mybatisplus.extension.plugins.PaginationInterceptor;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
- * 2020-12-06
- * KafkaProducer
+ * 2020-11-03
+ * MybatisPlus配置类
  *
  * @author tao.zhang
  * @since 1.0
  */
-@Component
-@Slf4j
-public class MessageProducer {
-
+@EnableTransactionManagement
+@Configuration
+public class MybatisPlusConfig {
+    /**
+     * mybatis-plus分页插件
+     */
+    @Bean
+    public PaginationInterceptor paginationInterceptor() {
+        return new PaginationInterceptor();
+    }
 }

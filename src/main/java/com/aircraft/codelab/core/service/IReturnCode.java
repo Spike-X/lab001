@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.service;
+package com.aircraft.codelab.core.service;
 
 /**
  * 2020-11-01

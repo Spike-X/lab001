@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.config;
+package com.aircraft.codelab.core.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -37,7 +37,7 @@ public class DruidProperties {
 
     private String password;
 
-    private String driverClassName = "com.mysql.cj.jdbc.Driver";
+    private String driverClassName;
 
     /**
      * 连接池初始化物理连接数
@@ -90,8 +90,8 @@ public class DruidProperties {
         dataSource.setUrl(url);
         dataSource.setUsername(username);
         dataSource.setPassword(password);
-
         dataSource.setDriverClassName(driverClassName);
+
         dataSource.setInitialSize(initialSize);
         dataSource.setMaxActive(maxActive);
         dataSource.setMinIdle(minIdle);

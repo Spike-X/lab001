@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.enums;
+package com.aircraft.codelab.core.enums;
 
-import com.aircraft.lab001.core.service.IReturnCode;
+import com.aircraft.codelab.core.service.IReturnCode;
 
 /**
  * 2020-11-01

@@ -32,7 +32,7 @@
         <AsyncLogger name="org.springframework" level="info" additivity="false">
             <AppenderRef ref="Console"/>
         </AsyncLogger>
-        <AsyncLogger name="com.aircraft.lab001" level="debug" additivity="false">
+        <AsyncLogger name="com.aircraft.codelab" level="debug" additivity="false">
             <AppenderRef ref="Console"/>
         </AsyncLogger>
         <Root level="info">

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.aircraft.lab001.core.exception;
+package com.aircraft.codelab.core.exception;
 
-import com.aircraft.lab001.core.service.IReturnCode;
+import com.aircraft.codelab.core.service.IReturnCode;
 
 /**
  * 2020-11-03
