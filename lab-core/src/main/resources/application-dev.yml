@@ -88,5 +88,5 @@ mybatis-plus:
     db-config:
       id-type: auto
 
-logging:
-  config: classpath:log4j2-${spring.profiles.active}.xml
+#logging:
+#  config: classpath:log4j2-${spring.profiles.active}.xml

@@ -1,6 +1,6 @@
-package com.aircraft.codelab.labcore.exception;
+package com.aircraft.codelab.core.exception;
 
-import com.aircraft.codelab.labcore.service.IReturnCode;
+import com.aircraft.codelab.core.service.IReturnCode;
 
 /**
  * 2020-11-03

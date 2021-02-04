@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service;
+package com.aircraft.codelab.core.service;
 
 import java.util.List;
 import java.util.Map;

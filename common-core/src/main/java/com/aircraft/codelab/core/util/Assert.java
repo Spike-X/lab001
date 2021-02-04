@@ -1,6 +1,6 @@
-package com.aircraft.codelab.labcore.util;
+package com.aircraft.codelab.core.util;
 
-import com.aircraft.codelab.labcore.exception.ApiException;
+import com.aircraft.codelab.core.exception.ApiException;
 import com.google.common.base.Strings;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;

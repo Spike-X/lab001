@@ -16,8 +16,8 @@
 
 package com.aircraft.codelab.labcore.controller;
 
-import com.aircraft.codelab.labcore.entities.CommonResult;
-import com.aircraft.codelab.labcore.enums.ResultCode;
+import com.aircraft.codelab.core.entities.CommonResult;
+import com.aircraft.codelab.core.enums.ResultCode;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -56,7 +56,7 @@ public class TestController {
 
     @ApiOperation(value = "map测试", notes = "redis测试")
     @GetMapping("/redis")
-    public com.aircraft.codelab.labcore.entities.CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
+    public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
         log.debug("redis test");
         INFO.put("id", parentId);
         redisTemplate.opsForHash().putAll("test:map:2", INFO);

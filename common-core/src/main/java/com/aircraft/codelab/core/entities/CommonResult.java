@@ -1,7 +1,7 @@
-package com.aircraft.codelab.labcore.entities;
+package com.aircraft.codelab.core.entities;
 
-import com.aircraft.codelab.labcore.enums.ResultCode;
-import com.aircraft.codelab.labcore.service.IReturnCode;
+import com.aircraft.codelab.core.service.IReturnCode;
+import com.aircraft.codelab.core.enums.ResultCode;
 
 /**
  * 2020-11-01

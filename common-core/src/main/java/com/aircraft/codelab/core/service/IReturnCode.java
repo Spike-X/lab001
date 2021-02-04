@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service;
+package com.aircraft.codelab.core.service;
 
 /**
  * 2020-11-01
