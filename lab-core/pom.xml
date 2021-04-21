@@ -18,12 +18,25 @@
             <artifactId>common-core</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <!-- maven modules -->
 
 <!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
+<!--            <groupId>com.aircraft.codelab</groupId>-->
+<!--            <artifactId>lab-kafka</artifactId>-->
+<!--            <version>${project.version}</version>-->
 <!--        </dependency>-->
+        <!-- maven modules -->
+
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-server</artifactId>
+            <version>2.3.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>2.3.0</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -69,18 +82,10 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
-    <build>
-
-    </build>
 </project>

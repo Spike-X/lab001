@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.labcore.kafka;
+package com.aircraft.codelab.kafka;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.springframework.kafka.annotation.KafkaListener;
-import org.springframework.kafka.annotation.TopicPartition;
 import org.springframework.kafka.support.Acknowledgment;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +32,7 @@ import java.util.Optional;
  * @author tao.zhang
  * @since 1.0
  */
-//@Component
+@Component
 @Slf4j
 public class MessageConsumer {
     /**
@@ -41,7 +41,7 @@ public class MessageConsumer {
      * @param records List<ConsumerRecord>
      * @param ack     Acknowledgment
      */
-    @KafkaListener(topicPartitions = {@TopicPartition(topic = "${spring.kafka.template.default-topic}", partitions = {"0", "1", "2"})}, containerFactory = "containerFactory")
+//    @KafkaListener(topicPartitions = {@TopicPartition(topic = "${spring.kafka.template.default-topic}", partitions = {"0", "1", "2"})}, containerFactory = "containerFactory")
     public void receiveMessage(List<ConsumerRecord<?, ?>> records, Acknowledgment ack) {
         try {
             records.forEach(record -> {

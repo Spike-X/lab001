@@ -6,6 +6,7 @@
     <modules>
         <module>lab-core</module>
         <module>common-core</module>
+        <module>lab-kafka</module>
     </modules>
 
     <groupId>com.aircraft.codelab</groupId>

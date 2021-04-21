@@ -2,6 +2,11 @@ server:
   port: 8081
 
 spring:
+  boot:
+    admin:
+      client:
+        url: http://localhost:${server.port}
+
   redis:
     host: 192.168.31.164
     port: 6379
@@ -20,18 +25,19 @@ spring:
         #连接池中的最小空闲连接
         min-idle: 0
         time-between-eviction-runs: 1
+
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.31.164:3306/rsdb?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://192.168.31.164:3306/test1?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
       username: root
       password: root
 
-#  jackson:
-#    date-format: yyyy-MM-dd HH:mm:ss
-#    time-zone: GMT+8
-#    serialization:
-#      write-dates-as-timestamps: false
+  #  jackson:
+  #    date-format: yyyy-MM-dd HH:mm:ss
+  #    time-zone: GMT+8
+  #    serialization:
+  #      write-dates-as-timestamps: false
 
   kafka:
     bootstrap-servers: 10.41.96.99:9092,10.41.98.95:9092,10.41.97.129:9092

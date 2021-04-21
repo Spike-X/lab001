@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.labcore.kafka;
+package com.aircraft.codelab.kafka;
 
 import com.fasterxml.jackson.databind.deser.std.StringDeserializer;
 import org.apache.kafka.clients.CommonClientConfigs;
@@ -25,6 +25,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.listener.ContainerProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,7 +37,7 @@ import java.util.Map;
  * @author tao.zhang
  * @since 1.0
  */
-//@Component
+@Component
 public class KafkaContainerFactory {
 
     @Value("${spring.kafka.bootstrap-servers}")

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.labcore.kafka;
+package com.aircraft.codelab.kafka;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +23,7 @@ import org.apache.kafka.clients.producer.ProducerRecord;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
+import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 
 import javax.annotation.Resource;
@@ -35,7 +36,7 @@ import java.util.Optional;
  * @author tao.zhang
  * @since 1.0
  */
-//@Component
+@Component
 @Slf4j
 public class MessageProducer {
     @Value("${spring.kafka.template.default-topic}")
