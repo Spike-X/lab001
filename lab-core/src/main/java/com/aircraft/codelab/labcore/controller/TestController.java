@@ -40,7 +40,7 @@ import java.util.Map;
  */
 @RestController
 @RequestMapping("/hello")
-@Api(tags = "统一返回格式测试")
+@Api(tags = "测试")
 @Slf4j
 public class TestController {
     private static final HashMap<String, Object> INFO;
