@@ -18,20 +18,34 @@ import java.util.stream.Collectors;
  * @author tao.zhang
  * @since 1.0
  */
+@Slf4j
 @RestControllerAdvice
 public class GlobalExceptionAdvice {
-
+/**
+     * ApiException
+     *
+     * @param error ApiException
+     * @return CommonResult
+     */
     @ExceptionHandler(ApiException.class)
-    public CommonResult<String> handleException(ApiException e) {
-        if (e.getReturnCode() != null) {
-            return CommonResult.failed(e.getReturnCode());
+    public CommonResult<String> handleException(ApiException error) {
+        log.warn("ApiException:", error);
+        if (error.getReturnCode() != null) {
+            return CommonResult.failed(error.getReturnCode());
         }
-        return CommonResult.failed(e.getMessage());
+        return CommonResult.failed(error.getMessage());
     }
 
+    /**
+     * MethodArgumentNotValidException
+     *
+     * @param error MethodArgumentNotValidException
+     * @return CommonResult
+     */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public CommonResult<String> handleException(MethodArgumentNotValidException e) {
-        BindingResult bindingResult = e.getBindingResult();
+    public CommonResult<String> handleException(MethodArgumentNotValidException error) {
+        log.warn("MethodArgumentNotValidException:", error);
+        BindingResult bindingResult = error.getBindingResult();
         String message = null;
         if (bindingResult.hasErrors()) {
             FieldError fieldError = bindingResult.getFieldError();
@@ -42,12 +56,31 @@ public class GlobalExceptionAdvice {
         return CommonResult.failed(message);
     }
 
+    /**
+     * ConstraintViolationException
+     *
+     * @param error ConstraintViolationException
+     * @return CommonResult
+     */
     @ExceptionHandler(ConstraintViolationException.class)
-    public CommonResult<String> handleException(ConstraintViolationException e) {
+    public CommonResult<String> handleException(ConstraintViolationException error) {
+        log.warn("ConstraintViolationException:", error);
         String message;
-        message = e.getConstraintViolations().stream()
-                .map(x -> String.format(Locale.ROOT, "%s value '%s' %s", x.getPropertyPath(), x.getInvalidValue(), x.getMessage()))
+        message = error.getConstraintViolations().stream()
+                .map(constraint -> String.format(Locale.ROOT, "%s value '%s' %s", constraint.getPropertyPath(), constraint.getInvalidValue(), constraint.getMessage()))
                 .collect(Collectors.joining(","));
         return CommonResult.failed(message);
+    }
+
+    /**
+     * Exception
+     *
+     * @param error Exception
+     * @return CommonResult
+     */
+    @ExceptionHandler(Exception.class)
+    public CommonResult<String> handleException(Exception error) {
+        log.error("Exception:", error);
+        return CommonResult.failed(ResultCode.INTERNAL_SERVER_ERROR);
     }
 }
