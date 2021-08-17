@@ -28,7 +28,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * @author tao.zhang
  * @since 1.0
  */
-@EnableTransactionManagement
 @Configuration
 public class MybatisPlusConfig {
     /**
