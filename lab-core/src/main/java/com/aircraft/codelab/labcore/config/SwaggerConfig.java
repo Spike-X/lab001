@@ -38,9 +38,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
  * @since 1.0
  */
 @Configuration
-@EnableSwagger2
-@EnableKnife4j
-@Import(BeanValidatorPluginsConfiguration.class)
+@EnableSwagger2WebMvc
 public class SwaggerConfig {
 
     @Bean(value = "defaultApi")
