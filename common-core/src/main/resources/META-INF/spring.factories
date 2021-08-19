@@ -2,4 +2,5 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
 com.aircraft.codelab.core.config.CorsConfig,\
 com.aircraft.codelab.core.config.RedisConfig,\
-com.aircraft.codelab.core.exception.GlobalExceptionAdvice
+com.aircraft.codelab.core.exception.GlobalExceptionAdvice,\
+com.aircraft.codelab.core.config.JacksonConfig

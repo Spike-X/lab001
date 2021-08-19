@@ -12,7 +12,10 @@ import java.time.format.DateTimeFormatter;
  * @author tao.zhang
  * @since 1.0
  */
-public class DataUtil {
+public class DateUtil {
+    private DateUtil() {
+    }
+
     public static String getDateTimeNow() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN);
         return formatter.format(LocalDateTime.now());
