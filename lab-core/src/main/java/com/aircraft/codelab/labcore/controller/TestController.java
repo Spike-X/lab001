@@ -18,6 +18,9 @@ package com.aircraft.codelab.labcore.controller;
 
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
+import com.aircraft.codelab.labcore.pojo.entity.UserDO;
+import com.aircraft.codelab.labcore.pojo.vo.UserVO;
+import com.aircraft.codelab.labcore.service.UserConverter;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -28,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -38,10 +42,10 @@ import java.util.Map;
  * @author tao.zhang
  * @since 1.0
  */
-@RestController
-@RequestMapping("/hello")
-@Api(tags = "测试")
 @Slf4j
+@RestController
+@Api(tags = "测试")
+@RequestMapping("/hello")
 public class TestController {
     private static final HashMap<String, Object> INFO;
 
@@ -54,7 +58,7 @@ public class TestController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
-    @ApiOperation(value = "map测试", notes = "redis测试")
+    @ApiOperation(value = "redis测试", notes = "redis hash")
     @GetMapping("/redis")
     public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
         log.debug("redis test");
@@ -62,5 +66,17 @@ public class TestController {
         redisTemplate.opsForHash().putAll("test:map:2", INFO);
         Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), map);
+    }
+
+    @ApiOperation(value = "mapstruct测试")
+    @GetMapping("/mapstruct")
+    public CommonResult<UserDO> helloMapstruct() {
+        log.debug("mapstruct test");
+        UserVO userVO = UserVO.builder().id(100L).name("zhang").build();
+        UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
+        UserDO build = userDO.toBuilder()
+                .creatTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now()).build();
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
     }
 }

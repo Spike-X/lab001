@@ -2,10 +2,10 @@ server:
   port: 8081
 
 spring:
-  boot:
-    admin:
-      client:
-        url: http://localhost:${server.port}
+#  boot:
+#    admin:
+#      client:
+#        url: http://localhost:${server.port}
 
   redis:
     host: 192.168.31.164
@@ -29,7 +29,7 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.31.164:3306/test1?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=GMT%2B8
+      url: jdbc:mysql://192.168.31.164:3306/test1?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
       username: root
       password: root
 
