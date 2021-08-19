@@ -15,11 +15,11 @@ import java.time.format.DateTimeFormatter;
 public class DataUtil {
     public static String getDateTimeNow() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_PATTERN);
-        return LocalDateTime.now().format(formatter);
+        return formatter.format(LocalDateTime.now());
     }
 
     public static String getDateTimeNow(String pattern) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(pattern);
-        return LocalDateTime.now().format(formatter);
+        return formatter.format(LocalDateTime.now());
     }
 }
