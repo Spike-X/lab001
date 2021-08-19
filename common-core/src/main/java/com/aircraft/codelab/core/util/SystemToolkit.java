@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * @since 1.0
  */
 public class SystemToolkit {
+    // JsonUtils
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
 
     public static ObjectMapper getObjectMapper() {
