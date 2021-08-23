@@ -6,6 +6,9 @@ knife4j:
   setting:
     enableHost: true
     enableHostText: localhost.huawei.com:8081
+    enableFooter: false
+    enableFooterCustom: true
+    footerCustomContent: Apache License 2.0 | Copyright (c) 2021 [浙江八一菜刀股份有限公司](https://gitee.com/xiaoym/knife4j)
 
 spring:
 #    boot:
