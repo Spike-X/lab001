@@ -1,11 +1,17 @@
 server:
   port: 8081
 
+knife4j:
+  enable: true
+  setting:
+    enableHost: true
+    enableHostText: localhost.huawei.com:8081
+
 spring:
-#  boot:
-#    admin:
-#      client:
-#        url: http://localhost:${server.port}
+#    boot:
+#      admin:
+#        client:
+#          url: http://localhost:${server.port}
 
   redis:
     host: 192.168.31.164
