@@ -16,6 +16,7 @@
 
 package com.aircraft.codelab.labcore.config;
 
+import com.github.xiaoymin.knife4j.spring.extension.OpenApiExtensionResolver;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -27,6 +28,8 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 
+import javax.annotation.Resource;
+
 /**
  * 2020-11-03
  * Knife4j配置类
@@ -37,17 +40,23 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2WebMvc;
 @Configuration
 @EnableSwagger2WebMvc
 public class SwaggerConfig {
-    @Bean(value = "defaultApi")
+    @Resource
+    private OpenApiExtensionResolver openApiExtensionResolver;
+
+    @Bean
     public Docket defaultApi() {
+        String groupName = "2.X版本";
         return new Docket(DocumentationType.SWAGGER_2)
+                .host("")
                 .apiInfo(apiInfo())
                 //分组名称
-                .groupName("2.X版本")
+                .groupName(groupName)
                 .select()
                 //这里指定Controller扫描包路径
                 .apis(RequestHandlerSelectors.basePackage("com.aircraft.codelab.labcore.controller"))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .extensions(openApiExtensionResolver.buildExtensions(groupName));
     }
 
     private ApiInfo apiInfo() {
