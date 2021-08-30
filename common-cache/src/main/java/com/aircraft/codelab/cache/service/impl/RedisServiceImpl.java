@@ -1,6 +1,6 @@
-package com.aircraft.codelab.core.service.impl;
+package com.aircraft.codelab.cache.service.impl;
 
-import com.aircraft.codelab.core.service.RedisService;
+import com.aircraft.codelab.cache.service.RedisService;
 import org.springframework.data.redis.core.RedisTemplate;
 
 import javax.annotation.Resource;
