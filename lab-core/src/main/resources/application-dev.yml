@@ -3,6 +3,7 @@ server:
 
 knife4j:
   enable: true
+  production: false
   setting:
     enableHost: true
     enableHostText: localhost.huawei.com:8081
