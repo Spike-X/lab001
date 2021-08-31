@@ -16,7 +16,16 @@
         <dependency>
             <groupId>com.aircraft.codelab</groupId>
             <artifactId>common-core</artifactId>
-            <version>${project.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aircraft.codelab</groupId>
+            <artifactId>common-database</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.aircraft.codelab</groupId>
+            <artifactId>common-cache</artifactId>
         </dependency>
 
         <!--        <dependency>-->
@@ -24,19 +33,8 @@
         <!--            <artifactId>lab-kafka</artifactId>-->
         <!--            <version>${project.version}</version>-->
         <!--        </dependency>-->
+
         <!-- maven modules -->
-
-        <!--        <dependency>-->
-        <!--            <groupId>de.codecentric</groupId>-->
-        <!--            <artifactId>spring-boot-admin-starter-server</artifactId>-->
-        <!--            <version>2.3.0</version>-->
-        <!--        </dependency>-->
-
-        <!--        <dependency>-->
-        <!--            <groupId>de.codecentric</groupId>-->
-        <!--            <artifactId>spring-boot-admin-starter-client</artifactId>-->
-        <!--            <version>2.3.0</version>-->
-        <!--        </dependency>-->
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -51,26 +49,6 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.oracle.database.jdbc</groupId>
-            <artifactId>ojdbc8</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-        </dependency>
-
-        <dependency>
             <groupId>com.github.xiaoymin</groupId>
             <artifactId>knife4j-spring-boot-starter</artifactId>
             <exclusions>
@@ -82,15 +60,33 @@
         </dependency>
 
         <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cn.hutool</groupId>
+            <artifactId>hutool-all</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <scope>provided</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.mapstruct</groupId>
-            <artifactId>mapstruct</artifactId>
-        </dependency>
+        <!--        <dependency>-->
+        <!--            <groupId>de.codecentric</groupId>-->
+        <!--            <artifactId>spring-boot-admin-starter-server</artifactId>-->
+        <!--            <version>2.3.0</version>-->
+        <!--        </dependency>-->
+
+        <!--        <dependency>-->
+        <!--            <groupId>de.codecentric</groupId>-->
+        <!--            <artifactId>spring-boot-admin-starter-client</artifactId>-->
+        <!--            <version>2.3.0</version>-->
+        <!--        </dependency>-->
+
     </dependencies>
 
     <build>

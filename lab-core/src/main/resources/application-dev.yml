@@ -3,6 +3,7 @@ server:
 
 knife4j:
   enable: true
+  production: false
   setting:
     enableHost: true
     enableHostText: localhost.huawei.com:8081
@@ -101,7 +102,7 @@ mybatis-plus:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
     db-config:
-      id-type: auto
+      id-type: assign_id
 
 #logging:
 #  config: classpath:log4j2-${spring.profiles.active}.xml

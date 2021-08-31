@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.aircraft.codelab.labcore.config;
+package com.aircraft.codelab.db.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
