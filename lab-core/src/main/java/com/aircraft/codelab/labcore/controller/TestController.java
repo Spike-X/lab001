@@ -16,11 +16,16 @@
 
 package com.aircraft.codelab.labcore.controller;
 
+import com.aircraft.codelab.cache.service.RedisService;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
+import com.aircraft.codelab.core.service.DatePattern;
+import com.aircraft.codelab.core.util.DateUtil;
+import com.aircraft.codelab.core.util.JsonUtil;
 import com.aircraft.codelab.labcore.pojo.entity.UserDO;
 import com.aircraft.codelab.labcore.pojo.vo.UserVO;
 import com.aircraft.codelab.labcore.service.UserConverter;
+import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -58,6 +63,9 @@ public class TestController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Resource
+    private RedisService redisService;
+
     @ApiOperation(value = "redis测试", notes = "redis hash")
     @GetMapping("/redis")
     public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
@@ -66,6 +74,26 @@ public class TestController {
         redisTemplate.opsForHash().putAll("test:map:2", INFO);
         Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), map);
+    }
+
+    @ApiOperation(value = "redis序列化测试")
+    @GetMapping("/serializer")
+    public CommonResult<UserDO> helloRedisSerializer() {
+        log.debug("redis test");
+        String key = DateUtil.getDateTimeNow(DatePattern.PURE_DATETIME_PATTERN);
+        UserDO user = UserDO.builder()
+                .name("zhang")
+                .id(10000L)
+                .creatTime(LocalDateTime.now())
+                .updateTime(LocalDateTime.now()).build();
+        // 转json存储
+        String s = JsonUtil.toJsonString(user);
+        redisService.set(key, s);
+        Object o = redisService.get(key);
+        UserDO userDO = JsonUtil.jsonToObject(o.toString(), UserDO.class);
+        UserDO userDO1 = JsonUtil.jsonToObject(o.toString(), new TypeReference<UserDO>() {
+        });
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), userDO);
     }
 
     @ApiOperation(value = "mapstruct测试")
