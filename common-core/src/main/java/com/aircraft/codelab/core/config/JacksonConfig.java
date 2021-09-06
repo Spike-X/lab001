@@ -1,6 +1,9 @@
 package com.aircraft.codelab.core.config;
 
 import com.aircraft.codelab.core.service.DatePattern;
+import com.aircraft.codelab.core.util.JsonUtil;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
@@ -41,6 +44,12 @@ public class JacksonConfig {
             javaTimeModule.addDeserializer(LocalDate.class, new LocalDateDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN)));
             javaTimeModule.addDeserializer(LocalTime.class, new LocalTimeDeserializer(DateTimeFormatter.ofPattern(DatePattern.NORM_TIME_PATTERN)));
 
+            // JackSon序列化指定LocalDateTime格式
+            ObjectMapper objectMapper = JsonUtil.getInstance();
+            objectMapper.registerModule(javaTimeModule);
+            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+            // 返回前端Long,long,BigInteger数据类型转为String
             builder.locale(Locale.CHINA)
                     .timeZone(TimeZone.getTimeZone(ZoneId.systemDefault()))
                     .modules(javaTimeModule)
