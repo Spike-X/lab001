@@ -1,4 +1,4 @@
-package com.huawei.pcb.transform.pojo.vo;
+package com.aircraft.codelab.labcore.pojo.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;

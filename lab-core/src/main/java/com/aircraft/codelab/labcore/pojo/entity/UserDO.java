@@ -17,6 +17,6 @@ import lombok.experimental.SuperBuilder;
 @AllArgsConstructor
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
-public class UserDO extends BaseDo {
+public class UserDO extends BaseDO {
     private String name;
 }

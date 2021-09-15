@@ -11,8 +11,7 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
- * 2021-08-10
- * 基类
+ * 2021-09-15
  *
  * @author tao.zhang
  * @since 1.0

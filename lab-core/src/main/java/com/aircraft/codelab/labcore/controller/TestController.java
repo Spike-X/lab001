@@ -84,7 +84,7 @@ public class TestController {
         UserDO user = UserDO.builder()
                 .name("zhang")
                 .id(10000L)
-                .creatTime(LocalDateTime.now())
+                .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now()).build();
         // 转json存储
         String s = JsonUtil.toJsonString(user);
@@ -103,7 +103,7 @@ public class TestController {
         UserVO userVO = UserVO.builder().id(100L).name("zhang").build();
         UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
         UserDO build = userDO.toBuilder()
-                .creatTime(LocalDateTime.now())
+                .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now()).build();
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
     }

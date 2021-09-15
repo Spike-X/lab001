@@ -1,7 +1,0 @@
-id||bigint||自增id[:inc(id,1432657927816396321,2)]
-md5||char(32)||md5[:md5]
-review_id||char(32)||检视id[:md5]
-user_no||varchar(32)||工号[:random_number(9)]
-user_name||varchar(32)||用户名[:user_name]
-create_time||datetime||创建时间[:datetime_between(2021-01-01 00:00:00,2021-08-10 23:59:59)]
-update_time||datetime||更新时间[:datetime_between(2021-08-11 00:00:00,2021-09-10 23:59:59)]

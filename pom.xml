@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <module>lab-core</module>
         <module>common-core</module>
-        <module>lab-kafka</module>
         <module>common-database</module>
         <module>common-cache</module>
+        <module>lab-core</module>
+        <module>lab-kafka</module>
     </modules>
 
     <groupId>com.aircraft.codelab</groupId>

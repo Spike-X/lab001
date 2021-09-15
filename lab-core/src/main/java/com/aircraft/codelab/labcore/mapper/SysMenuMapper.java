@@ -1,8 +1,8 @@
-package com.huawei.pcb.transform.mapper;
+package com.aircraft.codelab.labcore.mapper;
 
+import com.aircraft.codelab.labcore.pojo.entity.SysMenu;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.huawei.pcb.transform.pojo.entity.SysMenu;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 

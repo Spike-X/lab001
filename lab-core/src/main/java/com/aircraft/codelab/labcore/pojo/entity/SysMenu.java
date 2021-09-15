@@ -1,4 +1,4 @@
-package com.huawei.pcb.transform.pojo.entity;
+package com.aircraft.codelab.labcore.pojo.entity;
 
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;

@@ -1,8 +1,8 @@
-package com.huawei.pcb.transform.service;
+package com.aircraft.codelab.labcore.service;
 
-import com.huawei.pcb.transform.pojo.entity.SysMenu;
-import com.huawei.pcb.transform.pojo.vo.SysMenuCreatVo;
-import com.huawei.pcb.transform.pojo.vo.SysMenuUpdateVo;
+import com.aircraft.codelab.labcore.pojo.entity.SysMenu;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuCreatVo;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuUpdateVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 

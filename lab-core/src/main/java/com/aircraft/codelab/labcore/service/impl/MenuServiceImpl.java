@@ -1,15 +1,15 @@
-package com.huawei.pcb.transform.service.impl;
+package com.aircraft.codelab.labcore.service.impl;
 
+import com.aircraft.codelab.core.util.ValidateUtil;
+import com.aircraft.codelab.labcore.mapper.SysMenuMapper;
+import com.aircraft.codelab.labcore.pojo.entity.SysMenu;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuCreatVo;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuUpdateVo;
+import com.aircraft.codelab.labcore.service.IMenuService;
+import com.aircraft.codelab.labcore.service.SysMenuConvert;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.huawei.pcb.transform.mapper.SysMenuMapper;
-import com.huawei.pcb.transform.pojo.entity.SysMenu;
-import com.huawei.pcb.transform.pojo.vo.SysMenuCreatVo;
-import com.huawei.pcb.transform.pojo.vo.SysMenuUpdateVo;
-import com.huawei.pcb.transform.service.IMenuService;
-import com.huawei.pcb.transform.service.SysMenuConvert;
-import com.huawei.pcb.transform.utils.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Service;

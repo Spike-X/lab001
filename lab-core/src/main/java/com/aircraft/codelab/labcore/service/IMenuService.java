@@ -1,10 +1,10 @@
-package com.huawei.pcb.transform.service;
+package com.aircraft.codelab.labcore.service;
 
+import com.aircraft.codelab.labcore.pojo.entity.SysMenu;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuCreatVo;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuUpdateVo;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.huawei.pcb.transform.pojo.entity.SysMenu;
-import com.huawei.pcb.transform.pojo.vo.SysMenuCreatVo;
-import com.huawei.pcb.transform.pojo.vo.SysMenuUpdateVo;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
