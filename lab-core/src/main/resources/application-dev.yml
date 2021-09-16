@@ -43,12 +43,6 @@ spring:
       username: root
       password: root
 
-  #  jackson:
-  #    date-format: yyyy-MM-dd HH:mm:ss
-  #    time-zone: GMT+8
-  #    serialization:
-  #      write-dates-as-timestamps: false
-
   kafka:
     bootstrap-servers: 10.41.96.99:9092,10.41.98.95:9092,10.41.97.129:9092
     template:
@@ -96,8 +90,8 @@ spring:
 
 mybatis-plus:
   mapper-locations:
-    - classpath:/com/aircraft/codelab/core/mapper/xml/*.xml
-  type-aliases-package: com.aircraft.codelab.core.pojo
+    - classpath:/com/aircraft/codelab/labcore/mapper/xml/*.xml
+  type-aliases-package: com.aircraft.codelab.labcore.pojo
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:

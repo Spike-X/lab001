@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aircraft.codelab.labcore.mapper.SysMenuMapper">
+    <resultMap id="BaseResultMap" type="com.aircraft.codelab.labcore.pojo.entity.SysMenu">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="menu_type" jdbcType="INTEGER" property="menuType"/>
+        <result column="menu_name" jdbcType="VARCHAR" property="menuName"/>
+        <result column="sort" jdbcType="INTEGER" property="sort"/>
+        <result column="parent_id" jdbcType="BIGINT" property="parentId"/>
+        <result column="remark" jdbcType="VARCHAR" property="remark"/>
+        <result column="is_deleted" jdbcType="TINYINT" property="deleted"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , menu_type, menu_name, sort, parent_id, remark, is_deleted, create_time, update_time
+    </sql>
+
+    <select id="queryMenu" resultType="java.lang.Long">
+        select id from sys_menu where 1=1
+        <if test="type !=null and type !=''">
+            and menu_type = #{type}
+        </if>
+        ORDER BY id
+    </select>
+
+    <select id="queryMenuById" resultMap="BaseResultMap">
+        select t.* from sys_menu as t where t.id in
+        <foreach item="item" index="index" collection="ids" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </select>
+
+    <select id="existSubmenu" resultType="java.lang.Integer">
+        select 1
+        from sys_menu
+        where is_deleted = 0
+          and parent_id = #{id} limit 1
+    </select>
+
+    <update id="deleteBatchByLogic">
+        update sys_menu set is_deleted = 1,update_time = #{updateTime}
+        where id in
+        <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
+</mapper>
