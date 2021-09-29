@@ -15,7 +15,7 @@ import java.util.List;
  * @since 1.0
  */
 @SpringBootTest
-public class MybatisTest {
+public class MybatisPlusTest {
     @Resource
     private UserMapper userMapper;
 
