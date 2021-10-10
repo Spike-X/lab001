@@ -31,6 +31,12 @@
             <version>${project.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.aircraft.codelab</groupId>
+            <artifactId>lab-auth</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+
         <!--        <dependency>-->
         <!--            <groupId>com.aircraft.codelab</groupId>-->
         <!--            <artifactId>lab-kafka</artifactId>-->
@@ -70,11 +76,6 @@
         <dependency>
             <groupId>org.mapstruct</groupId>
             <artifactId>mapstruct</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cn.hutool</groupId>
-            <artifactId>hutool-all</artifactId>
         </dependency>
 
         <dependency>
