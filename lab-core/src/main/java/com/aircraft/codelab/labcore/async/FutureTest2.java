@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.thread;
+package com.aircraft.codelab.labcore.async;
 
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
@@ -6,12 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.TimeoutException;
+import java.util.concurrent.*;
 
 /**
  * 2021-06-30
@@ -31,7 +26,7 @@ public class FutureTest2 {
         log.debug("线程池线程数量: {}", poolSize);
         List<Future<String>> futureList = new ArrayList<>();
         for (int i = 0; i < 3; i++) {
-            Future<String> submit = threadPoolExecutor.submit(new ThreadTest3(i));
+            Future<String> submit = threadPoolExecutor.submit(new ThreadTest(i));
             futureList.add(submit);
         }
         futureList.forEach(task -> {
@@ -42,5 +37,19 @@ public class FutureTest2 {
             }
         });
         log.debug("time: {}", stopwatch.stop());
+    }
+
+    static class ThreadTest implements Callable<String> {
+        private int i;
+
+        public ThreadTest(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public String call() throws Exception {
+            i++;
+            return String.valueOf(i);
+        }
     }
 }

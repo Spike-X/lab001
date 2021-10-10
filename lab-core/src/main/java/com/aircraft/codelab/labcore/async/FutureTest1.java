@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.thread;
+package com.aircraft.codelab.labcore.async;
 
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
@@ -58,9 +58,9 @@ public class FutureTest1 {
 
 //        CompletableFuture<String> supplyAsync = CompletableFuture.supplyAsync(() -> {
 //            log.debug("子线程filepath: {}", Thread.currentThread());
-//            return asyncTest2.returnMethod(path);
+//            return returnMethod(path);
 //        }, threadPoolExecutor);
-
+//
 //        CompletableFuture.allOf(completableFuture, future, supplyAsync).join();
 //        try {
 //            log.info("{}", completableFuture.get());

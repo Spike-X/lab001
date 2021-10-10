@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.thread;
+package com.aircraft.codelab.labcore.async;
 
 import lombok.extern.slf4j.Slf4j;
 

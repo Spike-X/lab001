@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.thread;
+package com.aircraft.codelab.labcore.async;
 
 import com.google.common.base.Stopwatch;
 import lombok.extern.slf4j.Slf4j;
@@ -71,11 +71,14 @@ public class FutureTest3 {
     private int calc(Integer i) {
         try {
             if (i == 1) {
-                Thread.sleep(3000);//任务1耗时3秒
+                //任务1耗时3秒
+                Thread.sleep(3000);
             } else if (i == 5) {
-                Thread.sleep(5000);//任务5耗时5秒
+                //任务5耗时5秒
+                Thread.sleep(5000);
             } else {
-                Thread.sleep(1000);//其它任务耗时1秒
+                //其它任务耗时1秒
+                Thread.sleep(1000);
             }
         } catch (InterruptedException e) {
             e.printStackTrace();
