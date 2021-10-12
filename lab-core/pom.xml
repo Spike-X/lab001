@@ -27,12 +27,6 @@
 
         <dependency>
             <groupId>com.aircraft.codelab</groupId>
-            <artifactId>common-cache</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.aircraft.codelab</groupId>
             <artifactId>lab-auth</artifactId>
             <version>${project.version}</version>
         </dependency>
