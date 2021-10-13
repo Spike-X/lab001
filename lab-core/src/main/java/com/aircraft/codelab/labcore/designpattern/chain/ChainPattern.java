@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.impl;
+package com.aircraft.codelab.labcore.designpattern.chain;
 
 import lombok.Builder;
 import lombok.Data;

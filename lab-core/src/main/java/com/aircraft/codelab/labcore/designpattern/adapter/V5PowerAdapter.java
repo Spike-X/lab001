@@ -1,3 +1,7 @@
+package com.aircraft.codelab.labcore.designpattern.adapter;
+
+import lombok.Data;
+
 /**
  * 2021-07-16
  *

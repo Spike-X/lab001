@@ -1,3 +1,5 @@
+package com.aircraft.codelab.labcore.designpattern.strategy;
+
 /**
  * 2021-01-19
  *

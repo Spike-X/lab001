@@ -1,3 +1,5 @@
+package com.aircraft.codelab.labcore.designpattern.adapter;
+
 /**
  * 2021-07-16
  *

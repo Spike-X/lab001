@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.thread;
+package com.aircraft.codelab.labcore.async.thread;
 
 /**
  * 2021-06-11

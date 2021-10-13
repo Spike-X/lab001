@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service.impl;
+package com.aircraft.codelab.labcore.aop.jdk;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,10 +9,10 @@ import java.lang.reflect.Method;
  * @author tao.zhang
  * @since 1.0
  */
-public class MySellHandler implements InvocationHandler {
+public class UsbSellHandler implements InvocationHandler {
     private final Object target;
 
-    public MySellHandler(Object target) {
+    public UsbSellHandler(Object target) {
         this.target = target;
     }
 

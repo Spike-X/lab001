@@ -1,8 +1,8 @@
 package com.aircraft.codelab.labcore.proxy;
 
-import com.aircraft.codelab.labcore.service.UsbSell;
-import com.aircraft.codelab.labcore.service.impl.MySellHandler;
-import com.aircraft.codelab.labcore.service.impl.UsbKingFactory;
+import com.aircraft.codelab.labcore.aop.jdk.UsbSellHandler;
+import com.aircraft.codelab.labcore.aop.jdk.UsbImpl;
+import com.aircraft.codelab.labcore.aop.jdk.UsbSell;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.InvocationHandler;
@@ -18,9 +18,9 @@ public class JdkProxy {
     @Test
     void jdkProxyTest() {
         // 创建目标对象
-        UsbSell factory = new UsbKingFactory();
+        UsbSell factory = new UsbImpl();
         // 创建InvocationHandler对象
-        InvocationHandler handler = new MySellHandler(factory);
+        InvocationHandler handler = new UsbSellHandler(factory);
         // 创建代理对象
         UsbSell proxy = (UsbSell) Proxy.newProxyInstance(factory.getClass().getClassLoader(),
                 factory.getClass().getInterfaces(),

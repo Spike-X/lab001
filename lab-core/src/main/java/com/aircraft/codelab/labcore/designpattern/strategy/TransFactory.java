@@ -1,3 +1,12 @@
+package com.aircraft.codelab.labcore.designpattern.strategy;
+
+import com.aircraft.codelab.core.util.Assert;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.Resource;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
 /**
  * 2021-01-19
  *

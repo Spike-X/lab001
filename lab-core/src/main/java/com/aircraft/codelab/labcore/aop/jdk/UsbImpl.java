@@ -1,6 +1,4 @@
-package com.aircraft.codelab.labcore.service.impl;
-
-import com.aircraft.codelab.labcore.service.UsbSell;
+package com.aircraft.codelab.labcore.aop.jdk;
 
 /**
  * 2021-10-06
@@ -8,7 +6,7 @@ import com.aircraft.codelab.labcore.service.UsbSell;
  * @author tao.zhang
  * @since 1.0
  */
-public class UsbKingFactory implements UsbSell {
+public class UsbImpl implements UsbSell {
     @Override
     public Float sell(int amount) {
         System.out.println("目标类中,执行了sell目标方法");

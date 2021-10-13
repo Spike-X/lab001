@@ -1,19 +1,13 @@
-package com.aircraft.codelab.labcore.service.impl;
+package com.aircraft.codelab.labcore.util;
 
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.URLEncoder;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -32,14 +26,15 @@ import java.util.zip.ZipOutputStream;
  * @since 1.0
  */
 @Slf4j
-@Service
-public class ZipStreamImpl {
+public class FileUtil {
+    private FileUtil() {
+    }
 
-    public void zipFileChannel(File zipFile, String path) throws IOException {
+    public void compressToZip(File zipFile, String path) throws IOException {
         try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));
              WritableByteChannel writableByteChannel = Channels.newChannel(zipOut)) {
             List<String> filePathList = new ArrayList<>();
-            findAllFile(path, filePathList);
+            collectFilePath(path, filePathList);
             for (String filePath : filePathList) {
                 try (FileChannel fileChannel = new FileInputStream(filePath).getChannel()) {
                     File file = new File(filePath);
@@ -49,6 +44,25 @@ public class ZipStreamImpl {
                 }
             }
         }
+    }
+
+    private void collectFilePath(String path, List<String> filePathList) {
+        File root = new File(path);
+        File[] files = root.listFiles();
+        if (files == null) {
+            return;
+        }
+        Arrays.stream(files).forEach(file -> {
+            try {
+                if (file.isDirectory()) {
+                    collectFilePath(file.getCanonicalPath(), filePathList);
+                } else {
+                    filePathList.add(file.getCanonicalPath());
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     public void fileStreamResponse(File zipFile, HttpServletResponse response) throws IOException {
@@ -65,24 +79,5 @@ public class ZipStreamImpl {
             IOUtils.copyLarge(bis, bos);
             bos.flush();
         }
-    }
-
-    private void findAllFile(String path, List<String> fileList) {
-        File root = new File(path);
-        File[] files = root.listFiles();
-        if (files == null) {
-            return;
-        }
-        Arrays.stream(files).forEach(file -> {
-            try {
-                if (file.isDirectory()) {
-                    findAllFile(file.getCanonicalPath(), fileList);
-                } else {
-                    fileList.add(file.getCanonicalPath());
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
     }
 }
