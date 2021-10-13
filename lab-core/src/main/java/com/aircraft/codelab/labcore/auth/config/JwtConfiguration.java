@@ -1,6 +1,6 @@
-package com.aircraft.codelab.auth.config;
+package com.aircraft.codelab.labcore.auth.config;
 
-import com.aircraft.codelab.auth.jwt.JwtProperties;
+import com.aircraft.codelab.labcore.auth.jwt.*;
 import com.nimbusds.jose.JOSEException;
 import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.jwk.JWKSet;
@@ -32,13 +32,13 @@ import java.time.Duration;
 import java.util.Collection;
 
 /**
- * 2021-10-13
+ * JWT 配置
  *
- * @author tao.zhang
- * @since 1.0
+ * @author felord.cn
+ * @since 2021 /3/27 16:09
  */
 @EnableConfigurationProperties(JwtProperties.class)
-@Configuration(proxyBeanMethods = false)
+@Configuration
 public class JwtConfiguration {
     /**
      * 加载 JKS 证书库
@@ -46,6 +46,7 @@ public class JwtConfiguration {
     private static final KeyStore JKS_STORE;
     @Resource
     private JwtProperties jwtProperties;
+
 
     static {
         try {
@@ -173,4 +174,5 @@ public class JwtConfiguration {
 
         return nimbusJwtDecoder;
     }
+
 }

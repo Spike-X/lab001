@@ -11,12 +11,30 @@ knife4j:
     enableFooterCustom: true
     footerCustomContent: Apache License 2.0 | Copyright (c) 2021 [浙江八一菜刀股份有限公司](https://gitee.com/xiaoym/knife4j)
 
+# jwt 配置
+jwt:
+  cert-info:
+    alias: felordcn
+    key-password: 123456
+    cert-location: felordcn.jks
+  claims:
+    #    jwt.iss
+    issuer: https://felord.cn
+    #    jwt.sub
+    subject: all
+    #    jwt.exp 过期秒数
+    expires-at: 3600
+
 spring:
 #    boot:
 #      admin:
 #        client:
 #          url: http://localhost:${server.port}
 
+  cache:
+    type: REDIS
+#    ehcache:
+#      config: classpath:/ehcache.xml
   redis:
     host: 192.168.31.164
     port: 6379

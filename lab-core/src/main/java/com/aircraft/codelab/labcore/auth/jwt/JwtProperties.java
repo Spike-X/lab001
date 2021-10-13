@@ -1,19 +1,19 @@
-package com.aircraft.codelab.auth.jwt;
+package com.aircraft.codelab.labcore.auth.jwt;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 /**
- * 2021-10-13
+ * JWT 在application.yml的配置项
  *
- * @author tao.zhang
- * @since 1.0
+ * @author felord.cn
  */
 @ConfigurationProperties(prefix = "jwt")
 @Data
 public class JwtProperties {
-    private CertInfo certInfo;
-    private Claims claims;
+
+   private CertInfo certInfo;
+   private Claims claims;
     /**
      * The cert info.
      */
