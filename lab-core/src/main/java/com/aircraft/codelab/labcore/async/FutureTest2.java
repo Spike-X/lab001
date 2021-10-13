@@ -49,7 +49,7 @@ public class FutureTest2 {
         @Override
         public String call() throws Exception {
             i++;
-            return String.valueOf(i);
+            return Thread.currentThread().getName() + "返回值: " + i;
         }
     }
 }
