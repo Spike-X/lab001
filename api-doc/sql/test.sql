@@ -1,3 +1,7 @@
+DROP DATABASE if exists pcb ;
+CREATE DATABASE pcb default character set 'utf8mb4';
+use pcb;
+
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 
