@@ -21,7 +21,6 @@ public class AopTest {
     @Test
     public void test01() {
         MathCalculator mathCalculator = applicationContext.getBean(MathCalculator.class);
-        int div = mathCalculator.div(3, 1);
-        System.out.println("计算结果：" + div);
+        String div = mathCalculator.div(3, 1);
     }
 }

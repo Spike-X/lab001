@@ -10,8 +10,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class MathCalculator {
-    public int div(int i, int j) {
+    @Auth
+    public String div(int i, int j) {
         System.out.println("MathCalculator...div...计算中");
-        return i / j;
+        return String.valueOf(i / j);
     }
 }
