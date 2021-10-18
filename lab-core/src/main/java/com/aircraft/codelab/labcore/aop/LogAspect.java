@@ -1,24 +1,21 @@
 package com.aircraft.codelab.labcore.aop;
 
 import cn.hutool.extra.servlet.ServletUtil;
+import com.aircraft.codelab.core.service.DatePattern;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.util.WebUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Optional;
 
 /**
@@ -73,17 +70,14 @@ public class LogAspect {
         System.out.println("@After。。。运行结束");
     }
 
-@Around("pointCut()")
+    @Around("pointCut()")
     public Object surroundNotice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         Optional.ofNullable(attributes).ifPresent(attribute -> {
             HttpServletRequest request = attribute.getRequest();
-            UserInfoDTO loginInfo = WebUtil.getUserInfo(request);
-            String userId = loginInfo.getUid();
-            String userName = loginInfo.getDisplayName();
 
             log.info("clientIP:{}, userInfo: {}, userName: {}, requestURI: {}, requestMethod: {}, parameterNames: {}, parameterValues: {}",
-                    ServletUtil.getClientIP(request), userId, userName, request.getRequestURI(), request.getMethod(),
+                    ServletUtil.getClientIP(request), "userId", "userName", request.getRequestURI(), request.getMethod(),
                     String.join(",", ((MethodSignature) proceedingJoinPoint.getSignature()).getParameterNames()),
                     Arrays.toString(proceedingJoinPoint.getArgs()));
         });
