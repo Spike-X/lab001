@@ -73,49 +73,26 @@ public class LogAspect {
         System.out.println("@After。。。运行结束");
     }
 
-    @Around(value = "pointCut()")
-    public Object surroundInform(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
-        System.out.println("@Around环绕通知开始...");
-        LocalDateTime startTime = null;
-        if (log.isDebugEnabled()) {
-            startTime = LocalDateTime.now();
-        }
+@Around("pointCut()")
+    public Object surroundNotice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        Optional.ofNullable(attributes).ifPresent(attribute -> {
+            HttpServletRequest request = attribute.getRequest();
+            UserInfoDTO loginInfo = WebUtil.getUserInfo(request);
+            String userId = loginInfo.getUid();
+            String userName = loginInfo.getDisplayName();
 
-        Object o = proceedingJoinPoint.proceed();
-        if (log.isDebugEnabled()) {
-            LocalDateTime endTime = LocalDateTime.now();
-
-            try {
-                RequestAttributes ra = RequestContextHolder.getRequestAttributes();
-                ServletRequestAttributes sra = (ServletRequestAttributes) ra;
-                HttpServletRequest request = sra.getRequest();
-                LoginInfo loginInfo = WebUtils.getLoginInfoFromRequest(request);
-                String userId = loginInfo == null ? "未登录用户" : loginInfo.getSubject().get("id") + "";
-                String userName = loginInfo == null ? "未登录用户" : loginInfo.getSubject().get("name") + "";
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS");
-                log.debug("客户端IP:{}, 调用用户id: {}, 调用用户名: {}, " +
-                                "requestURI: {}, method: {}, 方法参数名: {}, " +
-                                "方法参数: {}, 调用开始时间: {}, 调用结束时间: {}, 时间差(毫秒): {}",
-                        new Object[]{ServletUtil.getClientIP(request), userId, userName, request.getRequestURI(), request.getMethod(),
-                                String.join(",", ((MethodSignature) proceedingJoinPoint.getSignature()).getParameterNames()),
-                                this.methodArgsConvert(proceedingJoinPoint.getArgs()), startTime.format(formatter),
-                                endTime.format(formatter), Duration.between(startTime, endTime).toMillis()});
-            } catch (Exception var12) {
-            }
-        }
-        return o;
-    }
-
-    private String methodArgsConvert(Object[] os) {
-        List<String> list = new ArrayList();
-        Object[] var3 = os;
-        int var4 = os.length;
-
-        for (int var5 = 0; var5 < var4; ++var5) {
-            Object o = var3[var5];
-            list.add(o == null ? "null" : o.toString());
-        }
-
-        return String.join(",", list);
+            log.info("clientIP:{}, userInfo: {}, userName: {}, requestURI: {}, requestMethod: {}, parameterNames: {}, parameterValues: {}",
+                    ServletUtil.getClientIP(request), userId, userName, request.getRequestURI(), request.getMethod(),
+                    String.join(",", ((MethodSignature) proceedingJoinPoint.getSignature()).getParameterNames()),
+                    Arrays.toString(proceedingJoinPoint.getArgs()));
+        });
+        LocalDateTime startTime = LocalDateTime.now();
+        Object result = proceedingJoinPoint.proceed();
+        LocalDateTime endTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_MS_PATTERN);
+        log.info("startTime: {}, endTime: {}, duration(ms): {}", startTime.format(formatter), endTime.format(formatter),
+                Duration.between(startTime, endTime).toMillis());
+        return result;
     }
 }
