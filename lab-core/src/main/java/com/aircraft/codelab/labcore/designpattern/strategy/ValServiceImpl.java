@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0
  */
 @Slf4j
-@Service("1")
+@Service("val")
 public class ValServiceImpl implements TransService {
 
     @Override
