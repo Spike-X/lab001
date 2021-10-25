@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service;
+package com.aircraft.codelab.labcore.designpattern.strategy;
 
 import java.util.Arrays;
 
