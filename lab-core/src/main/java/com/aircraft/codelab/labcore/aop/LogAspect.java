@@ -1,13 +1,20 @@
 package com.aircraft.codelab.labcore.aop;
 
+import cn.hutool.extra.servlet.ServletUtil;
+import com.aircraft.codelab.core.service.DatePattern;
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
+import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -20,13 +27,18 @@ import java.util.Optional;
  */
 @Aspect
 @Component
+@Slf4j
 public class LogAspect {
     // 抽取公共的切入点表达式
     @Pointcut("execution(* com.aircraft.codelab.labcore.aop.MathCalculator.*(..))")
     public void pointCut() {
     }
 
-//    @Pointcut("execution(* com.aircraft.codelab.labcore.controller.*.*(..))")
+//    @Pointcut("execution(public * com.aircraft.codelab.labcore.controller.*.*(..))")
+//    public void pointCut() {
+//    }
+
+//    @Pointcut("@within(org.springframework.web.bind.annotation.RestController) && execution(public * com.aircraft.codelab..controller..*.*(..))")
 //    public void pointCut() {
 //    }
 
@@ -58,16 +70,23 @@ public class LogAspect {
         System.out.println("@After。。。运行结束");
     }
 
-    @Around(value = "pointCut()")
-    public Object surroundInform(ProceedingJoinPoint proceedingJoinPoint) {
-        System.out.println("@Around环绕通知开始...");
-        try {
-            Object o = proceedingJoinPoint.proceed();
-            System.out.println("方法环绕proceed，结果是 :" + o);
-            return o;
-        } catch (Throwable e) {
-            e.printStackTrace();
-            return null;
-        }
+    @Around("pointCut()")
+    public Object surroundNotice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        Optional.ofNullable(attributes).ifPresent(attribute -> {
+            HttpServletRequest request = attribute.getRequest();
+
+            log.info("clientIP:{}, userInfo: {}, userName: {}, requestURI: {}, requestMethod: {}, parameterNames: {}, parameterValues: {}",
+                    ServletUtil.getClientIP(request), "userId", "userName", request.getRequestURI(), request.getMethod(),
+                    String.join(",", ((MethodSignature) proceedingJoinPoint.getSignature()).getParameterNames()),
+                    Arrays.toString(proceedingJoinPoint.getArgs()));
+        });
+        LocalDateTime startTime = LocalDateTime.now();
+        Object result = proceedingJoinPoint.proceed();
+        LocalDateTime endTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DatePattern.NORM_DATETIME_MS_PATTERN);
+        log.info("startTime: {}, endTime: {}, duration(ms): {}", startTime.format(formatter), endTime.format(formatter),
+                Duration.between(startTime, endTime).toMillis());
+        return result;
     }
 }

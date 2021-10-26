@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @since 1.0
  */
 @Slf4j
-@Service("0")
+@Service("odb")
 public class OdbppServiceImpl implements TransService {
 
     @Override
