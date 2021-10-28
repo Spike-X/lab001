@@ -107,4 +107,34 @@ public class TestController {
                 .updateTime(LocalDateTime.now()).build();
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
     }
+    
+    @Resource(name = "mailThreadPoolExecutor")
+    private ThreadPoolExecutor executor;
+
+    @GetMapping(value = "/pool", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> pool() {
+        log.debug("============================");
+        for (int i = 0; i < 50; i++) {
+            int task = i + 1;
+            executor.execute(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.debug("taskNo:{},threadName:{}", task, Thread.currentThread().getName());
+            });
+        }
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @GetMapping(value = "/poolStatus", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> poolStatus() {
+        int poolSize = executor.getPoolSize();
+        int activeCount = executor.getActiveCount();
+        long completedTaskCount = executor.getCompletedTaskCount();
+        int queueSize = executor.getQueue().size();
+        log.debug("poolSize:{},activeCount:{},completedTaskCount:{},queueSize:{}", poolSize, activeCount, completedTaskCount, queueSize);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
 }
