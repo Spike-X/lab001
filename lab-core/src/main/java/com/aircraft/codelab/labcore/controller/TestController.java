@@ -30,6 +30,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -39,6 +40,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 2020-11-03
@@ -107,7 +109,7 @@ public class TestController {
                 .updateTime(LocalDateTime.now()).build();
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
     }
-    
+
     @Resource(name = "mailThreadPoolExecutor")
     private ThreadPoolExecutor executor;
 
