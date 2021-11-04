@@ -39,7 +39,7 @@ spring:
   datasource:
     druid:
       driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://192.168.31.164:3306/test1?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
+      url: jdbc:mysql://192.168.196.202:3306/test1?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowMultiQueries=true&rewriteBatchedStatements=true&serverTimezone=Asia/Shanghai
       username: root
       password: root
 
@@ -97,6 +97,22 @@ mybatis-plus:
   global-config:
     db-config:
       id-type: assign_id
+
+resilience4j.retry:
+  configs:
+    default:
+      maxAttempts: 3
+      waitDuration: 10s  #指定若干时间后重试
+      retryExceptions:
+        - com.aircraft.codelab.core.exception.ApiException
+        - java.util.concurrent.TimeoutException
+        - java.io.IOException
+  instances:
+    backendA:
+      baseConfig: default
+    backendB:
+      baseConfig: default
+      waitDuration: 100ms
 
 #logging:
 #  config: classpath:log4j2-${spring.profiles.active}.xml
