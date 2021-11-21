@@ -1,5 +1,6 @@
 package com.aircraft.codelab.labcore.pojo.entity;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,8 +16,11 @@ import lombok.experimental.SuperBuilder;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@TableName("sys_user")
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserDO extends BaseDO {
     private String name;
+
+    private String password;
 }
