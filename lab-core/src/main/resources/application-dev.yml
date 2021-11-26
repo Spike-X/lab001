@@ -18,7 +18,7 @@ spring:
 #          url: http://localhost:${server.port}
 
   redis:
-    host: 192.168.31.164
+    host: 192.168.196.202
     port: 6379
     password: spike-x
     database: 0
