@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service;
+package com.aircraft.codelab.labcore.enums;
 
 /**
  * 2021-11-04

@@ -4,7 +4,7 @@ import com.aircraft.codelab.core.exception.ApiException;
 import com.aircraft.codelab.labcore.mapper.ProductMapper;
 import com.aircraft.codelab.labcore.pojo.entity.Product;
 import com.aircraft.codelab.labcore.service.ProductService;
-import com.aircraft.codelab.labcore.service.UpdateEnum;
+import com.aircraft.codelab.labcore.enums.UpdateEnum;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
