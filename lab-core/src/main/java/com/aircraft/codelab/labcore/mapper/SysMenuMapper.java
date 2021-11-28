@@ -13,6 +13,7 @@ import java.util.List;
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
     List<Long> queryMenu(Page<SysMenu> page, Integer type);
 
+    // 待优化
     List<SysMenu> queryMenuById(List<Long> ids);
 
     Integer deleteBatchByLogic(@Param("updateTime") LocalDateTime updateTime, @Param("idList") List<String> idList);

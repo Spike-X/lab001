@@ -22,23 +22,26 @@ import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.core.service.DatePattern;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
+import com.aircraft.codelab.labcore.async.thread.ThreadService;
 import com.aircraft.codelab.labcore.pojo.entity.UserDO;
 import com.aircraft.codelab.labcore.pojo.vo.UserVO;
+import com.aircraft.codelab.labcore.service.ProductService;
 import com.aircraft.codelab.labcore.service.UserConverter;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ThreadPoolExecutor;
 
 /**
  * 2020-11-03
@@ -52,33 +55,43 @@ import java.util.Map;
 @Api(tags = "测试")
 @RequestMapping("/hello")
 public class TestController {
-    private static final HashMap<String, Object> INFO;
-
-    static {
-        INFO = new HashMap<>();
-        INFO.put("name", "galaxy");
-        INFO.put("age", "70");
-    }
-
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
 
     @Resource
-    private RedisService redisService;
+    private ProductService productService;
 
-    @ApiOperation(value = "redis测试", notes = "redis hash")
-    @GetMapping("/redis")
-    public CommonResult<Map<Object, Object>> helloRedis(@RequestParam(defaultValue = "0", name = "id") Long parentId) {
-        log.debug("redis test");
-        INFO.put("id", parentId);
-        redisTemplate.opsForHash().putAll("test:map:2", INFO);
-        Map<Object, Object> map = redisTemplate.opsForHash().entries("test:map:2");
-        return CommonResult.success(ResultCode.SUCCESS.getMessage(), map);
+    @ApiOperation(value = "lock", notes = "乐观锁")
+    @GetMapping("/lock")
+    public CommonResult<?> lock() {
+        CountDownLatch countDownLatch = new CountDownLatch(2);
+        new Thread(() -> {
+            try {
+                countDownLatch.await();
+                int row = productService.updatePrice(new BigDecimal("30.00"), 1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        countDownLatch.countDown();
+        new Thread(() -> {
+            try {
+                countDownLatch.await();
+                int row = productService.updatePrice(new BigDecimal("20.00"), -1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
+        countDownLatch.countDown();
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
+
+    @Resource
+    private RedisService redisService;
 
     @ApiOperation(value = "redis序列化测试")
     @GetMapping("/serializer")
-    public CommonResult<UserDO> helloRedisSerializer() {
+    public CommonResult<UserDO> redisSerializer() {
         log.debug("redis test");
         String key = DateUtil.getDateTimeNow(DatePattern.PURE_DATETIME_PATTERN);
         UserDO user = UserDO.builder()
@@ -98,7 +111,7 @@ public class TestController {
 
     @ApiOperation(value = "mapstruct测试")
     @GetMapping("/mapstruct")
-    public CommonResult<UserDO> helloMapstruct() {
+    public CommonResult<UserDO> mapstruct() {
         log.debug("mapstruct test");
         UserVO userVO = UserVO.builder().id(100L).name("zhang").build();
         UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
@@ -106,5 +119,55 @@ public class TestController {
                 .createTime(LocalDateTime.now())
                 .updateTime(LocalDateTime.now()).build();
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
+    }
+
+    @Resource(name = "mailThreadPoolExecutor")
+    private ThreadPoolExecutor executor;
+
+    @GetMapping(value = "/pool", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> threadPool() {
+        log.debug("============================");
+        for (int i = 0; i < 50; i++) {
+            int task = i + 1;
+            executor.execute(() -> {
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                log.debug("taskNo:{},threadName:{}", task, Thread.currentThread().getName());
+            });
+        }
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @GetMapping(value = "/poolStatus", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> poolStatus() {
+        int poolSize = executor.getPoolSize();
+        int activeCount = executor.getActiveCount();
+        long completedTaskCount = executor.getCompletedTaskCount();
+        int queueSize = executor.getQueue().size();
+        log.debug("poolSize:{},activeCount:{},completedTaskCount:{},queueSize:{}", poolSize, activeCount, completedTaskCount, queueSize);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @Resource
+    private ThreadService threadService;
+
+    @GetMapping(value = "/cas", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> casTest() {
+        CountDownLatch countDownLatch = new CountDownLatch(100);
+        for (int i = 0; i < 100; i++) {
+            new Thread(() -> {
+                try {
+                    countDownLatch.await();
+                    int increment = threadService.getAndIncrement();
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }).start();
+            countDownLatch.countDown();
+        }
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }
