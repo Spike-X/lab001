@@ -2,6 +2,7 @@ package com.aircraft.codelab.core.util;
 
 import com.aircraft.codelab.core.service.DatePattern;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
@@ -14,6 +15,11 @@ import java.time.format.DateTimeFormatter;
  */
 public class DateUtil {
     private DateUtil() {
+    }
+
+    public static String getDateTime() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN);
+        return formatter.format(LocalDate.now());
     }
 
     public static String getDateTimeNow() {
