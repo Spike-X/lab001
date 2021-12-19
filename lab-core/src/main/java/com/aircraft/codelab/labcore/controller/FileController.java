@@ -1,6 +1,7 @@
 package com.aircraft.codelab.labcore.controller;
 
 import com.aircraft.codelab.core.entities.CommonResult;
+import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.labcore.service.FileStorageService;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +24,7 @@ public class FileController {
 
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<String> upload(@RequestParam("file") MultipartFile file) {
-        try {
-            String save = fileStorageService.save(file);
-            return CommonResult.success(save);
-        } catch (Exception e) {
-            return CommonResult.failed();
-        }
+        String save = fileStorageService.save(file);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), save);
     }
 }

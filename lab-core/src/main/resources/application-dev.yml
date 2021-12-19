@@ -92,7 +92,7 @@ spring:
 mybatis-plus:
   mapper-locations:
     - classpath:/com/aircraft/codelab/labcore/mapper/xml/*.xml
-  type-aliases-package: com.aircraft.codelab.labcore.pojo
+#  type-aliases-package: com.aircraft.codelab.labcore.pojo.*
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:

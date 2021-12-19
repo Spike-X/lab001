@@ -16,10 +16,10 @@
 
 package com.aircraft.codelab.labcore.controller;
 
+import cn.hutool.core.date.DatePattern;
 import com.aircraft.codelab.cache.service.RedisService;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
-import com.aircraft.codelab.core.service.DatePattern;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
 import com.aircraft.codelab.labcore.async.thread.ThreadService;
@@ -93,7 +93,7 @@ public class TestController {
     @GetMapping("/serializer")
     public CommonResult<UserDO> redisSerializer() {
         log.debug("redis test");
-        String key = DateUtil.getDateTimeNow(DatePattern.PURE_DATETIME_PATTERN);
+        String key = DateUtil.getDateTime(DatePattern.PURE_DATETIME_PATTERN);
         UserDO user = UserDO.builder()
                 .name("zhang")
                 .id(10000L)

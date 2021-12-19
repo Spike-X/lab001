@@ -1,6 +1,6 @@
 package com.aircraft.codelab.core.config;
 
-import com.aircraft.codelab.core.service.DatePattern;
+import cn.hutool.core.date.DatePattern;
 import com.aircraft.codelab.core.util.JsonUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
