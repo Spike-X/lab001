@@ -5,17 +5,18 @@ knife4j:
   enable: true
   production: false
   setting:
-    enableHost: true
+    enableHost: false
     enableHostText: localhost.huawei.com:8081
     enableFooter: false
     enableFooterCustom: true
     footerCustomContent: Apache License 2.0 | Copyright (c) 2021 [浙江八一菜刀股份有限公司](https://gitee.com/xiaoym/knife4j)
 
 spring:
-#    boot:
-#      admin:
-#        client:
-#          url: http://localhost:${server.port}
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB
+      max-request-size: 100MB
 
   redis:
     host: 192.168.196.202
@@ -91,7 +92,7 @@ spring:
 mybatis-plus:
   mapper-locations:
     - classpath:/com/aircraft/codelab/labcore/mapper/xml/*.xml
-  type-aliases-package: com.aircraft.codelab.labcore.pojo
+#  type-aliases-package: com.aircraft.codelab.labcore.pojo.*
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   global-config:
@@ -116,3 +117,8 @@ resilience4j.retry:
 
 #logging:
 #  config: classpath:log4j2-${spring.profiles.active}.xml
+
+## 文件存储所需参数
+# 所有通过 REST APIs 上传的文件都将存储在此目录下
+file:
+  upload-dir: D:\\lab

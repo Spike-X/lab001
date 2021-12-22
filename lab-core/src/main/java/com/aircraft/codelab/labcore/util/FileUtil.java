@@ -74,8 +74,7 @@ public class FileUtil {
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             response.setCharacterEncoding(StandardCharsets.UTF_8.displayName());
             response.setHeader(HttpHeaders.CONTENT_LENGTH, "" + zipFile.length());
-            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=" + fileName);
-
+            response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
             IOUtils.copyLarge(bis, bos);
             bos.flush();
         }
