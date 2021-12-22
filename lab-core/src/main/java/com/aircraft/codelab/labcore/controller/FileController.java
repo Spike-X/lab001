@@ -3,13 +3,16 @@ package com.aircraft.codelab.labcore.controller;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.labcore.service.FileStorageService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 2021-12-03
@@ -18,6 +21,7 @@ import javax.annotation.Resource;
  * @since 1.0
  */
 @RestController
+@Slf4j
 public class FileController {
     @Resource
     FileStorageService fileStorageService;
@@ -26,5 +30,21 @@ public class FileController {
     public CommonResult<String> upload(@RequestParam("file") MultipartFile file) {
         String save = fileStorageService.save(file);
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), save);
+    }
+
+    @GetMapping(value = "/listFiles", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<List<String>> listFiles() {
+        List<String> list = fileStorageService.listFile();
+        return CommonResult.success(list);
+    }
+
+    @GetMapping(value = "/downloadFile/{filenameUri:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+    public void downloadFile(@PathVariable String filenameUri, HttpServletRequest request, HttpServletResponse response) {
+        log.debug(filenameUri);
+        try {
+            fileStorageService.load(filenameUri, request, response);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

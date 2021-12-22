@@ -1,10 +1,11 @@
 package com.aircraft.codelab.labcore.service;
 
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Path;
-import java.util.stream.Stream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.List;
 
 /**
  * 2021-12-03
@@ -15,7 +16,7 @@ import java.util.stream.Stream;
 public interface FileStorageService {
     String save(MultipartFile multipartFile);
 
-    Resource load(String filename);
+    List<String> listFile();
 
-    Stream<Path> load();
+    void load(String filenameUri, HttpServletRequest request, HttpServletResponse response) throws IOException;
 }

@@ -5,7 +5,7 @@ knife4j:
   enable: true
   production: false
   setting:
-    enableHost: true
+    enableHost: false
     enableHostText: localhost.huawei.com:8081
     enableFooter: false
     enableFooterCustom: true
