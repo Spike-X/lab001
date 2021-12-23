@@ -3,9 +3,9 @@
     <property name="APP_Name" value="lab"/>
 
     <!-- 定义日志文件的存储地址 勿在配置中使用相对路径 -->
-    <!--    <springProfile name="dev">-->
-    <!--        <property name="LOG_HOME" value="D:\\lab001"/>-->
-    <!--    </springProfile>-->
+    <springProfile name="dev">
+        <property name="LOG_HOME" value="D:\\lab001"/>
+    </springProfile>
     <springProfile name="test,prod">
         <property name="LOG_HOME" value="/home/log"/>
     </springProfile>
@@ -51,15 +51,16 @@
     <!-- 测试环境+开发环境. 多个使用逗号隔开 -->
 
     <!-- 开发环境:打印到控制台 -->
-    <springProfile name="dev,test">
+    <springProfile name="dev">
         <logger name="com.aircraft.codelab" level="debug"/>
 
         <root level="info">
             <appender-ref ref="STDOUT"/>
+            <appender-ref ref="FILE"/>
         </root>
     </springProfile>
     <!-- 生产环境:输出到文件 -->
-    <springProfile name="prod">
+    <springProfile name="test,prod">
         <logger name="com.aircraft.codelab" level="info"/>
 
         <root level="info">
