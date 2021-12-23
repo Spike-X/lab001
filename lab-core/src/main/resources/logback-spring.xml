@@ -3,9 +3,9 @@
     <property name="APP_Name" value="lab"/>
 
     <!-- 定义日志文件的存储地址 勿在配置中使用相对路径 -->
-    <springProfile name="dev">
-        <property name="LOG_HOME" value="D:\\lab003"/>
-    </springProfile>
+    <!--    <springProfile name="dev">-->
+    <!--        <property name="LOG_HOME" value="D:\\lab001"/>-->
+    <!--    </springProfile>-->
     <springProfile name="test,prod">
         <property name="LOG_HOME" value="/home/log"/>
     </springProfile>
