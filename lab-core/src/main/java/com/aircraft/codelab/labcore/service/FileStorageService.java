@@ -2,7 +2,6 @@ package com.aircraft.codelab.labcore.service;
 
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -18,5 +17,5 @@ public interface FileStorageService {
 
     List<String> listFile();
 
-    void load(String filenameUri, HttpServletRequest request, HttpServletResponse response) throws IOException;
+    void load(String filenameUri, HttpServletResponse response) throws IOException;
 }

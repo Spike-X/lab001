@@ -16,7 +16,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -94,7 +93,7 @@ public class FileStorageServiceImpl implements FileStorageService {
     }
 
     @Override
-    public void load(String filenameUri, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public void load(String filenameUri, HttpServletResponse response) throws IOException {
         Path rootPath = Paths.get(fileProperties.getUploadDir());
         // 数据库查询文件地址,拼接rootPath
         Path filePath = rootPath.resolve(filenameUri);
