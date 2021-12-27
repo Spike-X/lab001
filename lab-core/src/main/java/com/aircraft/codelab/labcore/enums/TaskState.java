@@ -65,4 +65,8 @@ public enum TaskState {
     public static TaskState getInstance(int code) {
         return Arrays.stream(TaskState.values()).filter(s -> s.code == code).findFirst().orElseThrow(() -> new ApiException("Not found the enum code"));
     }
+
+    public static TaskState getInstance(String taskName) {
+        return Arrays.stream(TaskState.values()).filter(s -> s.taskName.equals(taskName)).findFirst().orElseThrow(() -> new ApiException("Not found the enum name"));
+    }
 }
