@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
@@ -39,10 +38,10 @@ public class FileController {
     }
 
     @GetMapping(value = "/downloadFile/{filenameUri:.+}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
-    public void downloadFile(@PathVariable String filenameUri, HttpServletRequest request, HttpServletResponse response) {
+    public void downloadFile(@PathVariable String filenameUri, HttpServletResponse response) {
         log.debug(filenameUri);
         try {
-            fileStorageService.load(filenameUri, request, response);
+            fileStorageService.load(filenameUri, response);
         } catch (IOException e) {
             e.printStackTrace();
         }
