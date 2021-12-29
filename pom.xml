@@ -39,7 +39,6 @@
         <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
         <lombok.version>1.18.12</lombok.version>
         <mysql-connector.version>8.0.20</mysql-connector.version>
@@ -174,8 +173,8 @@
             </plugins>
         </pluginManagement>
     </build>
-         
-         <repositories>
+
+    <repositories>
         <repository>
             <id>aliyunmaven</id>
             <name>aliyun</name>
