@@ -96,6 +96,8 @@ public class DruidProperties {
         dataSource.setMaxActive(maxActive);
         dataSource.setMinIdle(minIdle);
         dataSource.setMaxWait(maxWait);
+        // 使用非公平锁
+        dataSource.setUseUnfairLock(true);
         dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
         dataSource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
         try {
