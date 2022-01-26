@@ -1,6 +1,7 @@
 package com.aircraft.codelab.labcore.mapper;
 
 import com.aircraft.codelab.labcore.pojo.entity.UserDO;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,11 +22,12 @@ public class MybatisPlusTest {
 
     @Test
     public void selectPage() {
-        Page<UserDO> pageParam = new Page<>(1, 5);
-        userMapper.selectPage(pageParam,null);
-        List<UserDO> records = pageParam.getRecords();
-        long total = pageParam.getTotal();
-        pageParam.hasNext();
-        pageParam.hasPrevious();
+        Page<UserDO> page = new Page<>(1, 5);
+        IPage<UserDO> userIPage = userMapper.selectPage(page, null);
+        List<UserDO> recordsList = userIPage.getRecords();
+        List<UserDO> records = page.getRecords();
+        long total = page.getTotal();
+        page.hasNext();
+        page.hasPrevious();
     }
 }
