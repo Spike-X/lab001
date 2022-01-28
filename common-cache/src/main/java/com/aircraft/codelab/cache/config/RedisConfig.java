@@ -30,6 +30,38 @@ import java.time.Duration;
 //@EnableCaching
 @Configuration
 public class RedisConfig {
+    @Resource
+    private RedisProperties redisProperties;
+
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.redis", name = "cluster.nodes")
+    public RedissonClient clusterRedisson() {
+        String[] clusterArray = redisProperties.getCluster().getNodes().stream()
+                .map(node -> node.startsWith("redis://") ? node : "redis://" + node)
+                .toArray(String[]::new);
+        Config config = new Config();
+        //用"rediss://"来启用SSL连接
+        config.useClusterServers()
+                .addNodeAddress(clusterArray)
+                .setPassword(redisProperties.getPassword());
+        return Redisson.create(config);
+    }
+
+    @Bean
+    @ConditionalOnMissingBean(name = "clusterRedisson")
+    public RedissonClient singleRedisson() {
+        String host = redisProperties.getHost();
+        //用"rediss://"来启用SSL连接
+        host = host.startsWith("redis://") ? host : "redis://" + host;
+        int port = redisProperties.getPort();
+        String address = host + ":" + port;
+        Config config = new Config();
+        config.useSingleServer()
+                .setAddress(address)
+                .setPassword(redisProperties.getPassword());
+        return Redisson.create(config);
+    }
+    
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
