@@ -7,6 +7,12 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.jsontype.impl.LaissezFaireSubTypeValidator;
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
@@ -18,6 +24,7 @@ import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import javax.annotation.Resource;
 import java.time.Duration;
 
 /**
@@ -47,7 +54,7 @@ public class RedisConfig {
         return Redisson.create(config);
     }
 
-    @Bean
+//    @Bean
     @ConditionalOnMissingBean(name = "clusterRedisson")
     public RedissonClient singleRedisson() {
         String host = redisProperties.getHost();
@@ -61,7 +68,7 @@ public class RedisConfig {
                 .setPassword(redisProperties.getPassword());
         return Redisson.create(config);
     }
-    
+
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
