@@ -52,7 +52,7 @@ public class ThreadPoolConfig {
                 TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueCapacity),
                 threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }
-    
+
     @Bean
     public ThreadPoolExecutor singleThreadPoolExecutor() {
         ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").setDaemon(true).build();
