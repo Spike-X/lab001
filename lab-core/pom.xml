@@ -31,11 +31,11 @@
             <version>${project.version}</version>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>com.aircraft.codelab</groupId>-->
-        <!--            <artifactId>lab-kafka</artifactId>-->
-        <!--            <version>${project.version}</version>-->
-        <!--        </dependency>-->
+        <!--<dependency>
+            <groupId>com.aircraft.codelab</groupId>
+            <artifactId>lab-kafka</artifactId>
+            <version>${project.version}</version>
+        </dependency>-->
 
         <!-- maven modules -->
 
@@ -77,17 +77,17 @@
             <scope>provided</scope>
         </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>de.codecentric</groupId>-->
-        <!--            <artifactId>spring-boot-admin-starter-server</artifactId>-->
-        <!--            <version>2.3.0</version>-->
-        <!--        </dependency>-->
+        <!--<dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-server</artifactId>
+            <version>2.3.0</version>
+        </dependency>
 
-        <!--        <dependency>-->
-        <!--            <groupId>de.codecentric</groupId>-->
-        <!--            <artifactId>spring-boot-admin-starter-client</artifactId>-->
-        <!--            <version>2.3.0</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>de.codecentric</groupId>
+            <artifactId>spring-boot-admin-starter-client</artifactId>
+            <version>2.3.0</version>
+        </dependency>-->
 
         <dependency>
             <groupId>io.github.resilience4j</groupId>
@@ -96,10 +96,17 @@
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-        <dependency>
+        <!--<dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
             <version>4.5.13</version>
+        </dependency>-->
+
+        <!-- https://mvnrepository.com/artifact/com.squareup.retrofit2/retrofit -->
+        <dependency>
+            <groupId>com.squareup.retrofit2</groupId>
+            <artifactId>retrofit</artifactId>
+            <version>2.9.0</version>
         </dependency>
 
         <dependency>
