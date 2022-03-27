@@ -1,4 +1,4 @@
-package com.aircraft.codelab.labcore.service;
+package com.aircraft.codelab.labcore.pojo;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

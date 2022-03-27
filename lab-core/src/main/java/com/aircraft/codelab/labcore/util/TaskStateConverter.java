@@ -1,6 +1,6 @@
 package com.aircraft.codelab.labcore.util;
 
-import com.aircraft.codelab.labcore.enums.TaskState;
+import com.aircraft.codelab.labcore.enums.TaskStateEnum;
 import com.alibaba.excel.converters.Converter;
 import com.alibaba.excel.converters.ReadConverterContext;
 import com.alibaba.excel.converters.WriteConverterContext;
@@ -26,13 +26,13 @@ public class TaskStateConverter implements Converter<Integer> {
 
     @Override
     public Integer convertToJavaData(ReadConverterContext<?> context) {
-        TaskState instance = TaskState.getInstance(context.getReadCellData().getStringValue());
+        TaskStateEnum instance = TaskStateEnum.getInstance(context.getReadCellData().getStringValue());
         return instance.getCode();
     }
 
     @Override
     public WriteCellData<?> convertToExcelData(WriteConverterContext<Integer> context) {
-        TaskState instance = TaskState.getInstance(context.getValue());
+        TaskStateEnum instance = TaskStateEnum.getInstance(context.getValue());
         return new WriteCellData<>(instance.getTaskName());
     }
 }
