@@ -1,6 +1,6 @@
 package com.aircraft.codelab.labcore.aop;
 
-import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.aircraft.codelab.cache.config.RedisConfig;
 import com.aircraft.codelab.core.entities.CommonResult;
 import lombok.extern.slf4j.Slf4j;
@@ -39,9 +39,10 @@ public class IdempotentAspect {
         // 生产使用请求头token作为id
         String sessionId = Objects.requireNonNull(attributes).getSessionId();
         log.debug("===" + sessionId);
-        String requestURI = request.getRequestURI();
-        log.debug("requestURI: {}", requestURI);
-        String key = SecureUtil.md5(sessionId + requestURI);
+        String requestUri = request.getRequestURI();
+        log.debug("requestUri: {}", requestUri);
+        // md5摘要
+        String key = DigestUtil.md5Hex(sessionId + requestUri);
         log.debug("key: {}", key);
         String redisKey = String.format("idempotent:%s", key);
         Boolean success = setIfAbsent(redisKey, idempotent.timeout(), idempotent.timeUnit());

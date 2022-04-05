@@ -15,6 +15,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
@@ -54,8 +55,24 @@ public class RedisConfig {
         return Redisson.create(config);
     }
 
-//    @Bean
-    @ConditionalOnMissingBean(name = "clusterRedisson")
+    @Bean
+    @ConditionalOnProperty(prefix = "spring.redis", name = "sentinel.nodes")
+    public RedissonClient sentinelRedisson() {
+        RedisProperties.Sentinel sentinel = redisProperties.getSentinel();
+        String[] sentinelArray = sentinel.getNodes().stream()
+                .map(node -> node.startsWith("redis://") ? node : "redis://" + node)
+                .toArray(String[]::new);
+        Config config = new Config();
+        config.useSentinelServers()
+                .setMasterName(sentinel.getMaster())
+                .addSentinelAddress(sentinelArray)
+                .setPassword(redisProperties.getPassword());
+        return Redisson.create(config);
+    }
+
+    @Lazy
+    @Bean
+    @ConditionalOnMissingBean(name = {"clusterRedisson", "sentinelRedisson"})
     public RedissonClient singleRedisson() {
         String host = redisProperties.getHost();
         //用"rediss://"来启用SSL连接
