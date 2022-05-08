@@ -6,12 +6,12 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.security.SecureRandom;
 import java.time.*;
 import java.util.Objects;
 import java.util.Set;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -32,11 +32,12 @@ public class DelayQueue01 {
 
     private static final String DELAY_QUEUE_KEY = "delay:task:zset";
 
-//    @PostConstruct
+    //    @PostConstruct
     public void initSet() {
         LocalDateTime now = LocalDateTime.now();
         SecureRandom random = new SecureRandom();
         producer((long) random.nextInt(10000000), now);
+        int nextInt = ThreadLocalRandom.current().nextInt(10000000);
         consumer();
     }
 
@@ -50,6 +51,8 @@ public class DelayQueue01 {
 
         long nanoTime = System.nanoTime();
         long epochMilli = Instant.now().toEpochMilli();
+        long currentMillis = Clock.systemDefaultZone().millis();
+
         log.debug("taskId: {},datetime: {},millisecond: {}", taskId, localDateTime, nowMilli);
         Boolean result = redisTemplate.opsForZSet().add(DELAY_QUEUE_KEY, taskId, nowMilli);
         if (Objects.nonNull(result) && Boolean.FALSE.equals(result)) {

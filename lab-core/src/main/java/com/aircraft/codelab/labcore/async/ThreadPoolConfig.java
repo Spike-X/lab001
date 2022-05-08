@@ -47,6 +47,7 @@ public class ThreadPoolConfig {
 
     @Bean
     public ThreadPoolExecutor mailThreadPoolExecutor() {
+        // 线程池守护线程待研究
         ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").setDaemon(true).build();
         return new ThreadPoolExecutor(corePoolSize, maxPoolSize, keepAliveTime,
                 TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(queueCapacity),
