@@ -9,5 +9,5 @@ import java.util.concurrent.TimeUnit;
 public @interface Idempotent {
     int timeout() default 5;
     TimeUnit timeUnit() default TimeUnit.SECONDS;
-    String message() default "重复请求，请稍后重试";
+    String message() default "重复请求，自动忽略";
 }
