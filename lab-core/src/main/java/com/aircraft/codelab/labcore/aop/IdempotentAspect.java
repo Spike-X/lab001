@@ -3,6 +3,7 @@ package com.aircraft.codelab.labcore.aop;
 import cn.hutool.crypto.digest.DigestUtil;
 import com.aircraft.codelab.cache.config.RedisConfig;
 import com.aircraft.codelab.core.entities.CommonResult;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -15,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -39,10 +41,13 @@ public class IdempotentAspect {
         // 生产使用请求头token作为id
         String sessionId = Objects.requireNonNull(attributes).getSessionId();
         log.debug("===" + sessionId);
-        String requestUri = request.getRequestURI();
-        log.debug("requestUri: {}", requestUri);
+//        String requestUri = request.getRequestURI();
+//        log.debug("requestUri: {}", requestUri);
         // md5摘要
-        String key = DigestUtil.md5Hex(sessionId + requestUri);
+        Object[] args = proceedingJoinPoint.getArgs();
+        String s = Arrays.toString(args);
+        String jsonString = JSON.toJSONString(args);
+        String key = DigestUtil.md5Hex(sessionId + Arrays.toString(args));
         log.debug("key: {}", key);
         String redisKey = String.format("idempotent:%s", key);
         Boolean success = setIfAbsent(redisKey, idempotent.timeout(), idempotent.timeUnit());
