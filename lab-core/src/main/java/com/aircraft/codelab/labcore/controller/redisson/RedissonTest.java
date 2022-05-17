@@ -20,7 +20,7 @@ import javax.annotation.Resource;
 @Slf4j
 @RestController
 public class RedissonTest {
-    @Resource
+//    @Resource
     private RedissonClient redissonClient;
     private RRateLimiter rateLimiter;
 

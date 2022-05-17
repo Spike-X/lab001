@@ -101,7 +101,6 @@ public class RedisConfig {
         return redisTemplate;
     }
 
-    @Bean
     public RedisSerializer<Object> redisSerializer() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);

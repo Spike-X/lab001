@@ -17,12 +17,12 @@ import java.util.TreeMap;
 @Slf4j
 public class RepeatSubmitUtil {
     /**
-     * @param reqJSON     请求的参数，这里通常是JSON
+     * @param reqJson     请求的参数，这里通常是JSON
      * @param excludeKeys 请求参数里面要去除哪些字段再求摘要
      * @return 去除参数的MD5摘要
      */
-    public static String dedupParamMD5(final String reqJSON, String... excludeKeys) {
-        TreeMap paramTreeMap = JSON.parseObject(reqJSON, TreeMap.class);
+    public static String dedupParam(final String reqJson, String... excludeKeys) {
+        TreeMap paramTreeMap = JSON.parseObject(reqJson, TreeMap.class);
         if (excludeKeys != null) {
             List<String> dedupExcludeKeys = Arrays.asList(excludeKeys);
             if (!dedupExcludeKeys.isEmpty()) {
@@ -31,9 +31,9 @@ public class RepeatSubmitUtil {
                 }
             }
         }
-        String paramTreeMapJSON = JSON.toJSONString(paramTreeMap);
-        String md5deDupParam = DigestUtil.md5Hex(paramTreeMapJSON);
-        log.debug("md5deDupParam = {}, excludeKeys = {} {}", md5deDupParam, Arrays.deepToString(excludeKeys), paramTreeMapJSON);
+        String paramTreeMapJson = JSON.toJSONString(paramTreeMap);
+        String md5deDupParam = DigestUtil.md5Hex(paramTreeMapJson);
+        log.debug("md5deDupParam = {}, excludeKeys = {} {}", md5deDupParam, Arrays.deepToString(excludeKeys), paramTreeMapJson);
         return md5deDupParam;
     }
 }

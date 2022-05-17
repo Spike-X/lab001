@@ -1,10 +1,7 @@
 package com.aircraft.codelab.labcore.aop;
 
 import cn.hutool.crypto.digest.DigestUtil;
-import org.springframework.data.redis.connection.RedisStringCommands;
-import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.data.redis.core.types.Expiration;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -52,7 +49,7 @@ public class NoRepeatSubmit {
         String userId = "12345678";//用户
         String method = "pay";//接口名
         //计算请求参数摘要，其中剔除里面请求时间的干扰
-        String dedupMD5 = RepeatSubmitUtil.dedupParamMD5(req, "requestTime");
+        String dedupMD5 = RepeatSubmitUtil.dedupParam(req, "requestTime");
         String KEY = "dedup:U=" + userId + "M=" + method + "P=" + dedupMD5;
 
         long expireTime = 10000;// 1000毫秒过期，1000ms内的重复请求会认为重复

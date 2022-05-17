@@ -16,7 +16,6 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
@@ -40,14 +39,13 @@ public class IdempotentAspect {
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         // 生产使用请求头token作为id
         String sessionId = Objects.requireNonNull(attributes).getSessionId();
-        log.debug("===" + sessionId);
-//        String requestUri = request.getRequestURI();
-//        log.debug("requestUri: {}", requestUri);
-        // md5摘要
+        log.debug("sessionId: {}", sessionId);
+        String requestUri = request.getRequestURI();
+        log.debug("requestUri: {}", requestUri);
         Object[] args = proceedingJoinPoint.getArgs();
-        String s = Arrays.toString(args);
-        String jsonString = JSON.toJSONString(args);
-        String key = DigestUtil.md5Hex(sessionId + Arrays.toString(args));
+        String param = JSON.toJSONString(args);
+        // md5摘要
+        String key = DigestUtil.md5Hex(sessionId + param);
         log.debug("key: {}", key);
         String redisKey = String.format("idempotent:%s", key);
         Boolean success = setIfAbsent(redisKey, idempotent.timeout(), idempotent.timeUnit());

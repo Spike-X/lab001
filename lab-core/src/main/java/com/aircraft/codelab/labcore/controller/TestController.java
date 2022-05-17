@@ -22,8 +22,10 @@ import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
+import com.aircraft.codelab.labcore.aop.Idempotent;
 import com.aircraft.codelab.labcore.async.thread.ThreadService;
 import com.aircraft.codelab.labcore.pojo.entity.UserDO;
+import com.aircraft.codelab.labcore.pojo.vo.SysMenuCreatVo;
 import com.aircraft.codelab.labcore.pojo.vo.UserVO;
 import com.aircraft.codelab.labcore.service.ProductService;
 import com.aircraft.codelab.labcore.service.UserConverter;
@@ -33,9 +35,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -168,6 +168,13 @@ public class TestController {
             }).start();
             countDownLatch.countDown();
         }
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @Idempotent
+    @PostMapping(value = "/submit", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> repeatSubmit(@RequestBody SysMenuCreatVo sysMenuCreatVo) {
+        log.debug("submit =====>");
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }
