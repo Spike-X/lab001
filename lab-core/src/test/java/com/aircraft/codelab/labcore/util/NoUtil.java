@@ -79,7 +79,7 @@ public class NoUtil {
     }
 
     /**
-     * 获取一天中剩余的时间（秒数）
+     * 获取一天中剩余的时间（毫秒）
      */
     public Long getDayRemainingTime() {
         LocalDateTime now = LocalDateTime.now();
