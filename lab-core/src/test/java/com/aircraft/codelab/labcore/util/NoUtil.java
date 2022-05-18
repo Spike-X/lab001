@@ -9,14 +9,19 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 import javax.annotation.Resource;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 /**
  * 2022-05-10
@@ -50,11 +55,16 @@ public class NoUtil {
     }
 
     public List<String> getBatchOrderNo(Integer listSize) {
+        Date date = new Date();
+        Long endTime = getEndTime(date);
+        System.out.println(endTime);
+        Long dayRemainingTime = getDayRemainingTime();
+        System.out.println(dayRemainingTime);
         //数据key
         String redisKey = REDIS_KEY_PRE_ORDER_NO;
         //incr会将null自动设置成0
         Long increment = stringRedisTemplate.opsForValue().increment(redisKey, listSize);
-        stringRedisTemplate.expire(redisKey, getEndTime(), TimeUnit.MILLISECONDS);
+        stringRedisTemplate.expire(redisKey, getEndTime(date), TimeUnit.MILLISECONDS);
 
         List<String> result = new ArrayList<>();
 
@@ -69,11 +79,25 @@ public class NoUtil {
     }
 
     /**
-     * 获取当前时间与今天最后一个时间差 单位：秒
+     * 获取一天中剩余的时间（秒数）
+     */
+    public Long getDayRemainingTime() {
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("当前时间:  " + now);
+        //当天的零点
+        System.out.println("当天的零点:  " + LocalDateTime.of(now.toLocalDate(), LocalTime.MIN));
+        //当天的最后时间
+        LocalDateTime today_end = LocalDateTime.of(now.toLocalDate(), LocalTime.MAX);
+        System.out.println("当天的最后时间:  " + today_end);
+        return ChronoUnit.MILLIS.between(now, today_end);
+    }
+
+    /**
+     * 获取当前时间与今天最后一个时间差 单位：毫秒
      *
      * @return
      */
-    private Long getEndTime() {
+    private Long getEndTime(Date currentDate) {
         Calendar todayEnd = Calendar.getInstance();
         todayEnd.set(Calendar.HOUR_OF_DAY, 0);
         todayEnd.set(Calendar.MINUTE, 0);
@@ -81,7 +105,32 @@ public class NoUtil {
         todayEnd.add(Calendar.DAY_OF_MONTH, 1);
         todayEnd.add(Calendar.SECOND, -1);
         Date endDate = todayEnd.getTime();
-        return endDate.getTime() - (new Date()).getTime();
+        System.out.println(endDate);
+        return endDate.getTime() - currentDate.getTime();
+    }
+
+    @Test
+    public void orderNo() {
+        /** 生成18位订单编号:8位日期+2位订单来源+2位支付方式+6位以上自增id */
+        try {
+            String date = new SimpleDateFormat("yyyyMMdd").format(new Date());
+            String key = "mall:oms:orderId" + date;
+            Long increment = stringRedisTemplate.opsForValue().increment(key, 1);
+            StringBuffer buf = new StringBuffer();
+            buf.append(date);
+            buf.append(String.format("%02d", 0)); // 订单来源：0->PC订单；1->app订单
+            buf.append(String.format("%02d", 0)); // 支付方式：0->未支付；1->支付宝；2->微信
+            String incrementStr = increment.toString();
+            if (incrementStr.length() <= 6) {
+                buf.append(String.format("%06d", increment));
+            } else {
+                buf.append(incrementStr);
+            }
+            // 202108070000000001
+            System.out.println(buf.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     /*public static String generateOrderNo() {
@@ -130,7 +179,7 @@ public class NoUtil {
 
     @Test
     void BatchOrderNo() {
-            List<String> batchOrderNo = getBatchOrderNo(10000);
+        List<String> batchOrderNo = getBatchOrderNo(10000);
 //        List<String> orderNos = Collections.synchronizedList(new ArrayList<>());
 //        IntStream.range(0, 8000).parallel().forEach(i -> {
 ////            orderNos.add(generateOrderNo());
