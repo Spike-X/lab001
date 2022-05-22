@@ -15,10 +15,7 @@ import java.time.LocalTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -54,7 +51,7 @@ public class NoUtil {
         return dataTime.format(DF_FMT_PREFIX) + localIpSuffix + SEQ.getAndIncrement();
     }
 
-    public List<String> getBatchOrderNo(Integer listSize) {
+    public List<String> getBatchOrderNo(Integer orderNum) {
         Date date = new Date();
         Long endTime = getEndTime(date);
         System.out.println(endTime);
@@ -63,18 +60,41 @@ public class NoUtil {
         //数据key
         String redisKey = REDIS_KEY_PRE_ORDER_NO;
         //incr会将null自动设置成0
-        Long increment = stringRedisTemplate.opsForValue().increment(redisKey, listSize);
-        stringRedisTemplate.expire(redisKey, getEndTime(date), TimeUnit.MILLISECONDS);
+        Long increment = stringRedisTemplate.opsForValue().increment(REDIS_KEY_PRE_ORDER_NO, orderNum);
+        stringRedisTemplate.expire(REDIS_KEY_PRE_ORDER_NO, getEndTime(), TimeUnit.MILLISECONDS);
 
-        List<String> result = new ArrayList<>();
+        List<String> result = new ArrayList<>(orderNum);
 
-        long index = increment - listSize + 1;
-        for (long i = index; i <= increment; i++) {
-            StringBuilder no = new StringBuilder("WD").append(DateUtil.format(new Date(), "yyyyMMdd"));
-            //一天最多生成99999999条数据
-            no.append(String.format("%08d", (i)));
-            result.add(no.toString());
+        if (Objects.nonNull(increment)) {
+            long index = increment - orderNum + 1;
+            for (long i = index; i <= increment; i++) {
+                StringBuilder orderNo = new StringBuilder("RW").append(DateUtil.format(new Date(), DatePattern.PURE_DATE_PATTERN));
+                orderNo.append(String.format("%06d", i));
+                result.add(orderNo.toString());
+            }
         }
+        return result;
+    }
+
+    public List<String> getOrderNo(Integer orderNum) {
+        String format = DateUtil.format(new Date(), DatePattern.PURE_DATE_PATTERN);
+        //数据key
+        String redisKey = REDIS_KEY_PRE_ORDER_NO + format;
+        boolean flag = !Boolean.TRUE.equals(stringRedisTemplate.hasKey(redisKey));
+        //incr会将null自动设置成0
+        Long increment = stringRedisTemplate.opsForValue().increment(redisKey, orderNum);
+        if (flag) {
+            stringRedisTemplate.expire(redisKey, getEndTime(), TimeUnit.MILLISECONDS);
+        }
+
+        List<String> result = new ArrayList<>(orderNum);
+
+        Optional.ofNullable(increment).ifPresent(inc -> {
+            long index = inc - orderNum + 1;
+            for (long i = index; i <= inc; i++) {
+                result.add("RW" + format + String.format("%06d", i));
+            }
+        });
         return result;
     }
 
@@ -90,6 +110,17 @@ public class NoUtil {
         LocalDateTime today_end = LocalDateTime.of(now.toLocalDate(), LocalTime.MAX);
         System.out.println("当天的最后时间:  " + today_end);
         return ChronoUnit.MILLIS.between(now, today_end);
+    }
+
+    private Long getEndTime() {
+        Calendar todayEnd = Calendar.getInstance();
+        todayEnd.set(Calendar.HOUR_OF_DAY, 0);
+        todayEnd.set(Calendar.MINUTE, 0);
+        todayEnd.set(Calendar.SECOND, 0);
+        todayEnd.add(Calendar.DAY_OF_MONTH, 1);
+        todayEnd.add(Calendar.SECOND, -1);
+        Date endDate = todayEnd.getTime();
+        return endDate.getTime() - (new Date()).getTime();
     }
 
     /**
