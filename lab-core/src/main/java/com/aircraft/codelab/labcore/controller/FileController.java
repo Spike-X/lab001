@@ -23,7 +23,7 @@ import java.util.List;
 @Slf4j
 public class FileController {
     @Resource
-    FileStorageService fileStorageService;
+    private FileStorageService fileStorageService;
 
     @PostMapping(value = "/upload", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<String> upload(@RequestParam("file") MultipartFile file) {

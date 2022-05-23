@@ -36,10 +36,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ThreadPoolExecutor;
 
@@ -175,6 +179,8 @@ public class TestController {
     @PostMapping(value = "/submit", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> repeatSubmit(@RequestBody SysMenuCreatVo sysMenuCreatVo) {
         log.debug("submit =====>");
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletResponse response = Objects.requireNonNull(attributes).getResponse();
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }
