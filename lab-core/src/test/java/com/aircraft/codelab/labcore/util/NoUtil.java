@@ -210,7 +210,8 @@ public class NoUtil {
 
     @Test
     void BatchOrderNo() {
-        List<String> batchOrderNo = getBatchOrderNo(10000);
+//        List<String> batchOrderNo = getBatchOrderNo(10000);
+        List<String> batchOrderNo = getOrderNo(10000);
 //        List<String> orderNos = Collections.synchronizedList(new ArrayList<>());
 //        IntStream.range(0, 8000).parallel().forEach(i -> {
 ////            orderNos.add(generateOrderNo());

@@ -181,6 +181,12 @@ public class TestController {
         log.debug("submit =====>");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = Objects.requireNonNull(attributes).getResponse();
+        try {
+            int a = 1000 / 0;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+            log.error("aaa : {}", e.getMessage(), e);
+        }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }
