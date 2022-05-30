@@ -184,8 +184,8 @@ public class TestController {
         try {
             int a = 1000 / 0;
         } catch (Exception e) {
-            log.error(e.getMessage(), e);
-            log.error("aaa : {}", e.getMessage(), e);
+//            log.error(e.getMessage(), e);
+            log.error("error reason : {}", e.getMessage(), e);
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }

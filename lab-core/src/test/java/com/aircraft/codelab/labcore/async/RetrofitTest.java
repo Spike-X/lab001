@@ -1,6 +1,5 @@
-package com.aircraft.codelab.labcore;
+package com.aircraft.codelab.labcore.async;
 
-import com.aircraft.codelab.labcore.async.RetrofitCallBackService;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
