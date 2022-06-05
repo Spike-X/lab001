@@ -21,6 +21,7 @@ import java.util.zip.ZipOutputStream;
 
 /**
  * 2021-06-17
+ * 压缩指定目录下的全部文件
  *
  * @author tao.zhang
  * @since 1.0
@@ -30,11 +31,18 @@ public class FileUtil {
     private FileUtil() {
     }
 
-    public void compressToZip(File zipFile, String path) throws IOException {
+    /**
+     * 压缩指定目录下的全部文件
+     *
+     * @param zipFile   压缩包文件路径+文件名
+     * @param directory 指定文件夹
+     * @throws IOException IOException
+     */
+    public static void compressToZip(String directory, File zipFile) throws IOException {
         try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));
              WritableByteChannel writableByteChannel = Channels.newChannel(zipOut)) {
-            List<String> filePathList = new ArrayList<>();
-            collectFilePath(path, filePathList);
+            List<String> filePathList = new ArrayList<>(10);
+            collectFilePath(directory, filePathList);
             for (String filePath : filePathList) {
                 try (FileChannel fileChannel = new FileInputStream(filePath).getChannel()) {
                     File file = new File(filePath);
@@ -46,10 +54,18 @@ public class FileUtil {
         }
     }
 
-    private void collectFilePath(String path, List<String> filePathList) {
-        File root = new File(path);
+    /**
+     * 获取指定文件夹下的全部文件路径
+     *
+     * @param directory    指定文件夹路径
+     * @param filePathList 全部文件路径集合
+     */
+    private static void collectFilePath(String directory, List<String> filePathList) {
+        File root = new File(directory);
         File[] files = root.listFiles();
-        if (files == null) {
+        assert files != null;
+        if (files.length == 0) {
+            log.info("empty file directory");
             return;
         }
         Arrays.stream(files).forEach(file -> {
@@ -60,9 +76,16 @@ public class FileUtil {
                     filePathList.add(file.getCanonicalPath());
                 }
             } catch (IOException ex) {
-                ex.printStackTrace();
+                log.error("failed to get file path", ex);
             }
         });
+    }
+
+
+    public static void main(String[] args) throws IOException {
+        String path = "D:\\用户\\Downloads\\fgbp-face-factory-0.0.1";
+        File zipFile = new File("D:\\用户\\Downloads\\testzip.zip");
+        compressToZip(path, zipFile);
     }
 
     public void fileStreamResponse(File zipFile, HttpServletResponse response) throws IOException {

@@ -106,7 +106,7 @@ public class FileStorageServiceImpl implements FileStorageService {
             }
             response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
             response.setHeader(HttpHeaders.CONTENT_LENGTH, "" + resource.contentLength());
-            String fileName = URLEncoder.encode(Objects.requireNonNull(resource.getFilename()), StandardCharsets.UTF_8.displayName());
+            String fileName = URLEncoder.encode(Objects.requireNonNull(resource.getFilename()), StandardCharsets.UTF_8.name());
             response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
             IOUtils.copyLarge(bis, bos);
             bos.flush();
