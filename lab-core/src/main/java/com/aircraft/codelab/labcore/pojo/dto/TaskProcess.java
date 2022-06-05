@@ -1,6 +1,6 @@
 package com.aircraft.codelab.labcore.pojo.dto;
 
-import com.aircraft.codelab.labcore.enums.TaskState;
+import com.aircraft.codelab.labcore.enums.TaskStateEnum;
 import lombok.Data;
 
 /**
@@ -11,7 +11,7 @@ import lombok.Data;
  */
 @Data
 public class TaskProcess {
-    private TaskState state = TaskState.START;
+    private TaskStateEnum state = TaskStateEnum.START;
 
     public void nextState() {
         this.state = this.state.nextState();

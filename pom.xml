@@ -9,6 +9,7 @@
         <module>common-cache</module>
         <module>lab-core</module>
         <module>lab-kafka</module>
+        <module>lab-auth-server</module>
     </modules>
 
     <groupId>com.aircraft.codelab</groupId>
@@ -39,7 +40,6 @@
         <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
-        <maven-javadoc-plugin.version>3.2.0</maven-javadoc-plugin.version>
 
         <lombok.version>1.18.12</lombok.version>
         <mysql-connector.version>8.0.20</mysql-connector.version>
@@ -171,12 +171,15 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven-surefire-plugin.version}</version>
                 </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-javadoc-plugin</artifactId>
-                    <version>${maven-javadoc-plugin.version}</version>
-                </plugin>
             </plugins>
         </pluginManagement>
     </build>
+
+    <repositories>
+        <repository>
+            <id>aliyunmaven</id>
+            <name>aliyun</name>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+    </repositories>
 </project>

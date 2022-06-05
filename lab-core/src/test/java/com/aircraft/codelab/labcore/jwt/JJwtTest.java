@@ -23,7 +23,7 @@ import java.util.Date;
  * @author tao.zhang
  * @since 1.0
  */
-public class JwtTest {
+public class JJwtTest {
     private static final long TokenExpiration = 1000 * 60 * 2;
 
     private static final String SecretKey = "9PeyHpaQcpRpaaTdjH1ebmyJPcU4+82RbXFeHI+HA70=";

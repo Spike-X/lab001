@@ -3,6 +3,7 @@ package com.aircraft.codelab.core.exception;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -46,6 +47,7 @@ public class GlobalExceptionAdvice {
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public CommonResult<String> handleException(MethodArgumentNotValidException error) {
+        String stackTrace = ExceptionUtils.getStackTrace(error);
         log.warn("MethodArgumentNotValidException:", error);
         BindingResult bindingResult = error.getBindingResult();
         String message = null;
@@ -67,9 +69,9 @@ public class GlobalExceptionAdvice {
     @ExceptionHandler(ConstraintViolationException.class)
     public CommonResult<String> handleException(ConstraintViolationException error) {
         log.warn("ConstraintViolationException:", error);
-        String message;
-        message = error.getConstraintViolations().stream()
-                .map(constraint -> String.format(Locale.ROOT, "%s value '%s' %s", constraint.getPropertyPath(), constraint.getInvalidValue(), constraint.getMessage()))
+        String message = error.getConstraintViolations().stream()
+                .map(constraint -> String.format(Locale.ROOT, "%s value '%s' %s",
+                        constraint.getPropertyPath(), constraint.getInvalidValue(), constraint.getMessage()))
                 .collect(Collectors.joining(","));
         return CommonResult.failed(message);
     }

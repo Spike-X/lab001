@@ -1,8 +1,9 @@
 package com.aircraft.codelab.labcore.aop;
 
-import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.digest.DigestUtil;
 import com.aircraft.codelab.cache.config.RedisConfig;
 import com.aircraft.codelab.core.entities.CommonResult;
+import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -38,10 +39,13 @@ public class IdempotentAspect {
         HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
         // 生产使用请求头token作为id
         String sessionId = Objects.requireNonNull(attributes).getSessionId();
-        log.debug("===" + sessionId);
-        String requestURI = request.getRequestURI();
-        log.debug("requestURI: {}", requestURI);
-        String key = SecureUtil.md5(sessionId + requestURI);
+        log.debug("sessionId: {}", sessionId);
+        String requestUri = request.getRequestURI();
+        log.debug("requestUri: {}", requestUri);
+        Object[] args = proceedingJoinPoint.getArgs();
+        String param = JSON.toJSONString(args);
+        // md5摘要
+        String key = DigestUtil.md5Hex(sessionId + param);
         log.debug("key: {}", key);
         String redisKey = String.format("idempotent:%s", key);
         Boolean success = setIfAbsent(redisKey, idempotent.timeout(), idempotent.timeUnit());
