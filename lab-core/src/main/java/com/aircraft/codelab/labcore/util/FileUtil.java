@@ -39,18 +39,22 @@ public class FileUtil {
      * @throws IOException IOException
      */
     public static void compressToZip(String directory, File zipFile) throws IOException {
-        try (ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(zipFile));
+        try (FileOutputStream fos = new FileOutputStream(zipFile);
+                ZipOutputStream zipOut = new ZipOutputStream(fos);
              WritableByteChannel writableByteChannel = Channels.newChannel(zipOut)) {
             List<String> filePathList = new ArrayList<>(10);
             collectFilePath(directory, filePathList);
             for (String filePath : filePathList) {
-                try (FileChannel fileChannel = new FileInputStream(filePath).getChannel()) {
+                try (FileInputStream fis = new FileInputStream(filePath);
+                        FileChannel fileChannel = fis.getChannel()) {
                     File file = new File(filePath);
-                    zipOut.putNextEntry(new ZipEntry(file.getName()));
+                    ZipEntry zipEntry = new ZipEntry(file.getName());
+                    zipOut.putNextEntry(zipEntry);
                     long size = fileChannel.size();
                     fileChannel.transferTo(0, size, writableByteChannel);
                 }
             }
+            zipOut.flush();
         }
     }
 
