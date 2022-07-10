@@ -16,9 +16,13 @@
 
 package com.aircraft.codelab.db.config;
 
+import com.alibaba.druid.filter.Filter;
+import com.alibaba.druid.filter.stat.StatFilter;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
+import com.alibaba.druid.wall.WallConfig;
+import com.alibaba.druid.wall.WallFilter;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -28,7 +32,9 @@ import org.springframework.context.annotation.Primary;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -45,12 +51,36 @@ public class DruidConfig {
     @Resource
     private DruidProperties properties;
 
+    @Primary
     @Bean
-    @Primary // 在同样的DataSource中，首先使用被标注的DataSource
     public DataSource druid() {
         DruidDataSource dataSource = new DruidDataSource();
         properties.injectConfig(dataSource);
+        List<Filter> filterList = new ArrayList<>();
+        filterList.add(wallFilter());
+        filterList.add(statFilter());
+        dataSource.setProxyFilters(filterList);
         return dataSource;
+    }
+
+    @Bean
+    public WallFilter wallFilter() {
+        WallFilter wallFilter = new WallFilter();
+        wallFilter.setConfig(wallConfig());
+        return wallFilter;
+    }
+
+    @Bean
+    public WallConfig wallConfig() {
+        WallConfig config = new WallConfig();
+        //允许一次执行多条语句
+        config.setMultiStatementAllow(true);
+        return config;
+    }
+
+    @Bean
+    public StatFilter statFilter() {
+        return new StatFilter();
     }
 
     @Bean

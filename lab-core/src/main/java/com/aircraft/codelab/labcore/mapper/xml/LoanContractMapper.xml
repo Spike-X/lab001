@@ -130,4 +130,32 @@
         </choose>
         ORDER BY c.create_time ASC;
     </select>
+
+    <update id="updateContractState" parameterType="com.aircraft.codelab.labcore.pojo.vo.UpdateTaskVo">
+        update t_loan_contract
+        <set>
+            <if test="productName != null">
+                loan_product = #{productName},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateContractStateBatch" parameterType="com.aircraft.codelab.labcore.pojo.vo.UpdateTaskVo">
+        <foreach item="item" index="index" collection="taskVoList">
+            update t_loan_contract
+            <set>
+                <if test="item.productName != null">
+                    loan_product = #{item.productName},
+                </if>
+                <if test="item.updateTime != null">
+                    update_time = #{item.updateTime,jdbcType=TIMESTAMP},
+                </if>
+            </set>
+            where id = #{item.id};
+        </foreach>
+    </update>
 </mapper>

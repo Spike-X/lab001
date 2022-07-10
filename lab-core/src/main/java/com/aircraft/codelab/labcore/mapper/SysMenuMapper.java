@@ -8,6 +8,7 @@ import org.apache.ibatis.annotations.Param;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface SysMenuMapper extends BaseMapper<SysMenu> {
@@ -17,6 +18,8 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
     List<SysMenu> queryMenuById(List<Long> ids);
 
     Integer deleteBatchByLogic(@Param("updateTime") LocalDateTime updateTime, @Param("idList") List<String> idList);
+
+    Integer deleteBatchByLogicMap(Map<String, Object> map);
 
     Integer existSubmenu(Long id);
 }

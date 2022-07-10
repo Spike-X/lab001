@@ -3,6 +3,7 @@ package com.aircraft.codelab.labcore.mapper;
 import com.aircraft.codelab.labcore.pojo.dto.RealUserContractDto;
 import com.aircraft.codelab.labcore.pojo.dto.UserContractDto;
 import com.aircraft.codelab.labcore.pojo.entity.LoanContract;
+import com.aircraft.codelab.labcore.pojo.vo.UpdateTaskVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -17,4 +18,8 @@ public interface LoanContractMapper {
     List<UserContractDto> selectUserContract(@Param("userId") Long userId, @Param("contractState") Integer contractState);
 
     RealUserContractDto selectRealUserContract(@Param("userId") Long userId, @Param("contractState") Integer contractState);
+
+    int updateContractState(UpdateTaskVo updateTaskVo);
+
+    int updateContractStateBatch(@Param("taskVoList") List<UpdateTaskVo> taskVoList);
 }

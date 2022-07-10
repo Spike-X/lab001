@@ -46,4 +46,12 @@
             #{item}
         </foreach>
     </update>
+
+    <update id="deleteBatchByLogicMap">
+        update sys_menu set is_deleted = 1,update_time = #{updateTime}
+        where id in
+        <foreach item="item" index="index" collection="idList" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </update>
 </mapper>
