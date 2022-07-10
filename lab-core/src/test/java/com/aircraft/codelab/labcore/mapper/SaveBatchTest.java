@@ -4,9 +4,12 @@ import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.aircraft.codelab.core.util.SnowflakeUtil;
 import com.aircraft.codelab.labcore.pojo.entity.UserDO;
+import com.aircraft.codelab.labcore.util.MybatisBatchUtil;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
 import com.baomidou.mybatisplus.core.incrementer.IdentifierGenerator;
+import com.google.common.base.Stopwatch;
 import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -24,13 +27,14 @@ import java.util.List;
  * @author tao.zhang
  * @since 1.0
  */
+@Slf4j
 @SpringBootTest
 public class SaveBatchTest {
     @Resource
     private UserMapper userMapper;
 
     // 记录数量
-    private static final int MAX_COUNT = 200000;
+    private static final int MAX_COUNT = 100000;
 
     @Test
     void saveBatchByForeach() {
@@ -49,24 +53,24 @@ public class SaveBatchTest {
             user.setUpdateTime(now);
             list.add(user);
         }
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        // Foreach批量插入 单次插入过多报错：Packet for query is too large
+//        int num = userMapper.saveBatchByForeach(list);
+//        System.out.println("新增记录" + num + "条");
 
-        long sTime = System.currentTimeMillis(); // 统计开始时间
-        // 分片批量插入
+        // 一个索引列：10W->5.7s 20W->9.4s 50W->29.1s
         List<List<UserDO>> listPartition = Lists.partition(list, 1000);
         for (List<UserDO> item : listPartition) {
             int i = userMapper.saveBatchByForeach(item);
-            System.out.println("新增记录" + i + "条");
         }
-        // 批量插入
-        long eTime = System.currentTimeMillis(); // 统计结束时间
-        System.out.println("执行时间：" + (eTime - sTime));
+        log.debug("结束：{}", stopwatch.stop());
     }
 
     @Resource
     private SqlSessionFactory sqlSessionFactory;
 
     @Test
-    void saveBatchType() {
+    void saveBatchByExecutorType() {
         List<UserDO> list = new ArrayList<>();
         LocalDateTime now = LocalDateTime.now();
         for (int i = 0; i < MAX_COUNT; i++) {
@@ -79,13 +83,35 @@ public class SaveBatchTest {
         }
 
         try (SqlSession sqlSession = sqlSessionFactory.openSession(ExecutorType.BATCH)) {
-            UserMapper mapper = sqlSession.getMapper(UserMapper.class);
+            UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
-            long sTime = System.currentTimeMillis(); // 统计开始时间
-            list.forEach(mapper::saveOne);
+            Stopwatch stopwatch = Stopwatch.createStarted();
+            // 不加jdbcURl参数rewriteBatchedStatements 效率会奇低
+            // 一个索引列：10W->5.2s 20W->9.5s 50W->24.3s
+            list.forEach(userMapper::saveOne);
             sqlSession.commit();
-            long eTime = System.currentTimeMillis(); // 统计结束时间
-            System.out.println("执行时间：" + (eTime - sTime));
+            log.debug("结束：{}", stopwatch.stop());
         }
+    }
+
+    @Resource
+    private MybatisBatchUtil batchUtil;
+
+    @Test
+    void BatchTest() {
+        List<UserDO> list = new ArrayList<>();
+        LocalDateTime now = LocalDateTime.now();
+        for (int i = 0; i < MAX_COUNT; i++) {
+            UserDO user = new UserDO();
+            user.setName("test:" + i);
+            user.setPassword("123456");
+            user.setCreateTime(now);
+            user.setUpdateTime(now);
+            list.add(user);
+        }
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        // 一个索引列：10W->6.0s 20W->10.6s
+        int num = batchUtil.batchUpdateOrInsert(list, UserMapper.class, (R, userMapper) -> userMapper.saveOne(R));
+        log.debug("新增：{}条：耗时：{}", num, stopwatch.stop());
     }
 }
