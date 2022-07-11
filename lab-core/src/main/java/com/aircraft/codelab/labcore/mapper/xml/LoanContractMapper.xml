@@ -152,7 +152,7 @@
                     loan_product = #{item.productName},
                 </if>
                 <if test="item.updateTime != null">
-                    update_time = #{item.updateTime,jdbcType=TIMESTAMP},
+                    update_time = #{item.updateTime},
                 </if>
             </set>
             where id = #{item.id};

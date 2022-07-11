@@ -67,6 +67,7 @@ public class MybatisTest {
         updateTaskVos.add(updateTaskVo);
         updateTaskVos.add(updateTaskVo1);
         // jdbc添加参数allowMultiQueries=true
-        loanContractMapper.updateContractStateBatch(updateTaskVos);
+        int batch = loanContractMapper.updateContractStateBatch(updateTaskVos);
+        log.debug("成功更新数量：{}", batch);
     }
 }
