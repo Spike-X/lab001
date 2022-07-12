@@ -20,11 +20,14 @@ import javax.annotation.Resource;
 @Slf4j
 @RestController
 public class RedissonTest {
-//    @Resource
+    @Resource
     private RedissonClient redissonClient;
     private RRateLimiter rateLimiter;
 
-//    @PostConstruct
+    @Resource
+    private DelayConsumer delayConsumer;
+
+    //    @PostConstruct
     public void initRateLimiter() {
         rateLimiter = redissonClient.getRateLimiter("key");
         rateLimiter.trySetRate(RateType.OVERALL, 15, 1, RateIntervalUnit.SECONDS);
@@ -34,5 +37,21 @@ public class RedissonTest {
     public String rateLimiter() {
         boolean acquire = rateLimiter.tryAcquire(1);
         return "";
+    }
+
+    @GetMapping("/delayQueue")
+    public void delayQueue() {
+        DelayDto delayDto = new DelayDto();
+        delayDto.setTaskNo("0000");
+        delayDto.setRetryNum(0);
+        delayConsumer.accept(delayDto);
+    }
+
+    @GetMapping("/delayQueue1")
+    public void delayQueue1() {
+        DelayDto delayDto = new DelayDto();
+        delayDto.setTaskNo("1111");
+        delayDto.setRetryNum(0);
+        delayConsumer.accept(delayDto);
     }
 }

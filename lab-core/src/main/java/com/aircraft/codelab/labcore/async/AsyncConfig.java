@@ -20,7 +20,7 @@ public class AsyncConfig {
     private static final int queueCapacity = 200;    // 缓冲队列数 用来缓冲执行任务的队列
     private static final String threadNamePrefix = "Async-Test-";    // 线程池名前缀 方便我们定位处理任务所在的线程池
 
-    @Bean
+    @Bean("asyncThread")
     public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(corePoolSize);
