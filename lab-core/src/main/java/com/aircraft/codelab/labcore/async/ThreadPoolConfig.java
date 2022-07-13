@@ -2,6 +2,7 @@ package com.aircraft.codelab.labcore.async;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
+import org.redisson.api.RDelayedQueue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -56,7 +57,7 @@ public class ThreadPoolConfig {
 
     @Bean
     public ThreadPoolExecutor singleThreadPoolExecutor() {
-        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat(threadNamePrefix + "-%d").setDaemon(true).build();
+        ThreadFactory threadFactory = new ThreadFactoryBuilder().setNameFormat("single-thread" + "-%d").setDaemon(true).build();
         return new ThreadPoolExecutor(1, 1, 0L,
                 TimeUnit.MILLISECONDS, new ArrayBlockingQueue<>(1), threadFactory, new ThreadPoolExecutor.CallerRunsPolicy());
     }

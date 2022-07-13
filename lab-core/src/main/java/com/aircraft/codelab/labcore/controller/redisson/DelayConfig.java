@@ -21,15 +21,12 @@ public class DelayConfig {
 
     @Bean("blockQueue")
     public RBlockingDeque<DelayDto> getBlockQueue() {
-        RBlockingDeque<DelayDto> blockingDeque =
-                redissonClient.getBlockingDeque("delay:task:result");
-        return blockingDeque;
+        return redissonClient.getBlockingDeque("delay:task:result");
     }
 
     @Bean("delayedQueue")
     public RDelayedQueue<DelayDto> getDelayQueue() {
         RBlockingDeque<DelayDto> blockingDeque = getBlockQueue();
-        RDelayedQueue<DelayDto> delayedQueue = redissonClient.getDelayedQueue(blockingDeque);
-        return delayedQueue;
+        return redissonClient.getDelayedQueue(blockingDeque);
     }
 }

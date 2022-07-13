@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -16,13 +17,13 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-public class DelayConsumer<T> {
-    @Autowired
+public class DelayConsumer {
+    @Resource
     private RDelayedQueue<DelayDto> delayedQueue;
 
     private static final int RETRY_MAX = 11;
 
-    @Async("asyncThread")
+//    @Async("asyncThread")
     public void accept(DelayDto qryDto) {
         log.debug("dto: {}", qryDto);
         qryDto.setRetryNum(qryDto.getRetryNum() + 1);
