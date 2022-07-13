@@ -18,6 +18,7 @@ package com.aircraft.codelab.labcore;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
  * 2020-10-31
@@ -27,6 +28,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @since 1.0
  */
 //@EnableAdminServer
+@EnableAsync
 @SpringBootApplication
 public class Lab001Application {
 

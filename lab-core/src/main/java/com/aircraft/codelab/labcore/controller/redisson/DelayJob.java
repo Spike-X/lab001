@@ -3,13 +3,10 @@ package com.aircraft.codelab.labcore.controller.redisson;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.redisson.Redisson;
 import org.redisson.api.RBlockingDeque;
 import org.redisson.api.RDelayedQueue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -26,7 +23,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Component
 public class DelayJob implements ApplicationRunner {
     @Resource
-    private DelayConsumer delayConsumer;
+    private DelayProducer delayProducer;
 
     @Resource
     private RBlockingDeque<DelayDto> blockingDeque;
@@ -48,7 +45,7 @@ public class DelayJob implements ApplicationRunner {
                 try {
                     DelayDto dto = blockingDeque.take();
                     log.info("listen 从队列中获取需要查询的任务信息：{}", JSON.toJSONString(dto));
-                    CompletableFuture.runAsync(() -> delayConsumer.accept(dto), executor);
+                    CompletableFuture.runAsync(() -> delayProducer.accept(dto), executor);
                 } catch (InterruptedException e) {
                     log.error("listen InterruptedException,error msg:{}", ExceptionUtils.getMessage(e));
                 }

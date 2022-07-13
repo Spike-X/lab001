@@ -2,7 +2,6 @@ package com.aircraft.codelab.labcore.controller.redisson;
 
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.api.RDelayedQueue;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
@@ -17,7 +16,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @Component
-public class DelayConsumer {
+public class DelayProducer {
     @Resource
     private RDelayedQueue<DelayDto> delayedQueue;
 

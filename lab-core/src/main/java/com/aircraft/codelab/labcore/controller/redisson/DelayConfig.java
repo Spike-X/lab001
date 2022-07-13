@@ -19,14 +19,14 @@ public class DelayConfig {
     @Resource
     private RedissonClient redissonClient;
 
-    @Bean("blockQueue")
-    public RBlockingDeque<DelayDto> getBlockQueue() {
+    @Bean("blockingQueue")
+    public RBlockingDeque<DelayDto> initBlockingDeque() {
         return redissonClient.getBlockingDeque("delay:task:result");
     }
 
     @Bean("delayedQueue")
-    public RDelayedQueue<DelayDto> getDelayQueue() {
-        RBlockingDeque<DelayDto> blockingDeque = getBlockQueue();
+    public RDelayedQueue<DelayDto> initDelayedQueue() {
+        RBlockingDeque<DelayDto> blockingDeque = initBlockingDeque();
         return redissonClient.getDelayedQueue(blockingDeque);
     }
 }
