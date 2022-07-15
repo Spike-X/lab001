@@ -2,7 +2,6 @@ package com.aircraft.codelab.labcore.async;
 
 import com.google.common.util.concurrent.ThreadFactoryBuilder;
 import lombok.extern.slf4j.Slf4j;
-import org.redisson.api.RDelayedQueue;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -17,14 +16,18 @@ import java.util.concurrent.*;
 @Slf4j
 @Configuration
 public class ThreadPoolConfig {
+    // private static final int corePoolSize = Runtime.getRuntime().availableProcessors() + 1;
 
-//    private static final int corePoolSize = Runtime.getRuntime().availableProcessors() + 1;
-
-    private static final int corePoolSize = 4;      // 核心线程数（默认线程数）线程池创建时候初始化的线程数
-    private static final int maxPoolSize = 8;      // 最大线程数 线程池最大的线程数，只有在缓冲队列满了之后才会申请超过核心线程数的线程
-    private static final long keepAliveTime = 60L;     // 允许线程空闲时间（单位：默认为秒）当超过了核心线程之外的线程在空闲时间到达之后会被销毁
-    private static final int queueCapacity = 100;    // 缓冲队列数 用来缓冲执行任务的队列
-    private static final String threadNamePrefix = "pool-Test";    // 线程池名前缀 方便我们定位处理任务所在的线程池
+    // 核心线程数（默认线程数）线程池创建时候初始化的线程数
+    private static final int corePoolSize = 4;
+    // 最大线程数 线程池最大的线程数，只有在缓冲队列满了之后才会申请超过核心线程数的线程
+    private static final int maxPoolSize = 8;
+    // 允许线程空闲时间（单位：默认为秒）当超过了核心线程之外的线程在空闲时间到达之后会被销毁
+    private static final long keepAliveTime = 60L;
+    // 缓冲队列数 用来缓冲执行任务的队列
+    private static final int queueCapacity = 100;
+    // 线程池名前缀 方便我们定位处理任务所在的线程池
+    private static final String threadNamePrefix = "pool-Test";
 
     private static final ThreadPoolExecutor THREAD_POOL_EXECUTOR;
 
