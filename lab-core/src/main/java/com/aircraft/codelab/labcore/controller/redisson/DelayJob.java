@@ -41,7 +41,7 @@ public class DelayJob implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) {
         threadPoolExecutor.execute(() -> {
-            while (true) {
+            /*while (true) {
                 try {
                     DelayDto dto = blockingDeque.take();
                     log.info("listen 从队列中获取需要查询的任务信息：{}", JSON.toJSONString(dto));
@@ -49,7 +49,7 @@ public class DelayJob implements ApplicationRunner {
                 } catch (InterruptedException e) {
                     log.error("listen InterruptedException,error msg:{}", ExceptionUtils.getMessage(e));
                 }
-            }
+            }*/
         });
         log.info("Redission延迟队列启动成功");
     }
