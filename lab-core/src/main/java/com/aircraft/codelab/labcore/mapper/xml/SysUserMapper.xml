@@ -79,6 +79,22 @@
         </foreach>
     </update>
 
+    <update id="updateBatchById">
+        update sys_user
+        <set>
+            <if test="password != null">
+                password = #{password},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where id in
+        <foreach collection="idList" index="index" item="item" separator="," open="(" close=")">
+            #{item,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
     <select id="selectAll" resultMap="BaseResultMap">
         select *
         from sys_user

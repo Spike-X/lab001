@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -24,6 +25,10 @@ public interface UserMapper extends BaseMapper<UserDO> {
     int updateOne(UserDO userDO);
 
     int updateBatch(@Param("userDOList") List<UserDO> userDOList);
+
+    int updateBatchById(@Param("password") String password,
+                        @Param("updateTime") LocalDateTime updateTime,
+                        @Param("idList") List<Long> idList);
 
     int updateBatchCase(@Param("userDOList") List<UserDO> userDOList);
 }

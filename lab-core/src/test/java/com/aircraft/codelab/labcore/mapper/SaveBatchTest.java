@@ -3,6 +3,7 @@ package com.aircraft.codelab.labcore.mapper;
 import cn.hutool.core.lang.Snowflake;
 import cn.hutool.core.util.IdUtil;
 import com.aircraft.codelab.core.util.SnowflakeUtil;
+import com.aircraft.codelab.labcore.pojo.entity.BaseDO;
 import com.aircraft.codelab.labcore.pojo.entity.UserDO;
 import com.aircraft.codelab.labcore.util.MybatisBatchUtil;
 import com.baomidou.mybatisplus.core.incrementer.DefaultIdentifierGenerator;
@@ -20,6 +21,7 @@ import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 2021-11-21
@@ -185,5 +187,22 @@ public class SaveBatchTest {
             sqlSession.commit();
             log.debug("结束：{}", stopwatch.stop());
         }
+    }
+
+    @Test
+    void updateBatchById() {
+        LocalDateTime now = LocalDateTime.now();
+        List<UserDO> userDOS = userMapper.selectAll();
+        List<Long> longList = userDOS.stream().map(BaseDO::getId).collect(Collectors.toList());
+        List<List<Long>> partition = Lists.partition(longList, 5000);
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        // 5W->1.6s
+        partition.forEach(p -> {
+            int batch = userMapper.updateBatchById("admin", now, p);
+        });
+        log.debug("结束：{}", stopwatch.stop());
+        // 5W->1.8s
+//        int batch = userMapper.updateBatchById("admin", now, longList);
+//        log.debug("修改：{}条：耗时：{}", batch, stopwatch.stop());
     }
 }
