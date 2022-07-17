@@ -99,6 +99,7 @@ mybatis-plus:
 #  type-aliases-package: com.aircraft.codelab.labcore.pojo.*
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+#    log-impl: org.apache.ibatis.logging.nologging.NoLoggingImpl
   global-config:
     db-config:
       id-type: assign_id

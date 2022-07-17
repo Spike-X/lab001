@@ -18,4 +18,12 @@ public interface UserMapper extends BaseMapper<UserDO> {
     int saveBatchByForeach(@Param("userList") List<UserDO> userList);
 
     int saveOne(UserDO userDO);
+
+    List<UserDO> selectAll();
+
+    int updateOne(UserDO userDO);
+
+    int updateBatch(@Param("userDOList") List<UserDO> userDOList);
+
+    int updateBatchCase(@Param("userDOList") List<UserDO> userDOList);
 }
