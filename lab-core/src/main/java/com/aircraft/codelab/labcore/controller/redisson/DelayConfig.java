@@ -16,15 +16,15 @@ import javax.annotation.Resource;
  */
 @Configuration
 public class DelayConfig {
-    @Resource
+//    @Resource
     private RedissonClient redissonClient;
 
-    @Bean("blockingQueue")
+//    @Bean("blockingQueue")
     public RBlockingDeque<DelayDto> initBlockingDeque() {
         return redissonClient.getBlockingDeque("delay:task:result");
     }
 
-    @Bean("delayedQueue")
+//    @Bean("delayedQueue")
     public RDelayedQueue<DelayDto> initDelayedQueue() {
         RBlockingDeque<DelayDto> blockingDeque = initBlockingDeque();
         return redissonClient.getDelayedQueue(blockingDeque);

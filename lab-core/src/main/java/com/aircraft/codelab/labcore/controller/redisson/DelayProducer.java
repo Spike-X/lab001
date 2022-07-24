@@ -17,7 +17,7 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 @Component
 public class DelayProducer {
-    @Resource
+//    @Resource
     private RDelayedQueue<DelayDto> delayedQueue;
 
     private static final int RETRY_MAX = 11;
