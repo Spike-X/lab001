@@ -22,7 +22,7 @@ public class RabbitMqTest {
     @Test
     void delayedMessage() throws InterruptedException {
         sender.send("Hi Admin.");
-        TimeUnit.SECONDS.sleep(20);
+        TimeUnit.SECONDS.sleep(300);
     }
 
     @Test
@@ -31,6 +31,6 @@ public class RabbitMqTest {
         delayMessage.setRetryTime(1);
         delayMessage.setTaskNo("RW123124");
         sender.sendVo(delayMessage);
-        TimeUnit.SECONDS.sleep(20);
+        TimeUnit.SECONDS.sleep(300);
     }
 }
