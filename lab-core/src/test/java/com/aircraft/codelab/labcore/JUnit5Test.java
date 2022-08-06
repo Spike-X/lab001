@@ -16,7 +16,15 @@
 
 package com.aircraft.codelab.labcore;
 
+import com.aircraft.codelab.labcore.pojo.vo.UserVO;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.serializer.SerializerFeature;
+import com.google.common.collect.Lists;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
+
+import java.util.List;
 
 /**
  * 2020-10-31
@@ -25,6 +33,7 @@ import org.junit.jupiter.api.*;
  * @author tao.zhang
  * @since 1.0
  */
+@Slf4j
 @DisplayName("我的第一个测试用例")
 public class JUnit5Test {
     @BeforeAll
@@ -51,6 +60,22 @@ public class JUnit5Test {
     @Test
     void testFirstTest() {
         System.out.println("我的第一个测试开始测试");
+        List<String> stringList = Lists.newArrayList("Blackberry", null, "Avocado", "Cherry", "Apricots");
+
+        List<Integer> numList = Lists.newArrayList(1, null, 3, 4, 5);
+
+        UserVO userVO1 = UserVO.builder().name("1").build();
+        UserVO userVO2 = UserVO.builder().id(2L).build();
+        UserVO userVO3 = UserVO.builder().id(3L).name("3").build();
+        List<UserVO> objectList = Lists.newArrayList(userVO1, userVO2, userVO3);
+
+        log.debug("stringList: {}", stringList);
+        log.debug("stringList: {}", JSON.toJSONString(stringList));
+        log.debug("numList: {}", numList);
+        log.debug("numList: {}", JSON.toJSONString(numList));
+        log.debug("objectList: {}", objectList);
+        log.debug("objectList: {}", JSON.toJSONString(objectList));
+        log.debug("objectList: {}", JSON.toJSONString(objectList, SerializerFeature.WriteMapNullValue));
     }
 
     @DisplayName("我的第二个测试")
