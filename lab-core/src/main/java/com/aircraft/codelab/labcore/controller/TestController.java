@@ -76,7 +76,7 @@ public class TestController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        },"lock1").start();
+        }, "lock1").start();
         countDownLatch.countDown();
         new Thread(() -> {
             try {
@@ -85,7 +85,7 @@ public class TestController {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        },"lock2").start();
+        }, "lock2").start();
         countDownLatch.countDown();
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
@@ -169,7 +169,7 @@ public class TestController {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-            },"cas1").start();
+            }, "cas" + i).start();
             countDownLatch.countDown();
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
