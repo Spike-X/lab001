@@ -29,10 +29,13 @@ import com.aircraft.codelab.labcore.pojo.vo.SysMenuCreatVo;
 import com.aircraft.codelab.labcore.pojo.vo.UserVO;
 import com.aircraft.codelab.labcore.service.ProductService;
 import com.aircraft.codelab.labcore.service.UserConverter;
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.core.type.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.web.context.WebServerApplicationContext;
+import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -43,9 +46,13 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.CountDownLatch;
+
 import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 2020-11-03
@@ -130,7 +137,7 @@ public class TestController {
 
     @GetMapping(value = "/pool", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> threadPool() {
-        log.debug("============================");
+        log.debug("=====>");
         for (int i = 0; i < 50; i++) {
             int task = i + 1;
             executor.execute(() -> {
@@ -153,6 +160,35 @@ public class TestController {
         int queueSize = executor.getQueue().size();
         log.debug("poolSize:{},activeCount:{},completedTaskCount:{},queueSize:{}", poolSize, activeCount, completedTaskCount, queueSize);
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @Resource
+    private WebServerApplicationContext webServerApplicationContext;
+
+    @GetMapping(value = "/tomcat/actuator", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> tomcatStatus() {
+        TomcatWebServer webServer = (TomcatWebServer) webServerApplicationContext.getWebServer();
+        //获取webServer线程池
+        org.apache.tomcat.util.threads.ThreadPoolExecutor executor = (org.apache.tomcat.util.threads.ThreadPoolExecutor) (webServer)
+                .getTomcat()
+                .getConnector()
+                .getProtocolHandler()
+                .getExecutor();
+        Map<String, String> returnMap = new LinkedHashMap<>();
+        returnMap.put("核心线程数", String.valueOf(executor.getCorePoolSize()));
+        returnMap.put("最大线程数", String.valueOf(executor.getMaximumPoolSize()));
+        returnMap.put("活跃线程数", String.valueOf(executor.getActiveCount()));
+        returnMap.put("池中当前线程数", String.valueOf(executor.getPoolSize()));
+        returnMap.put("历史最大线程数", String.valueOf(executor.getLargestPoolSize()));
+        returnMap.put("线程允许空闲时间/s", String.valueOf(executor.getKeepAliveTime(TimeUnit.SECONDS)));
+        returnMap.put("核心线程数是否允许被回收", String.valueOf(executor.allowsCoreThreadTimeOut()));
+        returnMap.put("提交任务总数", String.valueOf(executor.getSubmittedCount()));
+        returnMap.put("历史执行任务的总数(近似值)", String.valueOf(executor.getTaskCount()));
+        returnMap.put("历史完成任务的总数(近似值)", String.valueOf(executor.getCompletedTaskCount()));
+        returnMap.put("工作队列任务数量", String.valueOf(executor.getQueue().size()));
+        returnMap.put("拒绝策略", executor.getRejectedExecutionHandler().getClass().getSimpleName());
+        log.debug("returnMap: {}", JSON.toJSONString(returnMap));
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), returnMap);
     }
 
     @Resource

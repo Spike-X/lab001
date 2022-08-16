@@ -1,5 +1,19 @@
 server:
   port: 8081
+  tomcat:
+    threads:
+      min-spare: 10
+      #最大线程数
+      max: 200
+    #最大连接数
+    max-connections: 8192
+    connection-timeout: 5000ms
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 
 knife4j:
   enable: true
