@@ -191,6 +191,19 @@
             <artifactId>sentinel-core</artifactId>
             <version>1.8.3</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.10.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-words</artifactId>
+            <version>15.8.0</version>
+            <classifier>jdk16</classifier>
+        </dependency>
+
     </dependencies>
 
     <build>
