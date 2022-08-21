@@ -28,13 +28,19 @@ public class poiTl {
     void ascTest() throws Exception {
         XWPFTemplate template = XWPFTemplate.compile("D:\\md\\template.docx").render(
                 new HashMap<String, Object>() {{
+                    // windows 方框
 //                    put("title1", (char) 9633);
-//                    put("title1", new TextRenderData("000000", String.valueOf(9633)));
-                    put("title1", new TextRenderData("R", new Style("Wingdings 2", 14)));
+                    put("title1", new TextRenderData("\u2610"));
 //                    put("title1", new TextRenderData("\uF0FE", new Style("Wingdings", 14)));
-                    put("title2", (char) 9745);
-                    put("title3", "□");
-                    put("title4", "☑");
+                    // windows 方框勾
+//                    put("title2", (char) 9745);
+                    put("title2", new TextRenderData("\u2611"));
+                    // linux 方框
+                    put("title3", "\u2610");
+                    // linux 方框勾
+                    put("title4", "\u2611");
+//                    put("title3", "□");
+//                    put("title4", "☑");
                     put("title5", true);
                     put("title6", false);
                 }});
