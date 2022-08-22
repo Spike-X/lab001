@@ -21,5 +21,7 @@ public interface LoanContractMapper {
 
     int updateContractState(UpdateTaskVo updateTaskVo);
 
-    int updateContractStateBatch(@Param("taskVoList") List<UpdateTaskVo> taskVoList);
+    int updateBatch(@Param("taskVoList") List<UpdateTaskVo> taskVoList);
+
+    int batchUpdateCaseWhen(@Param("taskVoList") List<UpdateTaskVo> taskVoList);
 }

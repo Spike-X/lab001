@@ -37,6 +37,11 @@
             <version>${project.version}</version>
         </dependency>-->
 
+        <dependency>
+            <groupId>com.aircraft.codelab</groupId>
+            <artifactId>lab-rabbitmq</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- maven modules -->
 
         <!--<dependency>
@@ -47,6 +52,11 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-oauth2-jose</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
         <dependency>
@@ -182,10 +192,18 @@
             <version>1.8.3</version>
         </dependency>
 
-        <!--<dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-amqp</artifactId>
-        </dependency>-->
+        <dependency>
+            <groupId>com.deepoove</groupId>
+            <artifactId>poi-tl</artifactId>
+            <version>1.10.4</version>
+        </dependency>
+        <dependency>
+            <groupId>com.aspose</groupId>
+            <artifactId>aspose-words</artifactId>
+            <version>15.8.0</version>
+            <classifier>jdk16</classifier>
+        </dependency>
+
     </dependencies>
 
     <build>

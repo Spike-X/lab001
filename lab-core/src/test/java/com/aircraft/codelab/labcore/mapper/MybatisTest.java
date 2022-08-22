@@ -67,7 +67,29 @@ public class MybatisTest {
         updateTaskVos.add(updateTaskVo);
         updateTaskVos.add(updateTaskVo1);
         // jdbc添加参数allowMultiQueries=true
-        int batch = loanContractMapper.updateContractStateBatch(updateTaskVos);
+        int batch = loanContractMapper.updateBatch(updateTaskVos);
+        // 返回一条更新记录
         log.debug("成功更新数量：{}", batch);
+    }
+
+    @Test
+    void batchUpdateCaseWhen() {
+        LocalDateTime now = LocalDateTime.now();
+        UpdateTaskVo updateTaskVo = new UpdateTaskVo();
+        updateTaskVo.setId(1432657379465654L);
+        updateTaskVo.setProductName("车享贷007");
+        updateTaskVo.setUpdateTime(now);
+
+        UpdateTaskVo updateTaskVo1 = new UpdateTaskVo();
+        updateTaskVo1.setId(1432657927816376L);
+        updateTaskVo1.setProductName("车享贷008");
+        updateTaskVo1.setUpdateTime(now);
+
+        List<UpdateTaskVo> updateTaskVos = new ArrayList<>();
+        updateTaskVos.add(updateTaskVo);
+        updateTaskVos.add(updateTaskVo1);
+        int i = loanContractMapper.batchUpdateCaseWhen(updateTaskVos);
+        // 返回实际更新记录数
+        log.debug("成功更新数量：{}", i);
     }
 }

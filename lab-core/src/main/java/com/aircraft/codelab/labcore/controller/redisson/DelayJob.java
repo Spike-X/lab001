@@ -22,13 +22,13 @@ import java.util.concurrent.ThreadPoolExecutor;
 @Slf4j
 @Component
 public class DelayJob implements ApplicationRunner {
-    @Resource
+//    @Resource
     private DelayProducer delayProducer;
 
-    @Resource
+//    @Resource
     private RBlockingDeque<DelayDto> blockingDeque;
 
-    @Resource
+//    @Resource
     private RDelayedQueue<DelayDto> delayedQueue;
 
     @Resource(name = "mailThreadPoolExecutor")
@@ -40,7 +40,7 @@ public class DelayJob implements ApplicationRunner {
     @SuppressWarnings("InfiniteLoopStatement")
     @Override
     public void run(ApplicationArguments args) {
-        threadPoolExecutor.execute(() -> {
+        /*threadPoolExecutor.execute(() -> {
             while (true) {
                 try {
                     DelayDto dto = blockingDeque.take();
@@ -50,7 +50,7 @@ public class DelayJob implements ApplicationRunner {
                     log.error("listen InterruptedException,error msg:{}", ExceptionUtils.getMessage(e));
                 }
             }
-        });
+        });*/
         log.info("Redission延迟队列启动成功");
     }
 

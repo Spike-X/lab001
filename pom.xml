@@ -10,6 +10,7 @@
         <module>lab-core</module>
         <module>lab-kafka</module>
         <module>lab-auth-server</module>
+        <module>lab-rabbitmq</module>
     </modules>
 
     <groupId>com.aircraft.codelab</groupId>

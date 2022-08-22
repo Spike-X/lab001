@@ -5,6 +5,7 @@ import org.redisson.api.RRateLimiter;
 import org.redisson.api.RateIntervalUnit;
 import org.redisson.api.RateType;
 import org.redisson.api.RedissonClient;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,6 +20,7 @@ import javax.annotation.Resource;
 @Slf4j
 @RestController
 public class RedissonTest {
+    @Lazy
     @Resource
     private RedissonClient redissonClient;
 
