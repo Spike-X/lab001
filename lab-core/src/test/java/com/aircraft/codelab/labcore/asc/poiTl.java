@@ -30,14 +30,19 @@ public class poiTl {
                 new HashMap<String, Object>() {{
                     // windows 方框
 //                    put("title1", (char) 9633);
-                    put("title1", new TextRenderData("\u2610"));
-//                    put("title1", new TextRenderData("\uF0FE", new Style("Wingdings", 14)));
+                    // 1F5F8 ==> D83DDDF8
+//                    put("title1", new TextRenderData("\uD83D\uDDF8", new Style("AlibabaPuHuiTi-2-55-Regular", 14)));
+                    put("title1", new TextRenderData("\u25A1", new Style("AlibabaPuHuiTi-2-55-Regular", 14)));
                     // windows 方框勾
 //                    put("title2", (char) 9745);
-                    put("title2", new TextRenderData("\u2611"));
+                    put("title2", new TextRenderData("\u2705", new Style("AlibabaPuHuiTi-2-55-Regular", 14)));
                     // linux 方框
+                    // Wingdings 2 方框 字符码0xA3 0x00A3
+//                    put("title1", new TextRenderData("\u00A3", new Style("Wingdings 2", 14)));
                     put("title3", "\u2610");
                     // linux 方框勾
+                    // Wingdings 2 方框勾 字符码0x52 0x0052
+//                    put("title2", new TextRenderData("\u0052", new Style("Wingdings 2", 14)));
                     put("title4", "\u2611");
 //                    put("title3", "□");
 //                    put("title4", "☑");
