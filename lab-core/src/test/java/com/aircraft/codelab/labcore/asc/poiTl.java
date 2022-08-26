@@ -31,10 +31,10 @@ public class poiTl {
                     // windows 方框
 //                    put("title1", (char) 9633);
                     put("title1", new TextRenderData("\u2610"));
-//                    put("title1", new TextRenderData("\uF0FE", new Style("Wingdings", 14)));
                     // windows 方框勾
 //                    put("title2", (char) 9745);
                     put("title2", new TextRenderData("\u2611"));
+//                    put("title2", new TextRenderData("\u0052", new Style("Wingdings 2", 14)));
                     // linux 方框
                     put("title3", "\u2610");
                     // linux 方框勾
