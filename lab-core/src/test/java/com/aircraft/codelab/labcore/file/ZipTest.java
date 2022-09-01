@@ -1,5 +1,6 @@
-package com.aircraft.codelab.labcore.util;
+package com.aircraft.codelab.labcore.file;
 
+import com.aircraft.codelab.labcore.util.FileUtil;
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
