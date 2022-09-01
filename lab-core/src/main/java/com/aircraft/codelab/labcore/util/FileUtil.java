@@ -34,19 +34,19 @@ public class FileUtil {
     /**
      * 压缩指定目录下的全部文件
      *
-     * @param zipFile   压缩包文件路径+文件名
-     * @param directory 指定文件夹
+     * @param directory 指定文件夹路径
+     * @param zipFile   生成压缩包保存路径+文件名 (避免与指定文件夹在同一目录)
      * @throws IOException IOException
      */
     public static void compressToZip(String directory, File zipFile) throws IOException {
         try (FileOutputStream fos = new FileOutputStream(zipFile);
-                ZipOutputStream zipOut = new ZipOutputStream(fos);
+             ZipOutputStream zipOut = new ZipOutputStream(fos);
              WritableByteChannel writableByteChannel = Channels.newChannel(zipOut)) {
             List<String> filePathList = new ArrayList<>(10);
             collectFilePath(directory, filePathList);
             for (String filePath : filePathList) {
                 try (FileInputStream fis = new FileInputStream(filePath);
-                        FileChannel fileChannel = fis.getChannel()) {
+                     FileChannel fileChannel = fis.getChannel()) {
                     File file = new File(filePath);
                     ZipEntry zipEntry = new ZipEntry(file.getName());
                     zipOut.putNextEntry(zipEntry);
@@ -64,7 +64,7 @@ public class FileUtil {
      * @param directory    指定文件夹路径
      * @param filePathList 全部文件路径集合
      */
-    private static void collectFilePath(String directory, List<String> filePathList) {
+    public static void collectFilePath(String directory, List<String> filePathList) {
         File root = new File(directory);
         File[] files = root.listFiles();
         assert files != null;
