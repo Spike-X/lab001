@@ -35,15 +35,24 @@ public class FileTest {
         String mimeType = FileUtil.getMimeType("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\IMG_0678.JPG");
         log.debug("mimeType: {}", mimeType);
 
+        File file2 = new File("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\2.png");
+        // D:\Users\zt_wm\Downloads\aTemp\bTemp\2.png
+        String path = file2.getPath();
+        // D:\Users\zt_wm\Downloads\aTemp\bTemp
+        String parent = file2.getParent();
+        // D:\Users\zt_wm\Downloads\aTemp
+        String parent1 = FileUtil.getParent("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\2.png", 2);
+        log.debug("{},\n{},\n{}", path, parent, parent1);
+
         // IMG_0678
         String filename = FileUtil.mainName("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\IMG_0678.JPG");
         // JPG
         String extname = FileUtil.extName("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\IMG_0678.JPG");
         log.debug("filename: {}, extname: {}", filename, extname);
 
-        File file2 = new File("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp");
+        File file3 = new File("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp");
         // 遍历目录下的所有文件和目录，递归计算其大小
-        long size = FileUtil.size(file2);
+        long size = FileUtil.size(file3);
         String filesize = NumberUtil.decimalFormatMoney(size / 1024.00 / 1024.00);
         log.debug("filesize: {}(MB)", filesize);
 

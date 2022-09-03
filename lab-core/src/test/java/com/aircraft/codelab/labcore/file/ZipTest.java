@@ -50,4 +50,10 @@ public class ZipTest {
         });
         zipFileList.forEach(file -> System.out.println(file.getName()));
     }
+
+    @Test
+    void unzip() throws ZipException {
+        ZipFile zipFile = new ZipFile("D:\\用户\\Downloads\\temp\\20220607建行对接测试001.zip");
+        zipFile.extractAll("D:\\用户\\Downloads\\temp");
+    }
 }
