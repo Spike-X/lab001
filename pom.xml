@@ -7,7 +7,7 @@
         <module>common-core</module>
         <module>common-database</module>
         <module>common-cache</module>
-        <module>lab-core</module>
+        <module>lab-pioneer</module>
         <module>lab-kafka</module>
         <module>lab-auth-server</module>
         <module>lab-rabbitmq</module>

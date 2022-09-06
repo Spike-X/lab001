@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aircraft.codelab.labcore.mapper.LoanContractMapper">
+    <resultMap id="BaseResultMap" type="com.aircraft.codelab.pioneer.pojo.entity.LoanContract">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="user_id" jdbcType="BIGINT" property="userId"/>
+        <result column="contract_no" jdbcType="CHAR" property="contractNo"/>
+        <result column="contract_state" jdbcType="TINYINT" property="contractState"/>
+        <result column="loan_product" jdbcType="VARCHAR" property="loanProduct"/>
+        <result column="loan_amount" jdbcType="DECIMAL" property="loanAmount"/>
+        <result column="product_detail" jdbcType="VARCHAR" property="productDetail"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id
+        , user_id, contract_no, contract_state, loan_product, loan_amount, product_detail,
+    create_time, update_time
+    </sql>
+
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_loan_contract
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+
+    <resultMap id="UserContractMap" type="com.aircraft.codelab.pioneer.pojo.dto.UserContractDto">
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="identity_card" jdbcType="CHAR" property="identityCard"/>
+        <result column="cellphone_no" jdbcType="CHAR" property="cellphoneNo"/>
+        <result column="contract_no" jdbcType="CHAR" property="contractNo"/>
+        <result column="contract_state" jdbcType="TINYINT" property="contractState"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+    </resultMap>
+    <select id="selectUserContract" resultMap="UserContractMap">
+        SELECT u.username,
+        u.gender,
+        u.identity_card ,
+        u.cellphone_no ,
+        c.contract_no ,
+        c.contract_state ,
+        c.create_time
+        FROM t_loan_user as u
+        INNER JOIN t_loan_contract as c ON u.id = c.user_id
+        WHERE c.user_id = #{userId,jdbcType=BIGINT}
+        <choose>
+            <when test="contractState != null and contractState &lt; 6">
+                and c.contract_state between 0 and 5
+            </when>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum$CONTRACT_END@SIGNATURE.getCode()">
+                and c.contract_state =
+                ${@com.aircraft.codelab.labcore.enums.ContractStateEnum$CONTRACT_END@SIGNATURE.getCode()}
+            </when>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum$CONTRACT_CANCEL@CANCEL.getCode()">
+                and c.contract_state =
+                ${@com.aircraft.codelab.labcore.enums.ContractStateEnum$CONTRACT_CANCEL@CANCEL.getCode()}
+            </when>
+        </choose>
+        ORDER BY c.create_time ASC;
+    </select>
+
+    <select id="selectUserContractList" resultType="com.aircraft.codelab.pioneer.pojo.dto.UserContractDto">
+        SELECT u.username,
+        u.gender,
+        u.identity_card as identityCard,
+        u.cellphone_no as cellphoneNo,
+        c.contract_no as contractNo,
+        c.contract_state as contractState,
+        c.create_time as createTime
+        FROM t_loan_user as u
+        INNER JOIN t_loan_contract as c ON u.id = c.user_id
+        WHERE c.user_id = #{userId,jdbcType=BIGINT}
+        <choose>
+            <when test="contractState != null and contractState &lt; 6">
+                and c.contract_state between 0 and 5
+            </when>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum$CONTRACT_END@SIGNATURE.getCode()">
+                and c.contract_state =
+                ${@com.aircraft.codelab.labcore.enums.ContractStateEnum$CONTRACT_END@SIGNATURE.getCode()}
+            </when>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum$CONTRACT_CANCEL@CANCEL.getCode()">
+                and c.contract_state =
+                ${@com.aircraft.codelab.labcore.enums.ContractStateEnum$CONTRACT_CANCEL@CANCEL.getCode()}
+            </when>
+        </choose>
+        ORDER BY c.create_time ASC;
+    </select>
+
+    <resultMap id="RealUserContractMap" type="com.aircraft.codelab.pioneer.pojo.dto.RealUserContractDto">
+        <result column="username" jdbcType="VARCHAR" property="username"/>
+        <result column="gender" jdbcType="CHAR" property="gender"/>
+        <result column="identity_card" jdbcType="CHAR" property="identityCard"/>
+        <result column="cellphone_no" jdbcType="CHAR" property="cellphoneNo"/>
+        <collection property="loanContractDtoList" ofType="com.aircraft.codelab.pioneer.pojo.dto.LoanContractDto"
+                    resultMap="loanContractResultMap"/>
+    </resultMap>
+    <resultMap id="loanContractResultMap" type="com.aircraft.codelab.pioneer.pojo.dto.LoanContractDto">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="contract_no" jdbcType="CHAR" property="contractNo"/>
+        <result column="contract_state" jdbcType="TINYINT" property="contractState"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <select id="selectRealUserContract" resultMap="RealUserContractMap">
+        SELECT u.username,
+        u.gender,
+        u.identity_card ,
+        u.cellphone_no ,
+        c.id,
+        c.contract_no ,
+        c.contract_state ,
+        c.create_time,
+        c.update_time
+        FROM t_loan_user as u
+        INNER JOIN t_loan_contract as c ON u.id = c.user_id
+        WHERE c.user_id = #{userId,jdbcType=BIGINT}
+        <choose>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum@SIGNING">
+                and c.contract_state between 0 and 5
+            </when>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum@END">
+                and c.contract_state =
+                ${@com.aircraft.codelab.labcore.enums.ContractStateEnum$CONTRACT_END@SIGNATURE.getCode()}
+            </when>
+            <when test="contractState != null and contractState eq @com.aircraft.codelab.pioneer.enums.ContractStateEnum@CANCEL">
+                and c.contract_state =
+                ${@com.aircraft.codelab.labcore.enums.ContractStateEnum$CONTRACT_CANCEL@CANCEL.getCode()}
+            </when>
+        </choose>
+        ORDER BY c.create_time ASC;
+    </select>
+
+    <update id="updateContractState" parameterType="com.aircraft.codelab.pioneer.pojo.vo.UpdateTaskVo">
+        update t_loan_contract
+        <set>
+            <if test="productName != null">
+                loan_product = #{productName},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <!-- update t_loan_contract SET loan_product = ?, update_time = ? where id = ? ;
+    update t_loan_contract SET loan_product = ?, update_time = ? where id = ? -->
+    <update id="updateBatch" parameterType="com.aircraft.codelab.pioneer.pojo.vo.UpdateTaskVo">
+        <foreach item="item" index="index" collection="taskVoList" separator=";">
+            update t_loan_contract
+            <set>
+                <if test="item.productName != null">
+                    loan_product = #{item.productName},
+                </if>
+                <if test="item.updateTime != null">
+                    update_time = #{item.updateTime},
+                </if>
+            </set>
+            where id = #{item.id}
+        </foreach>
+    </update>
+
+    <!-- update t_loan_contract set loan_product = case when id=? then ? when id=? then ? end,
+    update_time = case when id=? then ? when id=? then ? end where id in ( ? , ? ) -->
+    <update id="batchUpdateCaseWhen">
+        update t_loan_contract
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="loan_product = case" suffix="end,">
+                <foreach collection="taskVoList" item="item">
+                    <if test="item.productName!=null">
+                        when id=#{item.id} then #{item.productName}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time = case" suffix="end,">
+                <foreach collection="taskVoList" item="item">
+                    <if test="item.updateTime!=null">
+                        when id=#{item.id} then #{item.updateTime}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        where id in
+        <foreach collection="taskVoList" index="index" item="item" separator="," open="(" close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+</mapper>
