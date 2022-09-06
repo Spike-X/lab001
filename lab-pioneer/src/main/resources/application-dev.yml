@@ -65,7 +65,7 @@ spring:
   kafka:
     bootstrap-servers: 10.41.96.99:9092,10.41.98.95:9092,10.41.97.129:9092
     template:
-      default-topic: T_PCB_PARSE_PROD
+      default-topic: T_PARSE_PROD
     listener:
       ack-mode: manual
     producer:
@@ -86,9 +86,9 @@ spring:
         sasl:
           mechanism: PLAIN
           jaas:
-            config: org.apache.kafka.common.security.plain.PlainLoginModule required username="com.huawei.pcb_tools" password="R*nZZuhAOZior5kEFpz5Jr53Uxav1Jcv!P$XxF7~+h)GRn[h+BW1584607039062";
+            config: org.apache.kafka.common.security.plain.PlainLoginModule required username="com.tao.tools" password="R*nZZuhAOZior5kEFpz5Jr53Uxav1Jcv!P$XxF7~+h)GRn[h+BW1584607039062";
     consumer:
-      group-id: com_tao-T_PCB_PARSE_PROD-parser_group
+      group-id: com_tao-T_PARSE_PROD-parser_group
       #是否自动提交offset偏移量(默认true)
       enable-auto-commit: false
       #offset偏移量规则设置
