@@ -53,7 +53,7 @@ public class SwaggerConfig {
                 .groupName(groupName)
                 .select()
                 //这里指定Controller扫描包路径
-                .apis(RequestHandlerSelectors.basePackage("com.aircraft.codelab.labcore.controller"))
+                .apis(RequestHandlerSelectors.basePackage("com.aircraft.codelab.pioneer.controller"))
                 .paths(PathSelectors.any())
                 .build()
                 .extensions(openApiExtensionResolver.buildExtensions(groupName));

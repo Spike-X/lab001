@@ -37,6 +37,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -46,9 +47,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 
 import java.util.concurrent.ThreadPoolExecutor;
@@ -221,6 +220,21 @@ public class TestController {
             int a = 1000 / 0;
         } catch (Exception e) {
 //            log.error(e.getMessage(), e);
+            log.error("error reason : {}", e.getMessage(), e);
+        }
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @PostMapping(value = "/requestBody", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> testRequest(@RequestBody List<Long> idList,
+                                       @RequestParam("ids") List<Long> ids,
+                                       @RequestParam("dateTime") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime dateTime) {
+        log.debug("idList: {}", idList);
+        log.debug("ids: {}", ids);
+        log.debug("dateTime: {}", dateTime);
+        try {
+            int a = 1000 / 0;
+        } catch (Exception e) {
             log.error("error reason : {}", e.getMessage(), e);
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());

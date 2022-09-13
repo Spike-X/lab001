@@ -36,8 +36,10 @@ public class MenuController {
 
     @ApiOperation(value = "分页查询所有菜单", notes = "支持条件过滤")
     @GetMapping(value = "/query", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<IPage<SysMenu>> query(@RequestParam(defaultValue = "1", required = false) int currentPage,
-                                              @RequestParam int pageSize, Integer type) {
+    public CommonResult<IPage<SysMenu>> query(@RequestParam(defaultValue = "1", required = false)
+                                                      int currentPage,
+                                              @RequestParam int pageSize,
+                                              Integer type) {
         log.debug("currentPage: {},pageSize: {},type: {}", currentPage, pageSize, type);
         IPage<SysMenu> sysMenuPage = iMenuService.query(currentPage, pageSize, type);
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), sysMenuPage);
@@ -61,19 +63,39 @@ public class MenuController {
 
     @ApiOperation(value = "修改菜单")
     @PutMapping(value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> update(@RequestBody @Validated(SysMenuUpdateVo.Update.class) SysMenuUpdateVo sysMenuUpdateVo) {
+    public CommonResult<?> update(@RequestBody @Validated(SysMenuUpdateVo.Update.class)
+                                          SysMenuUpdateVo sysMenuUpdateVo) {
         log.debug("update: {}", sysMenuUpdateVo);
         iMenuService.updateMenu(sysMenuUpdateVo);
         return CommonResult.success();
     }
 
-    @ApiOperation(value = "删除菜单", notes = "支持批量删除")
-    @DeleteMapping(value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ApiImplicitParam(name = "idList", value = "多个用,号隔开", dataType = "String", required = true)
-    public CommonResult<Integer> delete(@RequestParam("idList") String[] idList) {
-        List<String> list = Arrays.stream(idList).collect(Collectors.toList());
+    @ApiOperation(value = "删除菜单1", notes = "支持批量删除")
+    @DeleteMapping(value = "/delete1", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<Integer> deleteByArray(@RequestParam("idArray") String[] idArray) {
+        List<String> list = Arrays.stream(idArray).collect(Collectors.toList());
         log.debug("idList: {}", list);
+        // String 有隐式转换问题
         int deleteMenu = iMenuService.deleteMenu(list);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), deleteMenu);
+    }
+
+    @ApiOperation(value = "删除菜单2", notes = "支持批量删除")
+    @DeleteMapping(value = "/delete2", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<Integer> deleteByParam(@RequestParam("idList") List<String> idList) {
+        log.debug("idList: {}", idList);
+        // String 有隐式转换问题
+        int deleteMenu = iMenuService.deleteMenu(idList);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), deleteMenu);
+    }
+
+    // raw application/json ["1428310206666051587","1428310206666051589"]
+    @ApiOperation(value = "删除菜单3", notes = "支持批量删除")
+    @DeleteMapping(value = "/delete3", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<Integer> deleteByList(@RequestBody List<String> idList) {
+        log.debug("idList: {}", idList);
+        // String 有隐式转换问题
+        int deleteMenu = iMenuService.deleteMenu(idList);
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), deleteMenu);
     }
 }

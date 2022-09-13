@@ -18,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 2021-08-13
@@ -79,7 +80,7 @@ public class MenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impleme
             // todo 校验id
             // 存在子菜单不予删除
             Integer existSubmenu = sysMenuMapper.existSubmenu(Long.parseLong(id));
-            if (existSubmenu == 1) {
+            if (Objects.nonNull(existSubmenu) && existSubmenu == 1) {
                 throw new RuntimeException("a submenu exists.");
             }
         });
