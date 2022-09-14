@@ -17,6 +17,7 @@
 package com.aircraft.codelab.pioneer.controller;
 
 import cn.hutool.core.date.DatePattern;
+import cn.hutool.extra.servlet.ServletUtil;
 import com.aircraft.codelab.cache.service.RedisService;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
@@ -44,8 +45,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.math.BigDecimal;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
@@ -238,5 +242,24 @@ public class TestController {
             log.error("error reason : {}", e.getMessage(), e);
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @GetMapping(value = "/ip", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> ipTest() throws UnknownHostException {
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = Objects.requireNonNull(attributes).getRequest();
+        StringBuffer requestURL = request.getRequestURL();
+        String requestURI = request.getRequestURI();
+        log.debug("requestURL: {}", requestURL);
+        log.debug("requestURI: {}", requestURI);
+
+        int localPort = request.getLocalPort();
+        InetAddress localHost = InetAddress.getLocalHost();
+        String hostName = localHost.getHostName();
+        String hostAddress = localHost.getHostAddress();
+        log.debug("hostName: {}", hostName);
+        log.debug("windows本机ip:port {}", hostAddress + ":" + localPort);
+        String clientIP = ServletUtil.getClientIP(request);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), clientIP);
     }
 }
