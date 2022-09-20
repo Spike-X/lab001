@@ -145,6 +145,9 @@ resilience4j.retry:
 #logging:
 #  config: classpath:log4j2-${spring.profiles.active}.xml
 
+logging:
+  config: classpath:logback-spring.xml
+
 app:
   id: lab001
 apollo:
