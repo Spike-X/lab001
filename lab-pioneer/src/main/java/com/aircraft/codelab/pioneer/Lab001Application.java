@@ -18,6 +18,7 @@ package com.aircraft.codelab.pioneer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.scheduling.annotation.EnableAsync;
 
 /**
@@ -30,6 +31,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 //@EnableAdminServer
 @EnableAsync
 @SpringBootApplication
+@EnableFeignClients(basePackages = {"com.aircraft.codelab.pioneer.service"})
 public class Lab001Application {
 
     public static void main(String[] args) {

@@ -44,8 +44,8 @@ public class HttpClientUtil {
     static {
         // 创建连接池管理器
         PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager(60 * 1000, TimeUnit.MILLISECONDS);
-        connectionManager.setMaxTotal(1000);
-        connectionManager.setDefaultMaxPerRoute(50);
+        connectionManager.setMaxTotal(200);
+        connectionManager.setDefaultMaxPerRoute(100);
 
         SocketConfig socketConfig = SocketConfig.custom()
                 .setSoKeepAlive(true)

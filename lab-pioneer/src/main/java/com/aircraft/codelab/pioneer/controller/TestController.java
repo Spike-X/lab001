@@ -28,10 +28,12 @@ import com.aircraft.codelab.pioneer.async.thread.ThreadService;
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
 import com.aircraft.codelab.pioneer.pojo.vo.SysMenuCreatVo;
 import com.aircraft.codelab.pioneer.pojo.vo.UserVO;
+import com.aircraft.codelab.pioneer.service.OpenFeignService;
 import com.aircraft.codelab.pioneer.service.ProductService;
 import com.aircraft.codelab.pioneer.service.UserConverter;
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.type.TypeReference;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -118,7 +120,7 @@ public class TestController {
         redisService.set(key, s);
         Object o = redisService.get(key);
         UserDO userDO = JsonUtil.jsonToObject(o.toString(), UserDO.class);
-        UserDO userDO1 = JsonUtil.jsonToObject(o.toString(), new TypeReference<UserDO>() {
+        UserDO userDO1 = JsonUtil.jsonToObject(o.toString(), new com.fasterxml.jackson.core.type.TypeReference<UserDO>() {
         });
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), userDO);
     }
@@ -169,7 +171,7 @@ public class TestController {
     private WebServerApplicationContext webServerApplicationContext;
 
     @GetMapping(value = "/tomcat/actuator", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> tomcatStatus() {
+    public CommonResult<Map<String, Object>> tomcatStatus() {
         TomcatWebServer webServer = (TomcatWebServer) webServerApplicationContext.getWebServer();
         //获取webServer线程池
         org.apache.tomcat.util.threads.ThreadPoolExecutor executor = (org.apache.tomcat.util.threads.ThreadPoolExecutor) (webServer)
@@ -177,18 +179,18 @@ public class TestController {
                 .getConnector()
                 .getProtocolHandler()
                 .getExecutor();
-        Map<String, String> returnMap = new LinkedHashMap<>();
-        returnMap.put("核心线程数", String.valueOf(executor.getCorePoolSize()));
-        returnMap.put("最大线程数", String.valueOf(executor.getMaximumPoolSize()));
-        returnMap.put("活跃线程数", String.valueOf(executor.getActiveCount()));
-        returnMap.put("池中当前线程数", String.valueOf(executor.getPoolSize()));
-        returnMap.put("历史最大线程数", String.valueOf(executor.getLargestPoolSize()));
-        returnMap.put("线程允许空闲时间/s", String.valueOf(executor.getKeepAliveTime(TimeUnit.SECONDS)));
-        returnMap.put("核心线程数是否允许被回收", String.valueOf(executor.allowsCoreThreadTimeOut()));
-        returnMap.put("提交任务总数", String.valueOf(executor.getSubmittedCount()));
-        returnMap.put("历史执行任务的总数(近似值)", String.valueOf(executor.getTaskCount()));
-        returnMap.put("历史完成任务的总数(近似值)", String.valueOf(executor.getCompletedTaskCount()));
-        returnMap.put("工作队列任务数量", String.valueOf(executor.getQueue().size()));
+        Map<String, Object> returnMap = new LinkedHashMap<>();
+        returnMap.put("核心线程数", executor.getCorePoolSize());
+        returnMap.put("最大线程数", executor.getMaximumPoolSize());
+        returnMap.put("活跃线程数", executor.getActiveCount());
+        returnMap.put("池中当前线程数", executor.getPoolSize());
+        returnMap.put("历史最大线程数", executor.getLargestPoolSize());
+        returnMap.put("线程允许空闲时间/s", executor.getKeepAliveTime(TimeUnit.SECONDS));
+        returnMap.put("核心线程数是否允许被回收", executor.allowsCoreThreadTimeOut());
+        returnMap.put("提交任务总数", executor.getSubmittedCount());
+        returnMap.put("历史执行任务的总数(近似值)", executor.getTaskCount());
+        returnMap.put("历史完成任务的总数(近似值)", executor.getCompletedTaskCount());
+        returnMap.put("工作队列任务数量", executor.getQueue().size());
         returnMap.put("拒绝策略", executor.getRejectedExecutionHandler().getClass().getSimpleName());
         log.debug("returnMap: {}", JSON.toJSONString(returnMap));
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), returnMap);
@@ -261,5 +263,17 @@ public class TestController {
         log.debug("windows本机ip:port {}", hostAddress + ":" + localPort);
         String clientIP = ServletUtil.getClientIP(request);
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), clientIP);
+    }
+
+    @Resource
+    private OpenFeignService openFeignService;
+
+    @GetMapping(value = "/feign", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> openFeign() {
+        String tomcatStatus = openFeignService.tomcatStatus();
+        CommonResult<Map<String, Object>> mapCommonResult = JSONObject.parseObject(tomcatStatus,
+                new TypeReference<CommonResult<Map<String, Object>>>() {
+                });
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), mapCommonResult.getData());
     }
 }
