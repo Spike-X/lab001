@@ -166,3 +166,8 @@ file:
 remote:
   http:
     url: http://localhost:8081/hello
+
+collection:
+  bank:
+    itemId: 111,222
+    itemSize: "{'1111':'0001','2222':'0002'}"

@@ -37,6 +37,9 @@ import com.alibaba.fastjson.TypeReference;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -73,6 +76,12 @@ import java.util.concurrent.TimeUnit;
 public class TestController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Value("#{'${collection.bank.itemId:}'}")
+    private List<Long> itemId;
+
+    @Value("#{${collection.bank.itemSize:{}}}")
+    private Map<String, String> itemAndSize;
 
     @Resource
     private ProductService productService;
@@ -238,10 +247,15 @@ public class TestController {
         log.debug("idList: {}", idList);
         log.debug("ids: {}", ids);
         log.debug("dateTime: {}", dateTime);
-        try {
-            int a = 1000 / 0;
-        } catch (Exception e) {
-            log.error("error reason : {}", e.getMessage(), e);
+        if (CollectionUtils.isNotEmpty(itemId)) {
+            itemId.forEach(id -> log.debug("id: {}", id));
+        }
+        if (MapUtils.isNotEmpty(itemAndSize)) {
+            for (Map.Entry<String, String> next : itemAndSize.entrySet()) {
+                String key = next.getKey();
+                String value = next.getValue();
+                log.debug("key: {},value: {}", key, value);
+            }
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
