@@ -23,10 +23,11 @@ import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
+import com.aircraft.codelab.core.util.ValidateUtil;
 import com.aircraft.codelab.pioneer.aop.Idempotent;
 import com.aircraft.codelab.pioneer.async.thread.ThreadService;
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
-import com.aircraft.codelab.pioneer.pojo.vo.SysMenuCreatVo;
+import com.aircraft.codelab.pioneer.pojo.vo.CreatOrderVo;
 import com.aircraft.codelab.pioneer.pojo.vo.UserVO;
 import com.aircraft.codelab.pioneer.service.OpenFeignService;
 import com.aircraft.codelab.pioneer.service.ProductService;
@@ -52,6 +53,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolationException;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -71,8 +73,8 @@ import java.util.concurrent.TimeUnit;
  */
 @Slf4j
 @RestController
-@Api(tags = "测试")
-@RequestMapping("/hello")
+@Api(tags = "单元测试")
+@RequestMapping("/test")
 public class TestController {
     @Resource
     private RedisTemplate<String, Object> redisTemplate;
@@ -86,7 +88,7 @@ public class TestController {
     @Resource
     private ProductService productService;
 
-    @ApiOperation(value = "lock", notes = "乐观锁")
+    @ApiOperation(value = "乐观锁测试", notes = "乐观锁")
     @GetMapping("/lock")
     public CommonResult<?> lock() {
         CountDownLatch countDownLatch = new CountDownLatch(2);
@@ -149,6 +151,7 @@ public class TestController {
     @Resource(name = "mailThreadPoolExecutor")
     private ThreadPoolExecutor executor;
 
+    @ApiOperation(value = "线程池测试")
     @GetMapping(value = "/pool", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> threadPool() {
         log.debug("=====>");
@@ -166,6 +169,7 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
+    @ApiOperation(value = "线程池状态监控测试")
     @GetMapping(value = "/poolStatus", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> poolStatus() {
         int poolSize = executor.getPoolSize();
@@ -179,6 +183,7 @@ public class TestController {
     @Resource
     private WebServerApplicationContext webServerApplicationContext;
 
+    @ApiOperation(value = "Tomcat状态测试")
     @GetMapping(value = "/tomcat/actuator", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<Map<String, Object>> tomcatStatus() {
         TomcatWebServer webServer = (TomcatWebServer) webServerApplicationContext.getWebServer();
@@ -208,6 +213,7 @@ public class TestController {
     @Resource
     private ThreadService threadService;
 
+    @ApiOperation(value = "自旋锁测试")
     @GetMapping(value = "/cas", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> casTest() {
         CountDownLatch countDownLatch = new CountDownLatch(100);
@@ -225,21 +231,31 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
-    @Idempotent
-    @PostMapping(value = "/submit", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> repeatSubmit(@RequestBody SysMenuCreatVo sysMenuCreatVo) {
-        log.debug("submit =====>");
+//    @Idempotent
+    @ApiOperation(value = "属性校验测试")
+    @PostMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> validate(@RequestBody CreatOrderVo creatOrderVo) {
+        log.debug("validate =====>");
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = Objects.requireNonNull(attributes).getResponse();
         try {
-            int a = 1000 / 0;
-        } catch (Exception e) {
-//            log.error(e.getMessage(), e);
-            log.error("error reason : {}", e.getMessage(), e);
+            // 最佳实践：
+            // String -> @NotBlank + @Length
+            // List -> @NotEmpty + @Size
+            // 对象嵌套对象 || 对象嵌套对象集合 -> @NotNull + @Valid || @NotEmpty + @Size + @Valid (无法校验List<String>,List<包装类型>)
+            // 数字类型 Long,Integer -> @NotNull + @Range || BigDecimal -> @NotNull + @Digits + @DecimalMin || 基本类型 @Range
+            // 银行卡，信用卡卡号 -> @NotBlank + @CreditCardNumber
+            // 邮件地址 -> @NotBlank + @Email
+            // 日期时间 -> @NotNull + @Past||@Future
+            ValidateUtil.validate(creatOrderVo);
+        } catch (ConstraintViolationException e) {
+            log.error("parameter validation failed : {}", e.getMessage(), e);
+            return CommonResult.success(ResultCode.SUCCESS.getMessage(), e.getMessage());
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
+    @ApiOperation(value = "requestBody测试")
     @PostMapping(value = "/requestBody", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> testRequest(@RequestBody List<Long> idList,
                                        @RequestParam("ids") List<Long> ids,
@@ -260,6 +276,7 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
+    @ApiOperation(value = "ip测试")
     @GetMapping(value = "/ip", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> ipTest() throws UnknownHostException {
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -282,6 +299,7 @@ public class TestController {
     @Resource
     private OpenFeignService openFeignService;
 
+    @ApiOperation(value = "feign远程调用测试")
     @GetMapping(value = "/feign", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> openFeign() {
         String tomcatStatus = openFeignService.tomcatStatus();
