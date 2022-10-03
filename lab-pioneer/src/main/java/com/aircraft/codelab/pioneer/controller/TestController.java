@@ -23,6 +23,7 @@ import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
+import com.aircraft.codelab.core.util.ValidateList;
 import com.aircraft.codelab.core.util.ValidateUtil;
 import com.aircraft.codelab.pioneer.aop.Idempotent;
 import com.aircraft.codelab.pioneer.async.thread.ThreadService;
@@ -46,6 +47,7 @@ import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -54,6 +56,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -140,7 +143,7 @@ public class TestController {
     @GetMapping("/mapstruct")
     public CommonResult<UserDO> mapstruct() {
         log.debug("mapstruct test");
-        UserVO userVO = UserVO.builder().id(100L).name("zhang").build();
+        UserVO userVO = UserVO.builder().id(100L).username("zhang").build();
         UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
         UserDO build = userDO.toBuilder()
                 .createTime(LocalDateTime.now())
@@ -231,8 +234,8 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
-//    @Idempotent
-    @ApiOperation(value = "属性校验测试")
+    //    @Idempotent
+    @ApiOperation(value = "属性校验测试1")
     @PostMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> validate(@RequestBody CreatOrderVo creatOrderVo) {
         log.debug("validate =====>");
@@ -253,6 +256,17 @@ public class TestController {
             return CommonResult.success(ResultCode.SUCCESS.getMessage(), e.getMessage());
         }
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
+    }
+
+    @ApiOperation(value = "属性校验测试2")
+    @PostMapping(value = "/validateList", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> validateList(@RequestBody @Valid ValidateList<UserVO> ids) {
+        log.debug("validateList =====>");
+        List<UserVO> list = ids.getList();
+        list.get(0).setTaskList(new ArrayList<>());
+        ValidateList<UserVO> userVOList = new ValidateList<>(list);
+        ValidateUtil.validate(userVOList);
+        return CommonResult.success(ResultCode.SUCCESS.getMessage(), list);
     }
 
     @ApiOperation(value = "requestBody测试")

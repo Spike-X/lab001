@@ -64,9 +64,9 @@ public class JUnit5Test {
 
         List<Integer> numList = Lists.newArrayList(1, null, 3, 4, 5);
 
-        UserVO userVO1 = UserVO.builder().name("1").build();
+        UserVO userVO1 = UserVO.builder().username("1").build();
         UserVO userVO2 = UserVO.builder().id(2L).build();
-        UserVO userVO3 = UserVO.builder().id(3L).name("3").build();
+        UserVO userVO3 = UserVO.builder().id(3L).username("3").build();
         List<UserVO> objectList = Lists.newArrayList(userVO1, userVO2, userVO3);
 
         log.debug("stringList: {}", stringList);

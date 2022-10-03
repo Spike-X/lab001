@@ -1,9 +1,11 @@
 package com.aircraft.codelab.pioneer.pojo.vo;
 
+import com.aircraft.codelab.core.annotation.TimeFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
+import cn.hutool.core.date.DatePattern;
 import org.hibernate.validator.constraints.CreditCardNumber;
 
 import javax.validation.Valid;
@@ -29,6 +31,9 @@ public class CreatOrderVo {
     private Boolean expressRequired;
     @Past
     private LocalDateTime creatTime;
+    @NotBlank
+    @TimeFormat(message = "请输入正确的日期格式{pattern}")
+    private String endTime;
     @Future
     private LocalDateTime payTime;
     @Email
@@ -41,11 +46,11 @@ public class CreatOrderVo {
     @Digits(integer = 1, fraction = 2, message = "整数位位数上限{integer}，小数位位数上限{fraction}")
     @DecimalMin("0.01") //可以为null 输入001出错
     private BigDecimal price;
-    @NotNull
-    @Valid
-    private UserVO userVO;
+    //    @NotNull
+//    @Valid
+//    private UserVO userVO;
     @NotEmpty
-    @Size(max = 1,message = "下单量最大上限{max}")
+    @Size(max = 1, message = "下单量最大上限{max}")
     @Valid
     private List<OrderVo> orderVoList;
 }
