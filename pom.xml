@@ -7,9 +7,10 @@
         <module>common-core</module>
         <module>common-database</module>
         <module>common-cache</module>
-        <module>lab-core</module>
+        <module>lab-pioneer</module>
         <module>lab-kafka</module>
         <module>lab-auth-server</module>
+        <module>lab-rabbitmq</module>
     </modules>
 
     <groupId>com.aircraft.codelab</groupId>
@@ -38,6 +39,8 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <spring-boot-version>2.3.2.RELEASE</spring-boot-version>
+        <spring.cloud-version>Hoxton.SR9</spring.cloud-version>
+        <spring-cloud-alibaba-version>2.2.6.RELEASE</spring-cloud-alibaba-version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-surefire-plugin.version>2.22.2</maven-surefire-plugin.version>
 
@@ -46,7 +49,6 @@
         <druid.version>1.1.22</druid.version>
         <mybatis-plus.version>3.4.2</mybatis-plus.version>
         <knife4j.version>2.0.9</knife4j.version>
-        <validator.version>6.1.5.Final</validator.version>
         <commons-pool2.version>2.8.1</commons-pool2.version>
         <commons-lang3.version>3.11</commons-lang3.version>
         <commons-collections4.version>4.4</commons-collections4.version>
@@ -68,9 +70,19 @@
             </dependency>
 
             <dependency>
-                <groupId>org.hibernate.validator</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>${validator.version}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring-cloud-alibaba-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
             <dependency>
@@ -176,6 +188,11 @@
     </build>
 
     <repositories>
+        <repository>
+            <id>aspose-maven-repository</id>
+            <url>http://artifact.aspose.com/repo/</url>
+        </repository>
+
         <repository>
             <id>aliyunmaven</id>
             <name>aliyun</name>

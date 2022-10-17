@@ -1,0 +1,5 @@
+# Auto Configure
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.aircraft.codelab.rabbitmq.Config,\
+com.aircraft.codelab.rabbitmq.DelayedReceiver,\
+com.aircraft.codelab.rabbitmq.DelayedSender

@@ -60,10 +60,12 @@ public class MessageConsumer {
     @KafkaListener(topics = {"${spring.kafka.template.default-topic}"})
     public void receiveMessage(ConsumerRecord<?, ?> record, Acknowledgment ack) {
         try {
-            Optional<?> kafkaMessage = Optional.ofNullable(record.value());
-            if (kafkaMessage.isPresent()) {
-                log.info("key:{},value:{},partition:{},offset:{}", record.key(), record.value(), record.partition(), record.offset());
-            }
+            Optional.ofNullable(record.value()).ifPresent(
+                    kafkaMessage -> {
+                        log.info("key:{},value:{},partition:{},offset:{}",
+                                record.key(), record.value(), record.partition(), record.offset());
+                    }
+            );
         } catch (Exception e) {
             log.error("Kafka监听异常" + e.getMessage(), e);
         } finally {

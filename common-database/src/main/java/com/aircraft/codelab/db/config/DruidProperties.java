@@ -100,11 +100,11 @@ public class DruidProperties {
         dataSource.setUseUnfairLock(true);
         dataSource.setTimeBetweenEvictionRunsMillis(timeBetweenEvictionRunsMillis);
         dataSource.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
-        try {
-            dataSource.addFilters(filters);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            dataSource.addFilters(filters);
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
         dataSource.setTestWhileIdle(testWhileIdle);
         dataSource.setTestOnBorrow(testOnBorrow);
         dataSource.setTestOnReturn(testOnReturn);

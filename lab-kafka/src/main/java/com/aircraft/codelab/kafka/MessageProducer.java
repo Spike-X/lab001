@@ -60,13 +60,13 @@ public class MessageProducer {
         // 默认异步发送消息
         ListenableFuture<SendResult<String, String>> future = kafkaTemplate.send(record);
         // 消息回调
-        future.addCallback(result -> {
-            Optional<SendResult<String, String>> sendResult = Optional.ofNullable(result);
-            if (sendResult.isPresent()) {
-                int partition = result.getRecordMetadata().partition();
-                long offset = result.getRecordMetadata().offset();
-                log.info("send success: key={},value={},partition={},offset={}", key, message, partition, offset);
-            }
-        }, ex -> log.error("send message={} failure: detail message={}", message, ex.getMessage()));
+        future.addCallback(result -> Optional.ofNullable(result).ifPresent(
+                sendResult -> {
+                    int partition = result.getRecordMetadata().partition();
+                    long offset = result.getRecordMetadata().offset();
+                    log.info("send success: key={},value={},partition={},offset={}",
+                            key, message, partition, offset);
+                }
+        ), ex -> log.error("send message={} failure: detail message={}", message, ex.getMessage()));
     }
 }
