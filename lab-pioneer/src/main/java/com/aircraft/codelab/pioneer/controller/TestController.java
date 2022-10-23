@@ -25,11 +25,10 @@ import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
 import com.aircraft.codelab.core.util.ValidateList;
 import com.aircraft.codelab.core.util.ValidateUtil;
-import com.aircraft.codelab.pioneer.aop.Idempotent;
 import com.aircraft.codelab.pioneer.async.thread.ThreadService;
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
 import com.aircraft.codelab.pioneer.pojo.vo.CreatOrderVo;
-import com.aircraft.codelab.pioneer.pojo.vo.UserVO;
+import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
 import com.aircraft.codelab.pioneer.service.OpenFeignService;
 import com.aircraft.codelab.pioneer.service.ProductService;
 import com.aircraft.codelab.pioneer.service.UserConverter;
@@ -47,7 +46,6 @@ import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -143,7 +141,7 @@ public class TestController {
     @GetMapping("/mapstruct")
     public CommonResult<UserDO> mapstruct() {
         log.debug("mapstruct test");
-        UserVO userVO = UserVO.builder().id(100L).username("zhang").build();
+        UserVo userVO = UserVo.builder().id(100L).username("zhang").build();
         UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
         UserDO build = userDO.toBuilder()
                 .createTime(LocalDateTime.now())
@@ -260,12 +258,12 @@ public class TestController {
 
     @ApiOperation(value = "属性校验测试2")
     @PostMapping(value = "/validateList", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> validateList(@RequestBody @Valid ValidateList<UserVO> ids) {
+    public CommonResult<?> validateList(@RequestBody @Valid ValidateList<UserVo> ids) {
         log.debug("validateList =====>");
-        List<UserVO> list = ids.getList();
+        List<UserVo> list = ids.getList();
         list.get(0).setTaskList(new ArrayList<>());
-        ValidateList<UserVO> userVOList = new ValidateList<>(list);
-        ValidateUtil.validate(userVOList);
+        ValidateList<UserVo> userVoList = new ValidateList<>(list);
+        ValidateUtil.validate(userVoList);
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), list);
     }
 

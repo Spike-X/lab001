@@ -16,7 +16,8 @@
 
 package com.aircraft.codelab.pioneer;
 
-import com.aircraft.codelab.pioneer.pojo.vo.UserVO;
+import com.aircraft.codelab.pioneer.pojo.Menu;
+import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SerializerFeature;
@@ -25,6 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * 2020-10-31
@@ -56,7 +59,7 @@ public class JUnit5Test {
         System.out.println("当前测试方法结束");
     }
 
-    @DisplayName("我的第一个测试")
+    @DisplayName("Json序列化测试")
     @Test
     void testFirstTest() {
         System.out.println("我的第一个测试开始测试");
@@ -64,10 +67,10 @@ public class JUnit5Test {
 
         List<Integer> numList = Lists.newArrayList(1, null, 3, 4, 5);
 
-        UserVO userVO1 = UserVO.builder().username("1").build();
-        UserVO userVO2 = UserVO.builder().id(2L).build();
-        UserVO userVO3 = UserVO.builder().id(3L).username("3").build();
-        List<UserVO> objectList = Lists.newArrayList(userVO1, userVO2, userVO3);
+        UserVo userVo1 = UserVo.builder().username("1").build();
+        UserVo userVo2 = UserVo.builder().id(2L).build();
+        UserVo userVo3 = UserVo.builder().id(3L).username("3").build();
+        List<UserVo> objectList = Lists.newArrayList(userVo1, userVo2, userVo3);
 
         log.debug("stringList: {}", stringList);
         log.debug("stringList: {}", JSON.toJSONString(stringList));
@@ -78,9 +81,42 @@ public class JUnit5Test {
         log.debug("objectList: {}", JSON.toJSONString(objectList, SerializerFeature.WriteMapNullValue));
     }
 
-    @DisplayName("我的第二个测试")
+    @DisplayName("遍历树形结构测试")
     @Test
     void testSecondTest() {
-        System.out.println("我的第二个测试开始测试");
+        //模拟从数据库查询出来
+        List<Menu> menus = Lists.newArrayList(new Menu(1L, "根节点", null),
+                new Menu(2L, "子节点1", 1L),
+                new Menu(3L, "子节点1.1", 2L),
+                new Menu(4L, "子节点1.2", 2L),
+                new Menu(5L, "子节点1.3", 2L),
+                new Menu(6L, "根节点2", 1L),
+                new Menu(7L, "根节点2.1", 6L),
+                new Menu(8L, "根节点2.2", 6L),
+                new Menu(9L, "根节点2.2.1", 7L),
+                new Menu(10L, "根节点2.2.2", 7L),
+                new Menu(11L, "根节点3", 1L),
+                new Menu(12L, "根节点3.1", 11L));
+
+        //获取父节点
+        // peek对一个对象进行操作的时候,对象不变,但是可以改变对象里面的值
+        List<Menu> collect = menus.stream().filter(m -> Objects.equals(0L, m.getParentId()) || Objects.equals(null, m.getParentId()))
+                .peek(m -> m.setChildList(getChildren(m, menus))).collect(Collectors.toList());
+        System.out.println(JSON.toJSONString(collect, SerializerFeature.SortField, SerializerFeature.WriteMapNullValue));
+    }
+
+    /**
+     * 递归查询子节点
+     *
+     * @param root 根节点
+     * @param all  所有节点
+     * @return 根节点信息
+     */
+    private List<Menu> getChildren(Menu root, List<Menu> all) {
+        return all.stream().filter(m -> Objects.equals(m.getParentId(), root.getId()))
+                .map((m) -> {
+                    m.setChildList(getChildren(m, all));
+                    return m;
+                }).collect(Collectors.toList());
     }
 }

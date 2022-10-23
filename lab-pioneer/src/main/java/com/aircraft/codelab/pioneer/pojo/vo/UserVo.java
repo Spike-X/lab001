@@ -21,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder(toBuilder = true)
-public class UserVO {
+public class UserVo {
     // @Size 无法使用
     // @Length 无法使用
     @NotNull
