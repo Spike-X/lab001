@@ -62,23 +62,37 @@ public class JUnit5Test {
     @DisplayName("Json序列化测试")
     @Test
     void testFirstTest() {
-        System.out.println("我的第一个测试开始测试");
-        List<String> stringList = Lists.newArrayList("Blackberry", null, "Avocado", "Cherry", "Apricots");
+        try {
+            System.out.println("我的第一个测试开始测试");
+            List<String> stringList = Lists.newArrayList("Blackberry", null, "Avocado", "Cherry", "Apricots");
 
-        List<Integer> numList = Lists.newArrayList(1, null, 3, 4, 5);
+            List<Integer> numList = Lists.newArrayList(1, null, 3, 4, 5);
 
-        UserVo userVo1 = UserVo.builder().username("1").build();
-        UserVo userVo2 = UserVo.builder().id(2L).build();
-        UserVo userVo3 = UserVo.builder().id(3L).username("3").build();
-        List<UserVo> objectList = Lists.newArrayList(userVo1, userVo2, userVo3);
+            UserVo userVo1 = UserVo.builder().username("1").build();
+            UserVo userVo2 = UserVo.builder().id(2L).build();
+            UserVo userVo3 = UserVo.builder().id(3L).username("3").build();
+            List<UserVo> objectList = Lists.newArrayList(userVo1, userVo2, userVo3);
+            String s = testException();
+            log.debug("stringList: {}", stringList);
+            log.debug("stringList: {}", JSON.toJSONString(stringList));
+            log.debug("numList: {}", numList);
+            log.debug("numList: {}", JSON.toJSONString(numList));
+            log.debug("objectList: {}", objectList);
+            log.debug("objectList: {}", JSON.toJSONString(objectList));
+            log.debug("objectList: {}", JSON.toJSONString(objectList, SerializerFeature.WriteMapNullValue));
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        log.debug("end");
+    }
 
-        log.debug("stringList: {}", stringList);
-        log.debug("stringList: {}", JSON.toJSONString(stringList));
-        log.debug("numList: {}", numList);
-        log.debug("numList: {}", JSON.toJSONString(numList));
-        log.debug("objectList: {}", objectList);
-        log.debug("objectList: {}", JSON.toJSONString(objectList));
-        log.debug("objectList: {}", JSON.toJSONString(objectList, SerializerFeature.WriteMapNullValue));
+    private String testException() {
+        try {
+            int a = 1 / 0;
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
+        return null;
     }
 
     @DisplayName("遍历树形结构测试")
