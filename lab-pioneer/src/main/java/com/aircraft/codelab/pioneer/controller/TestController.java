@@ -310,6 +310,9 @@ public class TestController {
 
     @Resource
     private OpenFeignService openFeignService;
+    // 会报错
+    /*@Resource
+    private OpenFeignService openFeignServices;*/
 
     @ApiOperation(value = "feign远程调用测试")
     @GetMapping(value = "/feign", produces = MediaType.APPLICATION_JSON_VALUE)
