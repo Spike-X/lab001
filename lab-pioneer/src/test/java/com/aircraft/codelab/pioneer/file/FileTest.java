@@ -5,6 +5,7 @@ import cn.hutool.core.util.NumberUtil;
 import cn.hutool.extra.emoji.EmojiUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -27,7 +28,7 @@ public class FileTest {
     @DisplayName("文件测试")
     void fileTest() throws ZipException {
         File file = FileUtil.mkdir("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp");
-        // 仅创建目录
+        // 仅创建目录 文件名也会变目录
         File file1 = FileUtil.mkdir("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\filename.zip");
 
         String mimeType = FileUtil.getMimeType("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\IMG_0678.JPG");
@@ -89,7 +90,10 @@ public class FileTest {
 //        ZipFile zipFile = new ZipFile("D:\\Users\\zt_wm\\Downloads\\aTemp\\filename.zip");
 //        // 10M = 10 * 1024 * 1024 = 10485760B
 //        zipFile.createSplitZipFile(fileList, new ZipParameters(), true, 2097152);
+    }
 
+    @Test
+    void emojiTest() {
         String str = "An 😀awesome 😃string with a few 😉emojis!";
         log.debug(str);
         if (EmojiUtil.containsEmoji(str)) {
@@ -99,5 +103,13 @@ public class FileTest {
             String unicode = EmojiUtil.toUnicode(toHtml);
             log.debug(unicode);
         }
+    }
+
+    @Test
+    void createDirIfNotExist() {
+        // 创建父目录
+        File localFile = new File("D:\\Users\\zt_wm\\Downloads\\sftp\\bTemp\\IMG_0678.JPG");
+        boolean mkdirs = localFile.mkdirs();
+        FileUtils.deleteQuietly(localFile);
     }
 }
