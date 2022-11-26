@@ -106,7 +106,7 @@ public class SftpClient {
     private ChannelSftp getChannelSftp(Session session) throws JSchException {
         ChannelSftp channelSftp = (ChannelSftp) session.openChannel("sftp");
         channelSftp.connect();
-
+//        channelSftp.connect(1000); // 设置超时时间1s
         return channelSftp;
     }
 
