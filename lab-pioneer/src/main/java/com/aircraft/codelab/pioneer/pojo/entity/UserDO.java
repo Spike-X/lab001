@@ -1,5 +1,6 @@
 package com.aircraft.codelab.pioneer.pojo.entity;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,7 +21,12 @@ import lombok.experimental.SuperBuilder;
 @SuperBuilder(toBuilder = true)
 @EqualsAndHashCode(callSuper = true)
 public class UserDO extends BaseDO {
+    @JSONField(name = "u_id", ordinal = 1)
+    private String uId;
+
+    @JSONField(ordinal = 2)
     private String name;
 
+    @JSONField(ordinal = 3)
     private String password;
 }

@@ -3,7 +3,7 @@ package com.aircraft.codelab.pioneer.service.impl;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.IdUtil;
 import com.aircraft.codelab.core.util.DateUtil;
-import com.aircraft.codelab.pioneer.pojo.FileProperties;
+import com.aircraft.codelab.pioneer.pojo.entity.FileProperties;
 import com.aircraft.codelab.pioneer.service.FileStorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;

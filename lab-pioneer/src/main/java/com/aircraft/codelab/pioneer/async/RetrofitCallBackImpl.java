@@ -31,8 +31,8 @@ public class RetrofitCallBackImpl implements RetrofitCallBackService {
 
     {
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
-                .connectTimeout(3000, TimeUnit.MILLISECONDS)
-                .readTimeout(15000, TimeUnit.MILLISECONDS)
+                .connectTimeout(3, TimeUnit.SECONDS)
+                .readTimeout(15, TimeUnit.SECONDS)
                 .build();
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://img2020.cnblogs.com/")

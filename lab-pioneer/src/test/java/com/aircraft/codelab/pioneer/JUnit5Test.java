@@ -16,7 +16,7 @@
 
 package com.aircraft.codelab.pioneer;
 
-import com.aircraft.codelab.pioneer.pojo.Menu;
+import com.aircraft.codelab.pioneer.pojo.entity.Menu;
 import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
 
 import com.alibaba.fastjson.JSON;

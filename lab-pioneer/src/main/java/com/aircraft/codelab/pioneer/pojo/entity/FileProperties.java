@@ -1,4 +1,4 @@
-package com.aircraft.codelab.pioneer.pojo;
+package com.aircraft.codelab.pioneer.pojo.entity;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;

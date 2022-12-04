@@ -3,19 +3,28 @@ package com.aircraft.codelab.pioneer.util;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpStatus;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.config.SocketConfig;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.LaxRedirectStrategy;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 
-import java.io.IOException;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -74,20 +83,40 @@ public class HttpClientUtil {
                 .build();
     }
 
-    public static void get() throws IOException {
-        HttpGet httpGet = new HttpGet("");
-
-        try (CloseableHttpResponse response = HTTP_CLIENT.execute(httpGet)) {
-            if (HttpStatus.SC_OK == response.getStatusLine().getStatusCode()) {
-                HttpEntity httpEntity = response.getEntity();
-                String result = EntityUtils.toString(httpEntity, StandardCharsets.UTF_8);
+    public static String get(String url, Map<String, String> headers, Map<String, String> params) throws Exception {
+        URIBuilder uriBuilder = new URIBuilder(url);
+        if (params != null) {
+            Set<Map.Entry<String, String>> entrySet = params.entrySet();
+            for (Map.Entry<String, String> entry : entrySet) {
+                uriBuilder.setParameter(entry.getKey(), entry.getValue());
             }
+        }
+        URI uri = uriBuilder.build();
+        HttpGet httpGet = new HttpGet(uri);
+
+        packageHeader(headers, httpGet);
+        try (CloseableHttpResponse response = HTTP_CLIENT.execute(httpGet)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            if (HttpStatus.SC_OK == statusCode) {
+                HttpEntity httpEntity = response.getEntity();
+                return EntityUtils.toString(httpEntity, StandardCharsets.UTF_8);
+            }
+            throw new RuntimeException("get request exception,error status code :" + statusCode);
         }
     }
 
-    public static void post() throws Exception {
-        HttpPost httpPost = new HttpPost("");
-
+    public static String post(String url, Map<String, String> headers, Map<String, String> params) throws Exception {
+        HttpPost httpPost = new HttpPost(url);
+        if (params != null) {
+            List<NameValuePair> pairList = new ArrayList<>();
+            Set<Map.Entry<String, String>> entrySet = params.entrySet();
+            for (Map.Entry<String, String> entry : entrySet) {
+                pairList.add(new BasicNameValuePair(entry.getKey(), entry.getValue()));
+            }
+            // 设置到请求的http对象中
+            httpPost.setEntity(new UrlEncodedFormEntity(pairList, StandardCharsets.UTF_8));
+        }
+        packageHeader(headers, httpPost);
         try (CloseableHttpResponse response = HTTP_CLIENT.execute(httpPost)) {
             int statusCode = response.getStatusLine().getStatusCode();
             if (statusCode != HttpStatus.SC_OK) {
@@ -97,6 +126,24 @@ public class HttpClientUtil {
             HttpEntity entity = response.getEntity();
             String result = EntityUtils.toString(entity, StandardCharsets.UTF_8);
             EntityUtils.consume(entity);
+            return result;
+        }
+    }
+
+    /**
+     * Description: 封装请求头
+     *
+     * @param params     params
+     * @param httpMethod httpMethod
+     */
+    public static void packageHeader(Map<String, String> params, HttpRequestBase httpMethod) {
+        // 封装请求头
+        if (params != null) {
+            Set<Map.Entry<String, String>> entrySet = params.entrySet();
+            for (Map.Entry<String, String> entry : entrySet) {
+                // 设置到请求头到HttpRequestBase对象中
+                httpMethod.setHeader(entry.getKey(), entry.getValue());
+            }
         }
     }
 }

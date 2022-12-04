@@ -29,12 +29,15 @@ import com.aircraft.codelab.pioneer.async.thread.ThreadService;
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
 import com.aircraft.codelab.pioneer.pojo.vo.CreatOrderVo;
 import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
+import com.aircraft.codelab.pioneer.service.ForestClient;
 import com.aircraft.codelab.pioneer.service.OpenFeignService;
 import com.aircraft.codelab.pioneer.service.ProductService;
 import com.aircraft.codelab.pioneer.service.UserConverter;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.dtflys.forest.exceptions.ForestNetworkException;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -308,13 +311,13 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), clientIP);
     }
 
-    @Resource
-    private OpenFeignService openFeignService;
+    /*@Resource
+    private OpenFeignService openFeignService;*/
     // 会报错
     /*@Resource
     private OpenFeignService openFeignServices;*/
 
-    @ApiOperation(value = "feign远程调用测试")
+    /*@ApiOperation(value = "feign远程调用测试")
     @GetMapping(value = "/feign", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> openFeign() {
         String tomcatStatus = openFeignService.tomcatStatus();
@@ -322,5 +325,31 @@ public class TestController {
                 new TypeReference<CommonResult<Map<String, Object>>>() {
                 });
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), mapCommonResult.getData());
+    }*/
+
+    @Resource
+    private ForestClient forestClient;
+
+    @ApiOperation(value = "forest测试")
+    @GetMapping(value = "/forest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> forestClient() {
+        try {
+            log.debug("forest request =====>");
+            CommonResult<Map<String, Object>> mapCommonResult = forestClient.helloForest();
+//            String send1 = forestClient.send1("1", "2");
+//            Map<String, Object> hashMap = Maps.newHashMap();
+//            hashMap.put("a", "1");
+//            hashMap.put("b", "2");
+//            String send2 = forestClient.send2(hashMap);
+            UserDO userDO = new UserDO();
+            userDO.setUId("qwert");
+            userDO.setName("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAotVuyODD3piClEgamOfr0iVQBj9rR+DTgTDigkD7hWHZzAccuSiQILzb9DcbQQwn0aTU/1k/1Pw2FA54LJorr34NW2tzKuYQSdAdE0+Ie");
+            userDO.setId(123L);
+            String send3 = forestClient.send3(userDO);
+            return CommonResult.success(ResultCode.SUCCESS.getMessage(), mapCommonResult.getData());
+        } catch (ForestNetworkException e) {
+            log.error(e.getMessage(), e);
+        }
+        return CommonResult.failed();
     }
 }

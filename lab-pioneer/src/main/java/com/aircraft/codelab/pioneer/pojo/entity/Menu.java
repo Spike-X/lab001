@@ -1,4 +1,4 @@
-package com.aircraft.codelab.pioneer.pojo;
+package com.aircraft.codelab.pioneer.pojo.entity;
 
 import com.alibaba.fastjson.annotation.JSONField;
 import lombok.AllArgsConstructor;
