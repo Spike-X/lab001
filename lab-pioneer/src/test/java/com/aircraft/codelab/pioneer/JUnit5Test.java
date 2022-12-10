@@ -25,7 +25,9 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -132,5 +134,24 @@ public class JUnit5Test {
                     m.setChildList(getChildren(m, all));
                     return m;
                 }).collect(Collectors.toList());
+    }
+
+    @DisplayName("stream测试")
+    @Test
+    void streamTest() {
+        List<String> arrayList = new ArrayList<>();
+        arrayList.add("1");
+        arrayList.add("2");
+        arrayList.add("2");
+        arrayList.add("3");
+        arrayList.add("3");
+        List<String> repeatList = arrayList.stream()
+                .collect(Collectors.toMap(e -> e, e -> 1, Integer::sum)) // 获得元素出现频率的 Map，键为元素，值为元素出现的次数
+                .entrySet()
+                .stream()                       // 所有 entry 对应的 Stream
+                .filter(e -> e.getValue() > 1)         // 过滤出元素出现次数大于 1 (重复元素）的 entry
+                .map(Map.Entry::getKey)                // 获得 entry 的键（重复元素）对应的 Stream
+                .collect(Collectors.toList());
+        log.info("repeatList: {}", repeatList);
     }
 }

@@ -14,7 +14,7 @@ public class CommonResult<T> {
     /**
      * 状态码
      */
-    private int code;
+    private String code;
 
     /**
      * 响应信息
@@ -29,7 +29,7 @@ public class CommonResult<T> {
     public CommonResult() {
     }
 
-    protected CommonResult(int code, String message, T data) {
+    protected CommonResult(String code, String message, T data) {
         this.code = code;
         this.message = message;
         this.data = data;
@@ -67,11 +67,11 @@ public class CommonResult<T> {
         return new CommonResult<>(returnCode.getCode(), returnCode.getMessage(), data);
     }
 
-    public int getCode() {
+    public String getCode() {
         return code;
     }
 
-    public void setCode(int code) {
+    public void setCode(String code) {
         this.code = code;
     }
 

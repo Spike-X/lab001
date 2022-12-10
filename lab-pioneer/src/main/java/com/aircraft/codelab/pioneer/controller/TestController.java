@@ -21,6 +21,7 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.aircraft.codelab.cache.service.RedisService;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
+import com.aircraft.codelab.core.exception.ApiException;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
 import com.aircraft.codelab.core.util.ValidateList;
@@ -335,6 +336,9 @@ public class TestController {
     public CommonResult<?> forestClient() {
         try {
             log.debug("forest request =====>");
+            if (true) {
+                throw new ApiException(ResultCode.VALIDATE_FAILURE);
+            }
             CommonResult<Map<String, Object>> mapCommonResult = forestClient.helloForest();
 //            String send1 = forestClient.send1("1", "2");
 //            Map<String, Object> hashMap = Maps.newHashMap();
