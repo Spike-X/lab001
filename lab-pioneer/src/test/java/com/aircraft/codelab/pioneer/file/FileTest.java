@@ -3,6 +3,10 @@ package com.aircraft.codelab.pioneer.file;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.extra.emoji.EmojiUtil;
+import com.aircraft.codelab.pioneer.pojo.vo.FileVo;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.exception.ZipException;
 import org.apache.commons.io.FileUtils;
@@ -11,9 +15,8 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -111,5 +114,29 @@ public class FileTest {
         File localFile = new File("D:\\Users\\zt_wm\\Downloads\\sftp\\bTemp\\IMG_0678.JPG");
         boolean mkdirs = localFile.mkdirs();
         FileUtils.deleteQuietly(localFile);
+    }
+
+    @Test
+    void readFile() {
+        try {
+            String fileInfo = FileUtils.readFileToString(new File("D:\\yinyan\\test.txt"), StandardCharsets.UTF_8);
+            Map<String, String> orderMap = JSON.parseObject(fileInfo, new TypeReference<Map<String, String>>() {
+            });
+            Iterator<Map.Entry<String, String>> fileIterator = orderMap.entrySet().iterator();
+            while (fileIterator.hasNext()) {
+                Map.Entry<String, String> entry = fileIterator.next();
+                String key = entry.getKey();
+                String value = entry.getValue();
+                try {
+                    FileVo fileVo = JSON.parseObject(value, FileVo.class);
+                    System.out.println(fileVo);
+                } catch (Exception e) {
+                    fileIterator.remove();
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            log.error("文件解析失败: {}", e.getMessage(), e);
+        }
     }
 }
