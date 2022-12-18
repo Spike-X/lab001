@@ -239,8 +239,11 @@ public class TestController {
     //    @Idempotent
     @ApiOperation(value = "属性校验测试1")
     @PostMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> validate(@RequestBody CreatOrderVo creatOrderVo) {
+    public CommonResult<?> validate(@RequestBody CreatOrderVo<?> creatOrderVo) {
         log.debug("validate =====>");
+        Object dx = creatOrderVo.getDx();
+        String jsonString = JSON.toJSONString(dx);
+        UserDO userDO = JSONObject.parseObject(jsonString, UserDO.class);
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = Objects.requireNonNull(attributes).getResponse();
         try {
