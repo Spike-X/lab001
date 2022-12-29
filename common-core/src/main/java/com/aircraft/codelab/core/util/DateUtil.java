@@ -99,9 +99,19 @@ public class DateUtil {
 
 
     public static void main(String[] args) throws ParseException {
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DatePattern.NORM_DATE_PATTERN);
-        Date date = simpleDateFormat.parse("2022-12-17 00:00:01");
+        LocalDateTime localDateTime = LocalDateTime.now();
+        int year = localDateTime.getYear();
+        int monthValue = localDateTime.getMonthValue();
+        int dayOfMonth = localDateTime.getDayOfMonth();
+        int hour = localDateTime.getHour();
+        int minute = localDateTime.getMinute();
+        int second = localDateTime.getSecond();
+        LocalDateTime localDateTime1 = localDateTime.withHour(11);
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DatePattern.NORM_DATETIME_MINUTE_PATTERN);
+        Date date = simpleDateFormat.parse("2022-12-17 01:02");
+
+        String format = new SimpleDateFormat(DatePattern.NORM_DATETIME_PATTERN).format(date);
         // 字符串比较
 //        LocalDate localDate = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 //        String StringDate = getDate(localDate);

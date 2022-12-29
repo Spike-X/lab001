@@ -1,16 +1,19 @@
-package com.aircraft.codelab.rabbitmq;
+package com.aircraft.codelab.pioneer.mq;
 
+import com.aircraft.codelab.rabbitmq.DelayedQueueConfig;
+import com.aircraft.codelab.rabbitmq.DelayMessage;
 import com.rabbitmq.client.Channel;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 /**
  * 2022-07-24
@@ -21,7 +24,7 @@ import java.time.format.DateTimeFormatter;
 @Slf4j
 @Component
 public class DelayedReceiver {
-    @RabbitListener(queues = Config.QUEUE_NAME)
+    @RabbitListener(queues = DelayedQueueConfig.QUEUE_NAME_1)
     @RabbitHandler
     public void process(String msg) {
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
@@ -29,7 +32,13 @@ public class DelayedReceiver {
         System.out.println("消息内容：" + msg);
     }
 
-    @RabbitListener(queues = Config.QUEUE_NAME_1)
+    @RabbitListener(queues = DelayedQueueConfig.DELAYED_QUEUE_NAME)
+    public void receiveDelayQueue(Message message) {
+        String msg = new String(message.getBody());
+        log.info("当前时间：{},收到延时队列的消息：{}", new Date().toString(), msg);
+    }
+
+    @RabbitListener(queues = DelayedQueueConfig.QUEUE_NAME_1)
     @RabbitHandler
     public void process(DelayMessage delayMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
         try {

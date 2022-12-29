@@ -19,19 +19,30 @@ public class DelayedSender {
     @Resource
     private AmqpTemplate rabbitTemplate;
 
-    public void send(String msg) {
-        rabbitTemplate.convertAndSend(Config.EXCHANGE_NAME, Config.QUEUE_NAME, msg, message -> {
-            message.getMessageProperties().setDelay(100000);
-            message.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
-            return message;
-        });
+    public void send(String message) {
+        rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, message,
+                msg -> {
+                    msg.getMessageProperties().setDelay(100000);
+                    msg.getMessageProperties().setDeliveryMode(MessageDeliveryMode.PERSISTENT);
+                    return msg;
+                });
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         System.out.println("发送时间：" + format);
+    }
+
+    public void sendLazy(String message, Integer delayTime) {
+        rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, message,
+                msg -> {
+                    //发送消息的时候的延迟时长 单位ms
+                    msg.getMessageProperties().setDelay(delayTime);
+                    return msg;
+                });
     }
 
     public void sendVo(DelayMessage msg) {
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         System.out.println("发送时间：" + format);
-        rabbitTemplate.convertAndSend(Config.QUEUE_NAME_1, msg);
+        rabbitTemplate.convertAndSend(DelayedQueueConfig.QUEUE_NAME_1, msg);
     }
+
 }

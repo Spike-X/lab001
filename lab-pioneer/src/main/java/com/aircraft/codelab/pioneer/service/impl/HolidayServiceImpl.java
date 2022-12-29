@@ -138,19 +138,43 @@ public class HolidayServiceImpl implements HolidayService {
         return null;
     }
 
-    public String dealLine(LocalDate startDate, Integer dateInterval) {
+    public String includeStartDate(LocalDate startDate, String intervalDays,
+                                   List<LocalDate> legalHolidayList, List<LocalDate> extraWorkdayList) {
         int days;
-        if (Objects.isNull(dateInterval) || dateInterval < 1) {
+        if (StringUtils.isBlank(intervalDays) || Integer.parseInt(intervalDays) < 1) {
             days = 1;
         } else {
-            days = dateInterval;
+            days = Integer.parseInt(intervalDays);
+        }
+        int times = 0;
+        // 包括开始日期
+        while (times < days) {
+            if (!DateUtil.isHoliday(startDate, legalHolidayList) && !DateUtil.isWeekend(startDate)
+                    || DateUtil.isExtraWorkday(startDate, extraWorkdayList)) {
+                times++;
+            }
+            if (times == days) {
+                return startDate.format(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN));
+            }
+            startDate = startDate.plusDays(1L);
+        }
+        return null;
+    }
+
+    public String excludeStartDate(LocalDate startDate, String intervalDays,
+                                   List<LocalDate> legalHolidayList, List<LocalDate> extraWorkdayList) {
+        int days;
+        if (StringUtils.isBlank(intervalDays) || Integer.parseInt(intervalDays) < 1) {
+            days = 1;
+        } else {
+            days = Integer.parseInt(intervalDays);
         }
         int times = 0;
         // 不包括开始日期
         while (times < days) {
             startDate = startDate.plusDays(1L);
-            if (!DateUtil.isHoliday(startDate, Lists.newArrayList()) && !DateUtil.isWeekend(startDate)
-                    || DateUtil.isExtraWorkday(startDate, Lists.newArrayList())) {
+            if (!DateUtil.isHoliday(startDate, legalHolidayList) && !DateUtil.isWeekend(startDate)
+                    || DateUtil.isExtraWorkday(startDate, extraWorkdayList)) {
                 times++;
             }
         }
