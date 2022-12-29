@@ -1,7 +1,7 @@
 package com.aircraft.codelab.rabbitmq;
 
-import org.springframework.amqp.core.AmqpTemplate;
 import org.springframework.amqp.core.MessageDeliveryMode;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -17,7 +17,7 @@ import java.time.format.DateTimeFormatter;
 @Component
 public class DelayedSender {
     @Resource
-    private AmqpTemplate rabbitTemplate;
+    private RabbitTemplate rabbitTemplate;
 
     public void send(String message) {
         rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, message,
