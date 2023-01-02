@@ -27,7 +27,7 @@ public class DelayedQueueConfig {
     //routingKey
     public static final String DELAYED_ROUTING_KEY = "delayed.routingkey";
 
-    public final static String QUEUE_NAME_1 = "delayed_goods_order_1";
+    public final static String QUEUE_NAME_1 = "goods_order_1";
 
     @Bean
     public Queue queue1() {
