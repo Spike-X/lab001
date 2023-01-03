@@ -8,6 +8,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.annotation.RabbitHandler;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.amqp.support.AmqpHeaders;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.stereotype.Component;
 
@@ -38,8 +39,14 @@ public class DelayedReceiver {
         log.info("当前时间：{},收到延时队列的消息：{}", new Date().toString(), msg);
     }
 
-//    @RabbitListener(queues = DelayedQueueConfig.DELAYED_QUEUE_NAME)
-//    @RabbitHandler
+    @RabbitListener(queues = DelayedQueueConfig.DELAYED_QUEUE_NAME)
+    public void receiveDelayQueue(byte[] bytes) {
+        DelayMessage deserialize = (DelayMessage) SerializationUtils.deserialize(bytes);
+        log.info("当前时间：{},收到延时队列的消息：{}", new Date(), deserialize);
+    }
+
+    @RabbitListener(queues = DelayedQueueConfig.DELAYED_QUEUE_NAME)
+    @RabbitHandler
     public void process(DelayMessage delayMessage, Channel channel, @Header(AmqpHeaders.DELIVERY_TAG) long tag) {
         try {
             String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS"));

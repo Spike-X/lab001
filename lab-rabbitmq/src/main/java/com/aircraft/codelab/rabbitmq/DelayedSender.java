@@ -5,6 +5,7 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageDeliveryMode;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.utils.SerializationUtils;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
@@ -35,7 +36,7 @@ public class DelayedSender {
         System.out.println("发送时间：" + format);
     }
 
-    public void sendVo(DelayMessage msg) {
+    public void sendVo(String msg) {
         String format = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         System.out.println("发送时间：" + format);
         rabbitTemplate.convertAndSend(DelayedQueueConfig.QUEUE_NAME_1, msg);
@@ -43,6 +44,7 @@ public class DelayedSender {
 
     public void sendLazy(DelayMessage message, Integer delayTime) {
         log.info("开始发送延时消息: {}", message);
+//        byte[] serialize = SerializationUtils.serialize(message);
         rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, message,
                 msg -> {
                     //发送消息的时候的延迟时长 单位ms

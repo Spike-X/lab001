@@ -27,10 +27,7 @@ public class RabbitMqTest {
 
     @Test
     void delayedMessage1() throws InterruptedException {
-        DelayMessage delayMessage = new DelayMessage();
-        delayMessage.setRetryTime(1);
-        delayMessage.setTaskNo("RW123124");
-        sender.sendVo(delayMessage);
+        sender.sendVo("delayMessage");
         TimeUnit.SECONDS.sleep(300);
     }
 
