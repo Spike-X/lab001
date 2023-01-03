@@ -33,4 +33,22 @@ public class RabbitMqTest {
         sender.sendVo(delayMessage);
         TimeUnit.SECONDS.sleep(300);
     }
+
+    @Test
+    void sendLazy() throws InterruptedException {
+        DelayMessage delayMessage = new DelayMessage();
+        delayMessage.setRetryTime(1);
+        delayMessage.setTaskNo("RW123124");
+        sender.sendLazy(delayMessage, 100);
+        TimeUnit.SECONDS.sleep(300);
+    }
+
+    @Test
+    void sendLazy1() throws InterruptedException {
+        DelayMessage delayMessage = new DelayMessage();
+        delayMessage.setRetryTime(1);
+        delayMessage.setTaskNo("RW123124");
+        sender.sendLazy("delayMessage", 10);
+        TimeUnit.SECONDS.sleep(300);
+    }
 }

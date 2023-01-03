@@ -1,5 +1,6 @@
 package com.aircraft.codelab.rabbitmq;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.amqp.core.Message;
 import org.springframework.amqp.core.MessageBuilder;
 import org.springframework.amqp.core.MessageDeliveryMode;
@@ -17,6 +18,7 @@ import java.time.format.DateTimeFormatter;
  * @author tao.zhang
  * @since 1.0
  */
+@Slf4j
 @Component
 public class DelayedSender {
     @Resource
@@ -39,20 +41,21 @@ public class DelayedSender {
         rabbitTemplate.convertAndSend(DelayedQueueConfig.QUEUE_NAME_1, msg);
     }
 
-    public void sendLazy(String message, Integer delayTime) {
+    public void sendLazy(DelayMessage message, Integer delayTime) {
+        log.info("开始发送延时消息: {}", message);
         rabbitTemplate.convertAndSend(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, message,
                 msg -> {
                     //发送消息的时候的延迟时长 单位ms
-                    msg.getMessageProperties().setDelay(delayTime);
+                    msg.getMessageProperties().setDelay(delayTime * 1000);
                     return msg;
                 });
     }
 
     public void sendLazy(String message, int delayTime) {
+        log.info("开始发送延时消息: {}", message);
         Message msg = MessageBuilder.withBody(message.getBytes(StandardCharsets.UTF_8))
-                .setHeader("x-delay", 3000).build();
+                .setHeader("x-delay", delayTime * 1000).build();
         rabbitTemplate.send(DelayedQueueConfig.DELAYED_EXCHANGE_NAME, DelayedQueueConfig.DELAYED_ROUTING_KEY, msg);
     }
-
 
 }

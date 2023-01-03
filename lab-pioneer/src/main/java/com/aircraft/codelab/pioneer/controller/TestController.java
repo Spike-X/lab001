@@ -44,6 +44,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
@@ -185,7 +186,7 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
-    @Resource
+    @Autowired(required = false)
     private WebServerApplicationContext webServerApplicationContext;
 
     @ApiOperation(value = "Tomcat状态测试")
