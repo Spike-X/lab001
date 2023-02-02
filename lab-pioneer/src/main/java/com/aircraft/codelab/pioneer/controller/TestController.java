@@ -34,6 +34,8 @@ import com.aircraft.codelab.pioneer.service.ForestClient;
 import com.aircraft.codelab.pioneer.service.OpenFeignService;
 import com.aircraft.codelab.pioneer.service.ProductService;
 import com.aircraft.codelab.pioneer.service.UserConverter;
+import com.aircraft.codelab.pioneer.spring.PlaceOrderEvent;
+import com.aircraft.codelab.pioneer.spring.PlaceOrderEventMessage;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
@@ -48,6 +50,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
@@ -359,5 +362,21 @@ public class TestController {
             log.error(e.getMessage(), e);
         }
         return CommonResult.failed();
+    }
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    @ApiOperation(value = "springEvent测试")
+    @GetMapping(value = "/springEvent", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> springEvent() {
+        log.info("[placeOrder] start.");
+        //消息
+        PlaceOrderEventMessage eventMessage = new PlaceOrderEventMessage();
+        eventMessage.setOrderId("123");
+        //发布事件
+        applicationEventPublisher.publishEvent(new PlaceOrderEvent(eventMessage));
+        log.info("[placeOrder] end.");
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }
