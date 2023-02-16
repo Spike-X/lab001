@@ -2,6 +2,7 @@ package com.aircraft.codelab.pioneer.controller;
 
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
+import com.aircraft.codelab.core.util.ValidateUtil;
 import com.aircraft.codelab.pioneer.pojo.entity.LoanContract;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
@@ -59,7 +60,7 @@ public class ExcelController {
         List<LoanContract> contractList = Lists.newArrayList();
         for (int i = 0; i < 10; i++) {
             LoanContract contract = LoanContract.builder()
-                    .userId((long) i)
+                    .userId((long) i + 1)
                     .contractNo("12345" + i)
                     .contractState(1001)
                     .loanProduct("what")
@@ -84,6 +85,15 @@ public class ExcelController {
                 .head(LoanContract.class)
                 .sheet()
                 .doReadSync();
+
+        for (LoanContract loanContract : contractList) {
+            try {
+                ValidateUtil.validate(loanContract);
+            } catch (Exception e) {
+                loanContract.setErrorReason(e.getMessage());
+                log.error(e.getMessage(), e);
+            }
+        }
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), contractList);
     }
 }

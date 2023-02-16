@@ -14,6 +14,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.DecimalMax;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Digits;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -67,6 +70,10 @@ public class LoanContract implements Serializable {
      */
     @ExcelProperty("借贷金额")
     @NumberFormat("#,##0.00")
+    @DecimalMin(value = "0.01", message = "借贷金额必须在{value}-1000之间")
+    @DecimalMax(value = "2000", inclusive = false, message = "借贷金额必须在0.01-{value}之间")//<10000
+//    @Digits(integer = 4, fraction = 2, message = "借贷金额必须在0.01-1000之间")
+    @Digits(integer = 4, fraction = 2, message = "借贷金额只允许在{integer}位整数和{fraction}位小数范围内")
     private BigDecimal loanAmount;
 
     /**
@@ -89,5 +96,6 @@ public class LoanContract implements Serializable {
     @ExcelIgnore
     private LocalDateTime updateTime;
 
+    private String errorReason;
     private static final long serialVersionUID = 1L;
 }
