@@ -187,4 +187,17 @@
             #{item.id,jdbcType=BIGINT}
         </foreach>
     </update>
+    <insert id="insertBatch">
+        insert into loan_contract(id,user_id,contract_no,
+        contract_state,loan_product,loan_amount,
+        product_detail,create_time,update_time,
+        error_reason)
+        values
+        <foreach collection="loanContractCollection" item="item" separator=",">
+            (#{item.id,jdbcType=NUMERIC},#{item.userId,jdbcType=NUMERIC},#{item.contractNo,jdbcType=VARCHAR},
+            #{item.contractState,jdbcType=NUMERIC},#{item.loanProduct,jdbcType=VARCHAR},#{item.loanAmount,jdbcType=DECIMAL},
+            #{item.productDetail,jdbcType=VARCHAR},#{item.createTime},#{item.updateTime},
+            #{item.errorReason,jdbcType=VARCHAR})
+        </foreach>
+    </insert>
 </mapper>

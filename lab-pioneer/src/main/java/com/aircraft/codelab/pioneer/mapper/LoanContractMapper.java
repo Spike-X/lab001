@@ -1,4 +1,5 @@
 package com.aircraft.codelab.pioneer.mapper;
+import java.util.Collection;
 
 import com.aircraft.codelab.pioneer.pojo.dto.RealUserContractDto;
 import com.aircraft.codelab.pioneer.pojo.dto.UserContractDto;
@@ -12,6 +13,8 @@ import java.util.List;
 @Mapper
 public interface LoanContractMapper {
     LoanContract selectByPrimaryKey(Long id);
+
+    int insertBatch(@Param("loanContractCollection") Collection<LoanContract> loanContractCollection);
 
     List<UserContractDto> selectUserContractList(@Param("userId") Long userId, @Param("contractState") Integer contractState);
 

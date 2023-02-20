@@ -3,6 +3,7 @@ package com.aircraft.codelab.pioneer.controller;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.core.util.ValidateUtil;
+import com.aircraft.codelab.pioneer.mapper.LoanContractMapper;
 import com.aircraft.codelab.pioneer.pojo.entity.LoanContract;
 import com.alibaba.excel.EasyExcel;
 import com.alibaba.excel.support.ExcelTypeEnum;
@@ -11,13 +12,13 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -78,12 +79,21 @@ public class ExcelController {
                 .doWrite(contractList);
     }
 
+    @Resource
+    private LoanContractMapper loanContractMapper;
+
     @ApiOperation(value = "测试导入")
     @PostMapping(value = "/import", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<List<LoanContract>> importData(@RequestPart("file") MultipartFile file) throws IOException {
-        List<LoanContract> contractList = EasyExcel.read(file.getInputStream())
+        EasyExcel.read(file.getInputStream(), LoanContract.class, new EasyExcelContractListener(loanContractMapper))
+                .sheet()
+                .headRowNumber(2)
+                .doRead();
+
+        /*List<LoanContract> contractList = EasyExcel.read(file.getInputStream())
                 .head(LoanContract.class)
                 .sheet()
+                .headRowNumber(2)
                 .doReadSync();
 
         for (LoanContract loanContract : contractList) {
@@ -93,7 +103,7 @@ public class ExcelController {
                 loanContract.setErrorReason(e.getMessage());
                 log.error(e.getMessage(), e);
             }
-        }
-        return CommonResult.success(ResultCode.SUCCESS.getMessage(), contractList);
+        }*/
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }

@@ -50,7 +50,7 @@ public class LoanContract implements Serializable {
     /**
      * 借贷合同流水号
      */
-    @ExcelProperty("流水号")
+    @ExcelProperty(index = 1)// 列
     private String contractNo;
 
     /**
@@ -68,7 +68,7 @@ public class LoanContract implements Serializable {
     /**
      * 借贷金额
      */
-    @ExcelProperty("借贷金额")
+    @ExcelProperty("*借贷金额")
     @NumberFormat("#,##0.00")
     @DecimalMin(value = "0.01", message = "借贷金额必须在{value}-1000之间")
     @DecimalMax(value = "2000", inclusive = false, message = "借贷金额必须在0.01-{value}之间")//<10000
@@ -96,6 +96,8 @@ public class LoanContract implements Serializable {
     @ExcelIgnore
     private LocalDateTime updateTime;
 
+    @ExcelIgnore
     private String errorReason;
+
     private static final long serialVersionUID = 1L;
 }

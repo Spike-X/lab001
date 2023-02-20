@@ -26,11 +26,17 @@ public class ValidateUtil {
     public static <T> void validate(T bean) {
         Set<ConstraintViolation<T>> validateSet = VALIDATOR.validate(bean);
         if (validateSet.size() > 0) {
-//            throw new ConstraintViolationException(validateSet);
-            String reason = validateSet.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
-            throw new ValidationException(reason);
+            throw new ConstraintViolationException(validateSet);
         }
     }
+
+    /*public static <T> String validate(T bean) {
+        Set<ConstraintViolation<T>> validateSet = VALIDATOR.validate(bean);
+        if (validateSet.size() > 0) {
+            return validateSet.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
+        }
+        return null;
+    }*/
 
     /**
      * 校验实体 自定义分组
