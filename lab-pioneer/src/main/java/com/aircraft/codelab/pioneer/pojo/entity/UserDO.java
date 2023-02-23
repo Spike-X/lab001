@@ -1,5 +1,7 @@
 package com.aircraft.codelab.pioneer.pojo.entity;
 
+import com.aircraft.codelab.pioneer.enums.ContractStateEnum;
+import com.aircraft.codelab.pioneer.enums.UpdateEnum;
 import com.alibaba.fastjson.annotation.JSONField;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
@@ -29,4 +31,6 @@ public class UserDO extends BaseDO {
 
     @JSONField(ordinal = 3)
     private String password;
+
+    private ContractStateEnum.CONTRACT_SIGNING contractSigningEnum;
 }

@@ -27,6 +27,8 @@ import com.aircraft.codelab.core.util.JsonUtil;
 import com.aircraft.codelab.core.util.ValidateList;
 import com.aircraft.codelab.core.util.ValidateUtil;
 import com.aircraft.codelab.pioneer.async.thread.ThreadService;
+import com.aircraft.codelab.pioneer.enums.ContractStateEnum;
+import com.aircraft.codelab.pioneer.enums.UpdateEnum;
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
 import com.aircraft.codelab.pioneer.pojo.vo.CreatOrderVo;
 import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
@@ -153,7 +155,9 @@ public class TestController {
         UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
         UserDO build = userDO.toBuilder()
                 .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now()).build();
+                .updateTime(LocalDateTime.now())
+                .contractSigningEnum(ContractStateEnum.CONTRACT_SIGNING.FACE_RECOGNITION)
+                .build();
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
     }
 
