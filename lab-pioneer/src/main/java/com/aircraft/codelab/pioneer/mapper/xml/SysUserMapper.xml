@@ -40,6 +40,7 @@
         where id = #{id}
     </update>
 
+    <!-- 少用 -->
     <update id="updateBatch">
         <foreach item="item" index="index" collection="userDOList" separator=";">
             update sys_user
