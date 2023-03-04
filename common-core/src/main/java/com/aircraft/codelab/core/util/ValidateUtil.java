@@ -1,10 +1,9 @@
 package com.aircraft.codelab.core.util;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
-import javax.validation.Validation;
-import javax.validation.Validator;
+import javax.validation.*;
+import javax.validation.metadata.ConstraintDescriptor;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * 2021-08-19
@@ -30,6 +29,14 @@ public class ValidateUtil {
             throw new ConstraintViolationException(validateSet);
         }
     }
+
+    /*public static <T> String validate(T bean) {
+        Set<ConstraintViolation<T>> validateSet = VALIDATOR.validate(bean);
+        if (validateSet.size() > 0) {
+            return validateSet.stream().map(ConstraintViolation::getMessage).collect(Collectors.joining(","));
+        }
+        return null;
+    }*/
 
     /**
      * 校验实体 自定义分组

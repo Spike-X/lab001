@@ -13,7 +13,7 @@ public interface IReturnCode {
      *
      * @return int
      */
-    int getCode();
+    String getCode();
 
     /**
      * 获取响应信息

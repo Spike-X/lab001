@@ -21,33 +21,41 @@ import cn.hutool.extra.servlet.ServletUtil;
 import com.aircraft.codelab.cache.service.RedisService;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
+import com.aircraft.codelab.core.exception.ApiException;
 import com.aircraft.codelab.core.util.DateUtil;
 import com.aircraft.codelab.core.util.JsonUtil;
 import com.aircraft.codelab.core.util.ValidateList;
 import com.aircraft.codelab.core.util.ValidateUtil;
-import com.aircraft.codelab.pioneer.aop.Idempotent;
 import com.aircraft.codelab.pioneer.async.thread.ThreadService;
+import com.aircraft.codelab.pioneer.enums.ContractStateEnum;
+import com.aircraft.codelab.pioneer.enums.UpdateEnum;
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
 import com.aircraft.codelab.pioneer.pojo.vo.CreatOrderVo;
-import com.aircraft.codelab.pioneer.pojo.vo.UserVO;
+import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
+import com.aircraft.codelab.pioneer.service.ForestClient;
 import com.aircraft.codelab.pioneer.service.OpenFeignService;
 import com.aircraft.codelab.pioneer.service.ProductService;
 import com.aircraft.codelab.pioneer.service.UserConverter;
+import com.aircraft.codelab.pioneer.spring.PlaceOrderEvent;
+import com.aircraft.codelab.pioneer.spring.PlaceOrderEventMessage;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.alibaba.fastjson.TypeReference;
+import com.dtflys.forest.exceptions.ForestNetworkException;
+import com.google.common.collect.Maps;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.collections4.MapUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.context.WebServerApplicationContext;
 import org.springframework.boot.web.embedded.tomcat.TomcatWebServer;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -143,11 +151,13 @@ public class TestController {
     @GetMapping("/mapstruct")
     public CommonResult<UserDO> mapstruct() {
         log.debug("mapstruct test");
-        UserVO userVO = UserVO.builder().id(100L).username("zhang").build();
+        UserVo userVO = UserVo.builder().id(100L).username("zhang").build();
         UserDO userDO = UserConverter.INSTANCE.vo2do(userVO);
         UserDO build = userDO.toBuilder()
                 .createTime(LocalDateTime.now())
-                .updateTime(LocalDateTime.now()).build();
+                .updateTime(LocalDateTime.now())
+                .contractSigningEnum(ContractStateEnum.CONTRACT_SIGNING.FACE_RECOGNITION)
+                .build();
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), build);
     }
 
@@ -183,7 +193,7 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 
-    @Resource
+    @Autowired(required = false)
     private WebServerApplicationContext webServerApplicationContext;
 
     @ApiOperation(value = "Tomcat状态测试")
@@ -237,8 +247,11 @@ public class TestController {
     //    @Idempotent
     @ApiOperation(value = "属性校验测试1")
     @PostMapping(value = "/validate", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> validate(@RequestBody CreatOrderVo creatOrderVo) {
+    public CommonResult<?> validate(@RequestBody CreatOrderVo<?> creatOrderVo) {
         log.debug("validate =====>");
+        Object dx = creatOrderVo.getDx();
+        String jsonString = JSON.toJSONString(dx);
+        UserDO userDO = JSONObject.parseObject(jsonString, UserDO.class);
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         HttpServletResponse response = Objects.requireNonNull(attributes).getResponse();
         try {
@@ -260,12 +273,12 @@ public class TestController {
 
     @ApiOperation(value = "属性校验测试2")
     @PostMapping(value = "/validateList", produces = MediaType.APPLICATION_JSON_VALUE)
-    public CommonResult<?> validateList(@RequestBody @Valid ValidateList<UserVO> ids) {
+    public CommonResult<?> validateList(@RequestBody @Valid ValidateList<UserVo> ids) {
         log.debug("validateList =====>");
-        List<UserVO> list = ids.getList();
+        List<UserVo> list = ids.getList();
         list.get(0).setTaskList(new ArrayList<>());
-        ValidateList<UserVO> userVOList = new ValidateList<>(list);
-        ValidateUtil.validate(userVOList);
+        ValidateList<UserVo> userVoList = new ValidateList<>(list);
+        ValidateUtil.validate(userVoList);
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), list);
     }
 
@@ -310,10 +323,13 @@ public class TestController {
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), clientIP);
     }
 
-    @Resource
-    private OpenFeignService openFeignService;
+    /*@Resource
+    private OpenFeignService openFeignService;*/
+    // 会报错
+    /*@Resource
+    private OpenFeignService openFeignServices;*/
 
-    @ApiOperation(value = "feign远程调用测试")
+    /*@ApiOperation(value = "feign远程调用测试")
     @GetMapping(value = "/feign", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<?> openFeign() {
         String tomcatStatus = openFeignService.tomcatStatus();
@@ -321,5 +337,50 @@ public class TestController {
                 new TypeReference<CommonResult<Map<String, Object>>>() {
                 });
         return CommonResult.success(ResultCode.SUCCESS.getMessage(), mapCommonResult.getData());
+    }*/
+
+    @Resource
+    private ForestClient forestClient;
+
+    @ApiOperation(value = "forest测试")
+    @GetMapping(value = "/forest", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> forestClient() {
+        try {
+            log.debug("forest request =====>");
+            if (true) {
+                throw new ApiException(ResultCode.VALIDATE_FAILURE);
+            }
+            CommonResult<Map<String, Object>> mapCommonResult = forestClient.helloForest();
+//            String send1 = forestClient.send1("1", "2");
+//            Map<String, Object> hashMap = Maps.newHashMap();
+//            hashMap.put("a", "1");
+//            hashMap.put("b", "2");
+//            String send2 = forestClient.send2(hashMap);
+            UserDO userDO = new UserDO();
+            userDO.setUId("qwert");
+            userDO.setName("MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAotVuyODD3piClEgamOfr0iVQBj9rR+DTgTDigkD7hWHZzAccuSiQILzb9DcbQQwn0aTU/1k/1Pw2FA54LJorr34NW2tzKuYQSdAdE0+Ie");
+            userDO.setId(123L);
+            String send3 = forestClient.send3(userDO);
+            return CommonResult.success(ResultCode.SUCCESS.getMessage(), mapCommonResult.getData());
+        } catch (ForestNetworkException e) {
+            log.error(e.getMessage(), e);
+        }
+        return CommonResult.failed();
+    }
+
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    @ApiOperation(value = "springEvent测试")
+    @GetMapping(value = "/springEvent", produces = MediaType.APPLICATION_JSON_VALUE)
+    public CommonResult<?> springEvent() {
+        log.info("[placeOrder] start.");
+        //消息
+        PlaceOrderEventMessage eventMessage = new PlaceOrderEventMessage();
+        eventMessage.setOrderId("123");
+        //发布事件
+        applicationEventPublisher.publishEvent(new PlaceOrderEvent(eventMessage));
+        log.info("[placeOrder] end.");
+        return CommonResult.success(ResultCode.SUCCESS.getMessage());
     }
 }

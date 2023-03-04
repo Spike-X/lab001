@@ -145,6 +145,7 @@
         where id = #{id}
     </update>
 
+    <!-- 问题：返回更新数量1 -->
     <!-- update t_loan_contract SET loan_product = ?, update_time = ? where id = ? ;
     update t_loan_contract SET loan_product = ?, update_time = ? where id = ? -->
     <update id="updateBatch" parameterType="com.aircraft.codelab.pioneer.pojo.vo.UpdateTaskVo">
@@ -162,6 +163,7 @@
         </foreach>
     </update>
 
+    <!-- 返回更新数量正常 -->
     <!-- update t_loan_contract set loan_product = case when id=? then ? when id=? then ? end,
     update_time = case when id=? then ? when id=? then ? end where id in ( ? , ? ) -->
     <update id="batchUpdateCaseWhen">
@@ -187,4 +189,15 @@
             #{item.id,jdbcType=BIGINT}
         </foreach>
     </update>
+
+    <insert id="insertBatch">
+        insert into t_loan_contract(id,user_id,contract_no,
+        contract_state,loan_product,loan_amount,
+        product_detail,create_time,update_time) values
+        <foreach collection="loanContractCollection" item="item" separator=",">
+            (#{item.id,jdbcType=NUMERIC},#{item.userId,jdbcType=NUMERIC},#{item.contractNo,jdbcType=VARCHAR},
+            #{item.contractState,jdbcType=NUMERIC},#{item.loanProduct,jdbcType=VARCHAR},#{item.loanAmount,jdbcType=DECIMAL},
+            #{item.productDetail,jdbcType=VARCHAR},#{item.createTime},#{item.updateTime})
+        </foreach>
+    </insert>
 </mapper>

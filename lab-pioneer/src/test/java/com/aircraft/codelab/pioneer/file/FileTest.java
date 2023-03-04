@@ -3,16 +3,20 @@ package com.aircraft.codelab.pioneer.file;
 import cn.hutool.core.io.FileUtil;
 import cn.hutool.core.util.NumberUtil;
 import cn.hutool.extra.emoji.EmojiUtil;
+import com.aircraft.codelab.pioneer.pojo.vo.FileVo;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.TypeReference;
 import lombok.extern.slf4j.Slf4j;
 import net.lingala.zip4j.exception.ZipException;
+import org.apache.commons.io.FileUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,7 +31,7 @@ public class FileTest {
     @DisplayName("文件测试")
     void fileTest() throws ZipException {
         File file = FileUtil.mkdir("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp");
-        // 仅创建目录
+        // 仅创建目录 文件名也会变目录
         File file1 = FileUtil.mkdir("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\filename.zip");
 
         String mimeType = FileUtil.getMimeType("D:\\Users\\zt_wm\\Downloads\\aTemp\\bTemp\\IMG_0678.JPG");
@@ -89,7 +93,10 @@ public class FileTest {
 //        ZipFile zipFile = new ZipFile("D:\\Users\\zt_wm\\Downloads\\aTemp\\filename.zip");
 //        // 10M = 10 * 1024 * 1024 = 10485760B
 //        zipFile.createSplitZipFile(fileList, new ZipParameters(), true, 2097152);
+    }
 
+    @Test
+    void emojiTest() {
         String str = "An 😀awesome 😃string with a few 😉emojis!";
         log.debug(str);
         if (EmojiUtil.containsEmoji(str)) {
@@ -98,6 +105,38 @@ public class FileTest {
             log.debug(toHtml);
             String unicode = EmojiUtil.toUnicode(toHtml);
             log.debug(unicode);
+        }
+    }
+
+    @Test
+    void createDirIfNotExist() {
+        // 创建父目录
+        File localFile = new File("D:\\Users\\zt_wm\\Downloads\\sftp\\bTemp\\IMG_0678.JPG");
+        boolean mkdirs = localFile.mkdirs();
+        FileUtils.deleteQuietly(localFile);
+    }
+
+    @Test
+    void readFile() {
+        try {
+            String fileInfo = FileUtils.readFileToString(new File("D:\\yinyan\\test.txt"), StandardCharsets.UTF_8);
+            Map<String, String> orderMap = JSON.parseObject(fileInfo, new TypeReference<Map<String, String>>() {
+            });
+            Iterator<Map.Entry<String, String>> fileIterator = orderMap.entrySet().iterator();
+            while (fileIterator.hasNext()) {
+                Map.Entry<String, String> entry = fileIterator.next();
+                String key = entry.getKey();
+                String value = entry.getValue();
+                try {
+                    FileVo fileVo = JSON.parseObject(value, FileVo.class);
+                    System.out.println(fileVo);
+                } catch (Exception e) {
+                    fileIterator.remove();
+                    e.printStackTrace();
+                }
+            }
+        } catch (IOException e) {
+            log.error("文件解析失败: {}", e.getMessage(), e);
         }
     }
 }

@@ -1,5 +1,6 @@
 package com.aircraft.codelab.pioneer.enums;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 
 /**
@@ -13,6 +14,7 @@ public interface ContractStateEnum {
     int END = 1;
     int CANCEL = 2;
 
+    @JsonFormat(shape = JsonFormat.Shape.OBJECT)
     enum CONTRACT_SIGNING {
         PENDING(0, "待办"),
         PRIVACY(1, "隐私"),

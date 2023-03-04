@@ -1,7 +1,7 @@
 package com.aircraft.codelab.pioneer.service;
 
 import com.aircraft.codelab.pioneer.pojo.entity.UserDO;
-import com.aircraft.codelab.pioneer.pojo.vo.UserVO;
+import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
 import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 
@@ -16,5 +16,5 @@ import org.mapstruct.factory.Mappers;
 public interface UserConverter {
     UserConverter INSTANCE = Mappers.getMapper(UserConverter.class);
 
-    UserDO vo2do(UserVO userVO);
+    UserDO vo2do(UserVo userVO);
 }

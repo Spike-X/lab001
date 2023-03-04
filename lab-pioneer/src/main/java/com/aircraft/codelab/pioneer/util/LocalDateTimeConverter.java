@@ -36,5 +36,3 @@ public class LocalDateTimeConverter implements Converter<LocalDateTime> {
         return new WriteCellData<>(context.getValue().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
     }
 }
-
-

@@ -24,7 +24,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Accessors(chain = true)
-public class CreatOrderVo {
+public class CreatOrderVo<T> {
+    private T dx;
     private String externalNumber;
     @NotNull
     @AssertTrue

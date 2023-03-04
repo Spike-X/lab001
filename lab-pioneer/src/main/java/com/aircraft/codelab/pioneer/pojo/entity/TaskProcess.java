@@ -1,4 +1,4 @@
-package com.aircraft.codelab.pioneer.pojo.dto;
+package com.aircraft.codelab.pioneer.pojo.entity;
 
 import com.aircraft.codelab.pioneer.enums.TaskStateEnum;
 import lombok.Data;

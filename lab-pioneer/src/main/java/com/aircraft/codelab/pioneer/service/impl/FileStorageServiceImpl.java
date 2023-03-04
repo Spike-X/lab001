@@ -1,9 +1,9 @@
 package com.aircraft.codelab.pioneer.service.impl;
 
+import cn.hutool.core.date.DatePattern;
 import cn.hutool.core.io.file.FileNameUtil;
 import cn.hutool.core.util.IdUtil;
-import com.aircraft.codelab.core.util.DateUtil;
-import com.aircraft.codelab.pioneer.pojo.FileProperties;
+import com.aircraft.codelab.pioneer.pojo.entity.FileProperties;
 import com.aircraft.codelab.pioneer.service.FileStorageService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
@@ -27,6 +27,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -51,7 +53,7 @@ public class FileStorageServiceImpl implements FileStorageService {
         Path baseLocation = Paths.get(fileProperties.getUploadDir());
         try {
             // 创建文件目录
-            String dateTime = DateUtil.getDate("yyyy/MM/dd");
+            String dateTime = LocalDate.now().format(DateTimeFormatter.ofPattern(DatePattern.NORM_DATE_PATTERN));
             Path directories = baseLocation.resolve(dateTime);
             boolean notExists = Files.notExists(directories);
             if (notExists) {

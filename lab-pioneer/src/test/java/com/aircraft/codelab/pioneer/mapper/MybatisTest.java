@@ -1,11 +1,17 @@
 package com.aircraft.codelab.pioneer.mapper;
 
+import cn.hutool.core.lang.Snowflake;
+import com.aircraft.codelab.core.util.SnowflakeUtil;
+import com.aircraft.codelab.pioneer.pojo.entity.LoanContract;
 import com.aircraft.codelab.pioneer.pojo.vo.UpdateTaskVo;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DuplicateKeyException;
 
 import javax.annotation.Resource;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +32,36 @@ public class MybatisTest {
 
     @Resource
     private LoanContractMapper loanContractMapper;
+
+    @Test
+    void batchSave() {
+        List<LoanContract> list = Lists.newArrayList();
+        LoanContract loanContract1 = new LoanContract();
+//        loanContract1.setContractNo("111");
+        loanContract1.setContractNo("444");
+        LoanContract loanContract2 = new LoanContract();
+//        loanContract2.setContractNo("222");
+        loanContract2.setContractNo("555");
+        LoanContract loanContract3 = new LoanContract();
+//        loanContract3.setContractNo("333");
+        loanContract3.setContractNo("111");
+        list.add(loanContract1);
+        list.add(loanContract2);
+        list.add(loanContract3);
+        Snowflake snowflake = SnowflakeUtil.getInstance();
+        LocalDateTime now = LocalDateTime.now();
+        for (LoanContract loanContract : list) {
+            loanContract.setId(snowflake.nextId());
+            loanContract.setLoanAmount(new BigDecimal("100"));
+            loanContract.setCreateTime(now);
+            loanContract.setUpdateTime(now);
+        }
+        try {
+            loanContractMapper.insertBatch(list);
+        } catch (DuplicateKeyException e) {
+            log.error(e.getMessage(), e);
+        }
+    }
 
     @Test
     void MapTest() {

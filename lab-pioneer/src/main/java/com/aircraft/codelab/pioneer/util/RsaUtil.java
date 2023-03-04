@@ -1,19 +1,12 @@
 package com.aircraft.codelab.pioneer.util;
 
-import cn.hutool.core.codec.Base64;
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.jwk.RSAKey;
-import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
+import java.security.*;
 import java.security.spec.PKCS8EncodedKeySpec;
 import java.security.spec.X509EncodedKeySpec;
+import java.util.Base64;
 
 /**
  * 2021-12-30
@@ -28,7 +21,7 @@ public class RsaUtil {
 
     @SneakyThrows
     public static PublicKey getPublicKey(String Base64EncodeKey) {
-        byte[] decode = Base64.decode(Base64EncodeKey);
+        byte[] decode = Base64.getDecoder().decode(Base64EncodeKey);
         X509EncodedKeySpec spec = new X509EncodedKeySpec(decode);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         return factory.generatePublic(spec);
@@ -36,21 +29,26 @@ public class RsaUtil {
 
     @SneakyThrows
     public static PrivateKey getPrivateKey(String Base64EncodeKey) {
-        byte[] decode = Base64.decode(Base64EncodeKey);
+        byte[] decode = Base64.getDecoder().decode(Base64EncodeKey);
         PKCS8EncodedKeySpec spec = new PKCS8EncodedKeySpec(decode);
         KeyFactory factory = KeyFactory.getInstance("RSA");
         return factory.generatePrivate(spec);
     }
 
-    public static void main(String[] args) throws JOSEException {
-        // RSA signatures require a public and private RSA key pair, the public key
-        // must be made known to the JWS recipient in order to verify the signatures
-        RSAKey rsaJWK = new RSAKeyGenerator(2048).generate();
-        RSAPublicKey rsaPublicKey = rsaJWK.toRSAPublicKey();
-        RSAPrivateKey rsaPrivateKey = rsaJWK.toRSAPrivateKey();
+    // 生成rsa秘钥对
+    public static void main(String[] args) throws NoSuchAlgorithmException {
+        // RSA加密算法
+        KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
+        // RSA密钥长度2048
+        keyPairGenerator.initialize(2048);
+        KeyPair keyPair = keyPairGenerator.generateKeyPair();
+        // 生成公钥
+        PublicKey rsaPublicKey = keyPair.getPublic();
+        // 生成私钥
+        PrivateKey rsaPrivateKey = keyPair.getPrivate();
         // Base64编码
-        String publicKey = Base64.encode(rsaPublicKey.getEncoded());
-        String privateKey = Base64.encode(rsaPrivateKey.getEncoded());
+        String publicKey = Base64.getEncoder().encodeToString(rsaPublicKey.getEncoded());
+        String privateKey = Base64.getEncoder().encodeToString(rsaPrivateKey.getEncoded());
         log.debug("publicKey: {}", publicKey);
         log.debug("privateKey: {}", privateKey);
     }
