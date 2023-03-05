@@ -6,7 +6,10 @@ import com.aircraft.codelab.core.util.ValidateUtil;
 import com.aircraft.codelab.pioneer.mapper.LoanContractMapper;
 import com.aircraft.codelab.pioneer.pojo.entity.LoanContract;
 import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.ExcelWriter;
 import com.alibaba.excel.support.ExcelTypeEnum;
+import com.alibaba.excel.write.metadata.WriteSheet;
+import com.alibaba.excel.write.metadata.fill.FillConfig;
 import com.google.common.collect.Lists;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -19,11 +22,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -55,7 +56,7 @@ public class ExcelController {
 
         response.setContentType(MediaType.APPLICATION_OCTET_STREAM_VALUE);
         response.setCharacterEncoding(StandardCharsets.UTF_8.name());
-        String fileName = URLEncoder.encode("文件模板" + ".xlsx", StandardCharsets.UTF_8.name());
+        String fileName = URLEncoder.encode("导入派单" + ".xlsx", StandardCharsets.UTF_8.name());
         response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=" + fileName);
 
         List<LoanContract> contractList = Lists.newArrayList();
@@ -72,11 +73,37 @@ public class ExcelController {
             contractList.add(contract);
         }
 
-        EasyExcel.write(response.getOutputStream())
+        /*EasyExcel.write(response.getOutputStream())
                 .head(LoanContract.class)
                 .excelType(ExcelTypeEnum.XLSX)
                 .sheet("合同模板")
-                .doWrite(contractList);
+                .doWrite(contractList);*/
+
+        //获取模板
+        File file = new File("D:\\home\\导入派单模板.xlsx");
+        try (InputStream inputStream = new FileInputStream(file);
+             ServletOutputStream outputStream = response.getOutputStream()) {
+            /*EasyExcel.write(outputStream, LoanContract.class)
+                    .withTemplate(inputStream)
+                    .sheet()
+                    .autoTrim(true)
+                    .needHead(false)
+                    .doWrite(contractList);*/
+            //设置输出流和模板信息
+            ExcelWriter excelWriter = EasyExcel.write(outputStream, LoanContract.class)
+                    .withTemplate(inputStream).needHead(Boolean.FALSE).build();
+            WriteSheet writeSheet = EasyExcel.writerSheet().build();
+            // 分批写入excel
+            List<List<LoanContract>> partition = Lists.partition(contractList, 3);
+            for (List<LoanContract> loanContracts : partition) {
+                int size = loanContracts.size();
+                log.info("本次写入数据: {}条", size);
+                excelWriter.write(loanContracts, writeSheet);
+            }
+            excelWriter.finish();
+        } catch (Exception e) {
+            log.error(e.getMessage(), e);
+        }
     }
 
     @Resource
@@ -85,11 +112,13 @@ public class ExcelController {
     @ApiOperation(value = "测试导入")
     @PostMapping(value = "/import", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<List<LoanContract>> importData(@RequestPart("file") MultipartFile file) throws IOException {
+        // 异步读取
         EasyExcel.read(file.getInputStream(), LoanContract.class, new EasyExcelContractListener(loanContractMapper))
                 .sheet()
                 .headRowNumber(2)
                 .doRead();
 
+        // 同步读取
         /*List<LoanContract> contractList = EasyExcel.read(file.getInputStream())
                 .head(LoanContract.class)
                 .sheet()
