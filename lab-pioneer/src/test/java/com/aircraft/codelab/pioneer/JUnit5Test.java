@@ -66,7 +66,7 @@ public class JUnit5Test {
     void testFirstTest() {
         try {
             System.out.println("我的第一个测试开始测试");
-            List<String> stringList = Lists.newArrayList("Blackberry", null, "Avocado", "Cherry", "Apricots");
+            List<String> stringList = Lists.newArrayList("Blackberry", null, "Avocado", "Cherry", "Apricots", "");
 
             List<Integer> numList = Lists.newArrayList(1, null, 3, 4, 5);
 

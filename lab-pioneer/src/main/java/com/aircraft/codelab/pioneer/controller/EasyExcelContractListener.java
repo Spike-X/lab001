@@ -4,15 +4,19 @@ import com.aircraft.codelab.pioneer.mapper.LoanContractMapper;
 import com.aircraft.codelab.pioneer.pojo.entity.LoanContract;
 import com.alibaba.excel.context.AnalysisContext;
 import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.metadata.data.ReadCellData;
 import com.alibaba.excel.read.listener.ReadListener;
 import com.alibaba.excel.read.metadata.holder.ReadHolder;
 import com.alibaba.excel.read.metadata.holder.ReadRowHolder;
 import com.alibaba.excel.read.metadata.property.ExcelReadHeadProperty;
+import com.alibaba.excel.util.ConverterUtils;
 import com.alibaba.excel.util.ListUtils;
 import com.alibaba.fastjson.JSON;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.poi.ss.formula.functions.T;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 2023-02-21
@@ -31,7 +35,7 @@ public class EasyExcelContractListener implements ReadListener<LoanContract> {
     /**
      * 缓存的数据
      */
-    private List<LoanContract> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
+    private final List<LoanContract> cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
 
     /**
      * 假设这个是一个DAO，当然有业务逻辑这个也可以是一个service。当然如果不用存储这个对象没用。
@@ -42,6 +46,20 @@ public class EasyExcelContractListener implements ReadListener<LoanContract> {
         this.contractMapper = contractMapper;
     }
 
+    /**
+     * 这里会一行行的返回头
+     *
+     * @param headMap
+     * @param context
+     */
+    @Override
+    public void invokeHead(Map<Integer, ReadCellData<?>> headMap, AnalysisContext context) {
+        log.info("解析到一条头数据:{}", JSON.toJSONString(headMap));
+        // 如果想转成成 Map<Integer,String>
+        // 方案1： 不要implements ReadListener 而是 extends AnalysisEventListener
+        // 方案2： 调用 ConverterUtils.convertToStringMap(headMap, context) 自动会转换
+    }
+
     @Override
     public void invoke(LoanContract loanContract, AnalysisContext analysisContext) {
         log.info("解析到一条数据:{}", JSON.toJSONString(loanContract));
@@ -49,17 +67,17 @@ public class EasyExcelContractListener implements ReadListener<LoanContract> {
         Integer rowIndex = readRowHolder.getRowIndex();
         cachedDataList.add(loanContract);
         // 达到BATCH_COUNT了，需要去存储一次数据库，防止数据几万条数据在内存，容易OOM
-        if (cachedDataList.size() >= BATCH_COUNT) {
+        /*if (cachedDataList.size() >= BATCH_COUNT) {
             saveData();
             // 存储完成清理 list
             cachedDataList = ListUtils.newArrayListWithExpectedSize(BATCH_COUNT);
-        }
+        }*/
     }
 
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
         // 这里也要保存数据，确保最后遗留的数据也存储到数据库
-        saveData();
+//        saveData();
         log.info("所有数据解析完成！");
     }
 
@@ -68,4 +86,9 @@ public class EasyExcelContractListener implements ReadListener<LoanContract> {
 //        contractMapper.insertBatch(cachedDataList);
         log.info("存储数据库成功！");
     }
+
+    public List<LoanContract> getData() {
+        return cachedDataList;
+    }
+
 }

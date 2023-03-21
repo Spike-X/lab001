@@ -112,11 +112,21 @@ public class ExcelController {
     @ApiOperation(value = "测试导入")
     @PostMapping(value = "/import", produces = MediaType.APPLICATION_JSON_VALUE)
     public CommonResult<List<LoanContract>> importData(@RequestPart("file") MultipartFile file) throws IOException {
+        /*EasyExcelContractListener easyExcelContractListener = new EasyExcelContractListener(loanContractMapper);
         // 异步读取
-        EasyExcel.read(file.getInputStream(), LoanContract.class, new EasyExcelContractListener(loanContractMapper))
+        EasyExcel.read(file.getInputStream(), LoanContract.class, easyExcelContractListener)
                 .sheet()
                 .headRowNumber(2)
                 .doRead();
+        List<LoanContract> data = easyExcelContractListener.getData();*/
+
+        ExcelContractListener excelContractListener = new ExcelContractListener();
+        EasyExcel.read(file.getInputStream(), LoanContract.class, excelContractListener)
+                .excelType(ExcelTypeEnum.XLSX)
+                .sheet()
+                .headRowNumber(2)
+                .doRead();
+        List<LoanContract> data = excelContractListener.getData();
 
         // 同步读取
         /*List<LoanContract> contractList = EasyExcel.read(file.getInputStream())

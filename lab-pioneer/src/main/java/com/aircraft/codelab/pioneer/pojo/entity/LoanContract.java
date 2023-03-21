@@ -44,13 +44,14 @@ public class LoanContract implements Serializable {
     /**
      * 用户表主键id
      */
-    @ExcelProperty("用户ID")
+    @ExcelProperty("*用户ID")
     private Long userId;
 
     /**
      * 借贷合同流水号
      */
-    @ExcelProperty(index = 1)// 列
+//    @ExcelProperty(index = 1)// 列
+    @ExcelProperty(value = "流水号")// 列
     private String contractNo;
 
     /**
