@@ -1,5 +1,6 @@
 package com.aircraft.codelab.pioneer.controller;
 
+import cn.hutool.core.io.FileUtil;
 import com.aircraft.codelab.core.entities.CommonResult;
 import com.aircraft.codelab.core.enums.ResultCode;
 import com.aircraft.codelab.core.util.ValidateUtil;
@@ -120,9 +121,11 @@ public class ExcelController {
                 .doRead();
         List<LoanContract> data = easyExcelContractListener.getData();*/
 
+        ExcelTypeEnum excelTypeEnum = ExcelTypeEnum.XLSX.getValue().equals(FileUtil.extName("D:\\home\\导入派单模板.xlsx")) ?
+                ExcelTypeEnum.XLSX : ExcelTypeEnum.XLS;
         ExcelContractListener excelContractListener = new ExcelContractListener();
         EasyExcel.read(file.getInputStream(), LoanContract.class, excelContractListener)
-                .excelType(ExcelTypeEnum.XLSX)
+                .excelType(excelTypeEnum)
                 .sheet()
                 .headRowNumber(2)
                 .doRead();

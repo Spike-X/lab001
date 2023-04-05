@@ -16,6 +16,7 @@
 
 package com.aircraft.codelab.pioneer;
 
+import cn.hutool.core.util.NumberUtil;
 import com.aircraft.codelab.pioneer.pojo.entity.Menu;
 import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
 
@@ -153,5 +154,9 @@ public class JUnit5Test {
                 .map(Map.Entry::getKey)                // 获得 entry 的键（重复元素）对应的 Stream
                 .collect(Collectors.toList());
         log.info("repeatList: {}", repeatList);
+
+//        String filesize = NumberUtil.decimalFormatMoney(21861 / 1024.00 / 1024.00);
+        String filesize = NumberUtil.decimalFormat("#.##", 21861 / 1024.00 / 1024.00);
+        log.info("filesize: {}", filesize);
     }
 }
