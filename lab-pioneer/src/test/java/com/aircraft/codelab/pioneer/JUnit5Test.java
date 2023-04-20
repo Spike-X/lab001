@@ -159,4 +159,12 @@ public class JUnit5Test {
         String filesize = NumberUtil.decimalFormat("#.##", 21861 / 1024.00 / 1024.00);
         log.info("filesize: {}", filesize);
     }
+
+    @Test
+    void stTest() {
+        UserVo userVo = new UserVo();
+        if (Objects.isNull(userVo)) {
+
+        }
+    }
 }
