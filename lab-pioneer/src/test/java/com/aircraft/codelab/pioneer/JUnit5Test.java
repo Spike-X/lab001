@@ -26,6 +26,8 @@ import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -166,5 +168,26 @@ public class JUnit5Test {
         if (Objects.isNull(userVo)) {
 
         }
+    }
+
+    @Test
+    void bigDecimal() {
+        String taskPrice = "12.66";
+        /*String price = "";
+        if (org.apache.commons.lang3.StringUtils.isNotBlank(taskPrice)) {
+            BigDecimal bigDecimal = new BigDecimal(taskPrice);
+            BigDecimal decimal = new BigDecimal("100");
+            price = bigDecimal.divide(decimal, 2, BigDecimal.ROUND_HALF_UP).toString();
+        }
+        log.debug("price: {}", price);*/
+
+
+        BigDecimal bigDecimal = new BigDecimal(taskPrice);
+        BigDecimal decimal = new BigDecimal("100");
+        BigDecimal multiply = bigDecimal.multiply(decimal).stripTrailingZeros();
+        log.debug("multiply: {}", multiply);
+
+        String price = multiply.divide(decimal, 2, RoundingMode.HALF_UP).toString();
+        log.debug("price: {}", price);
     }
 }

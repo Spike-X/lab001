@@ -1,6 +1,8 @@
 package com.aircraft.codelab.pioneer.async;
 
+import com.aircraft.codelab.pioneer.pojo.vo.UserVo;
 import com.google.common.base.Stopwatch;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -64,6 +66,21 @@ public class FutureTest3 {
         log.debug("resultList: {},time: {}", resultList, stopwatch.stop());
     }
 
+    public void futureAllOf() {
+        Stopwatch stopwatch = Stopwatch.createStarted();
+        Integer integer = 1;
+        Long aLong = 2L;
+        List<CompletableFuture<?>> completableFutures = Lists.newArrayList(
+                // 3秒
+                CompletableFuture.supplyAsync(() -> calc(integer), threadPoolExecutor),
+                // <1秒
+                CompletableFuture.supplyAsync(() -> calcObj(aLong), threadPoolExecutor));
+
+        CompletableFuture<Void> future = CompletableFuture.allOf(completableFutures.toArray(new CompletableFuture[0]));
+        future.join();
+        log.debug("time: {}", stopwatch.stop());
+    }
+
     private CompletableFuture<Integer> calcAsync(Integer i) {
         return CompletableFuture.supplyAsync(() -> calc(i), threadPoolExecutor);
     }
@@ -84,5 +101,11 @@ public class FutureTest3 {
             e.printStackTrace();
         }
         return i;
+    }
+
+    private UserVo calcObj(Long i) {
+        UserVo userVo = new UserVo();
+        userVo.setId(i);
+        return userVo;
     }
 }
