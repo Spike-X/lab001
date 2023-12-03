@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 
 /**
@@ -20,25 +21,29 @@ import javax.annotation.Resource;
 @Slf4j
 @RestController
 public class RedissonTest {
-    @Lazy
-    @Resource
-    private RedissonClient redissonClient;
-
     @Resource
     private DelayProducer delayProducer;
 
+//    @Lazy
+    @Resource
+    private RedissonClient redissonClient;
     private RRateLimiter rateLimiter;
 
-    //    @PostConstruct
+    @PostConstruct
     public void initRateLimiter() {
-        rateLimiter = redissonClient.getRateLimiter("key");
-        rateLimiter.trySetRate(RateType.OVERALL, 15, 1, RateIntervalUnit.SECONDS);
+        rateLimiter = redissonClient.getRateLimiter("limiter");
+        // l为访问数，l1为单位时间 最大流速 = 每3秒钟产生1个令牌
+        rateLimiter.trySetRate(RateType.OVERALL, 1, 3, RateIntervalUnit.SECONDS);
     }
 
     @GetMapping("/rateLimiter")
     public String rateLimiter() {
-        boolean acquire = rateLimiter.tryAcquire(1);
-        return "";
+        log.info("rateLimiter =====>");
+//        boolean acquire = rateLimiter.tryAcquire(1);
+        // 同步阻塞方法,控制速率
+        rateLimiter.acquire(1);
+        log.info("rateLimiter end =====>");
+        return "1";
     }
 
     @GetMapping("/delayQueue")

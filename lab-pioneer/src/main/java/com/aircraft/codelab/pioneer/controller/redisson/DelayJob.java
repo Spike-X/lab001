@@ -17,7 +17,7 @@ import java.util.concurrent.ThreadPoolExecutor;
  * @since 1.0
  */
 @Slf4j
-@Component
+//@Component
 public class DelayJob implements ApplicationRunner {
 //    @Resource
     private DelayProducer delayProducer;

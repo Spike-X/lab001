@@ -18,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
@@ -41,7 +42,7 @@ public class RedisConfig {
     @Resource
     private RedisProperties redisProperties;
 
-    @Bean
+    /*@Bean
     @ConditionalOnProperty(prefix = "spring.redis", name = "cluster.nodes")
     public RedissonClient clusterRedisson() {
         String[] clusterArray = redisProperties.getCluster().getNodes().stream()
@@ -84,12 +85,12 @@ public class RedisConfig {
                 .setAddress(address)
                 .setPassword(redisProperties.getPassword());
         return Redisson.create(config);
-    }
+    }*/
 
     @Bean
-    public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
+    public RedisTemplate<String, Object> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(lettuceConnectionFactory);
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
 
         StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
         RedisSerializer<Object> serializer = redisSerializer();
@@ -111,7 +112,7 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisCacheManager redisCacheManager(LettuceConnectionFactory redisConnectionFactory) {
+    public RedisCacheManager redisCacheManager(RedisConnectionFactory redisConnectionFactory) {
         RedisSerializer<String> redisSerializer = new StringRedisSerializer();
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
                 .entryTtl(Duration.ofDays(1))
