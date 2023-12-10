@@ -7,7 +7,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -19,7 +18,7 @@ import java.util.stream.Collectors;
  * @since 1.0
  */
 @Slf4j
-public class Lambda {
+public class LambdaTest {
     @Test
     void tt() {
         List<UserDO> userDOArrayList = new ArrayList<>();
