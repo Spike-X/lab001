@@ -28,7 +28,7 @@ public class FutureTest1 {
         int poolSize = threadPoolExecutor.getPoolSize();
         log.debug("线程池线程数量: {}", poolSize);
 
-        CompletableFuture<Void> completableFuture = CompletableFuture.runAsync(() -> {
+        CompletableFuture<Void> future1 = CompletableFuture.runAsync(() -> {
             Thread thread = Thread.currentThread();
             log.debug("子线程callback: {}", thread);
             try {
@@ -38,7 +38,7 @@ public class FutureTest1 {
             }
         }, threadPoolExecutor);
 
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
+        CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> {
             Thread thread = Thread.currentThread();
             log.debug("子线程future: {}", thread);
             try {
@@ -50,7 +50,7 @@ public class FutureTest1 {
         }, threadPoolExecutor);
 
         String path = "FilePath";
-        CompletableFuture<String> thenCombine = completableFuture.thenCombine(future, (__, f2) -> {
+        CompletableFuture<String> thenCombine = future1.thenCombine(future2, (__, f2) -> {
             log.debug("子线程filepath: {}", Thread.currentThread());
             log.debug("f2: {}", f2);
             return returnMethod(path);
@@ -73,6 +73,27 @@ public class FutureTest1 {
         log.debug("{}", thenCombine.join());
         log.debug("time: {}", stopwatch.stop());
     }
+
+
+    public static void main(String[] args) {
+        CompletableFuture<String> future1 = CompletableFuture.supplyAsync(() -> {
+            // Some computation
+            return "Hello";
+        });
+
+        CompletableFuture<String> future2 = CompletableFuture.supplyAsync(() -> {
+            // Some computation
+            return "World";
+        });
+
+        CompletableFuture<String> thenCombine = future1.thenCombine(future2, (__, f2) -> {
+            // Some computation using the results of future1 and future2
+            return __ + " " + f2;
+        });
+
+        thenCombine.thenAccept(System.out::println);
+    }
+
 
     private String returnMethod(String path) {
         try {
