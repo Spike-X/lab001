@@ -107,7 +107,8 @@ public class FutureTest1 {
             log.debug("thread2: {}", thread2.getName() + "_" + thread2.getId());
             // 执行耗时操作
             try {
-//                int a = 1/0;
+                // 此处无需try catch
+                int a = 1/0;
             } catch (RuntimeException e) {
                 throw new RuntimeException(e);
             }
@@ -117,7 +118,27 @@ public class FutureTest1 {
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(future1, future2);
         Thread thread3 = Thread.currentThread();
         log.debug("thread3: {}", thread3.getName() + "_" + thread3.getId());
-        CompletableFuture<Void> finalResult = allFutures.thenComposeAsync(voidResult -> {
+        allFutures.join();
+        if (!future1.isCompletedExceptionally() && !future2.isCompletedExceptionally()) {
+            CompletableFuture.completedFuture(null)
+                    .thenApply(ignored -> {
+                        try {
+                            String result1 = future1.get();
+                            Integer result2 = future2.get();
+                            log.debug("result1: {}, result2: {}", result1, result2);
+                            Thread thread5 = Thread.currentThread();
+                            log.debug("thread5: {}", thread5.getName() + "_" + thread5.getId());
+                            // 执行操作处理返回值
+                        } catch (InterruptedException | ExecutionException e) {
+                            log.error(e.getMessage(), e);
+                            // 处理获取返回值时的异常情况
+                        }
+                        return ignored;
+                    });
+        }
+
+
+        /*CompletableFuture<Void> finalResult = allFutures.thenComposeAsync(voidResult -> {
             Thread thread4 = Thread.currentThread();
             log.debug("thread4: {}", thread4.getName() + "_" + thread4.getId());
             if (!future1.isCompletedExceptionally() && !future2.isCompletedExceptionally()) {
@@ -141,7 +162,7 @@ public class FutureTest1 {
         });
         Thread thread6 = Thread.currentThread();
         log.debug("thread6: {}", thread6.getName() + "_" + thread6.getId());
-        finalResult.join(); // 等待所有操作完成
+        finalResult.join(); // 等待所有操作完成*/
     }
 
 
