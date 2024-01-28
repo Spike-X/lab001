@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -36,5 +37,27 @@ public class DistributedLock {
             log.info("我释放了锁！！");
         }
         return "1";
+    }
+
+    @GetMapping("/concurrency/{id}")
+    public void concurrency(@PathVariable String id) {
+        CountDownLatch countDownLatch = new CountDownLatch(50);
+        for (int i = 0; i < 50; i++) {
+            try {
+                new Thread(() -> {
+                    try {
+                        countDownLatch.await();
+                        log.debug("threadName:{}", Thread.currentThread().getName());
+                        Thread.sleep(5000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                }, "cas" + i).start();
+            } catch (Exception e) {
+                log.error("服务异常", e);
+            } finally {
+                countDownLatch.countDown();
+            }
+        }
     }
 }
